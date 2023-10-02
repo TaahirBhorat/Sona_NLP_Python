@@ -1,7 +1,123 @@
 ---
 title: "SONA_NLP_Python"
 ---
-hjk
-This is a Quarto website.
+# Introduction
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+```{python}
+pip install requests matplotlib seaborn
+```
+
+```{python}
+import os
+import pandas as pd
+import nltk
+import re
+from nltk.tokenize import sent_tokenize
+
+nltk.download('punkt')
+
+folder_path = 'speeches'  # Ensure this is your correct folder path
+files = os.listdir(folder_path)
+files = sorted([file for file in files if os.path.isfile(os.path.join(folder_path, file)) and file.endswith('.txt')])
+
+president_names = []
+
+# Updated regex pattern to handle more cases
+pattern = r'_(.+?)\.txt'  # Non-greedy match to get the president name
+
+for file in files:
+    match = re.search(pattern, file)
+    if match:
+        president_name = match.group(1)
+        # Remove the "_2" suffix from the president names here
+        cleaned_president_name = president_name.replace('_2', '')
+        president_names.append(cleaned_president_name)
+    else:
+        print(f"Warning: No match found in filename: {file}")
+        president_names.append('Unknown')  # Placeholder for missing names
+
+# Check the lengths of files and president_names lists
+if len(files) != len(president_names):
+    print(f"Warning: Number of files ({len(files)}) does not match number of president names ({len(president_names)})")
+
+# Initialize dataframe with appropriate column names
+df = pd.DataFrame(columns=['Presidents', 'Sentences'])
+
+# Iterate over all files and extract sentences
+for file_index in range(len(files)):
+    file_path = os.path.join(folder_path, files[file_index])
+    with open(file_path, 'r', encoding='utf-8') as file:
+        lines = file.readlines()[2:]  # Adjust if your files have a different structure
+
+    text = ' '.join(lines)
+    sentences = sent_tokenize(text)
+    cleaned_sentences = [sentence.replace('\n', '') for sentence in sentences]
+
+    current_president = president_names[file_index]
+    dftemp = pd.DataFrame({'Presidents': [current_president] * len(cleaned_sentences), 'Sentences': cleaned_sentences})
+    df = pd.concat([df, dftemp], axis=0, ignore_index=True)
+
+df.reset_index(drop=True, inplace=True)
+
+# Save the DataFrame to a CSV file
+df.to_csv('finalSentence.csv', index=False)
+```
+
+
+```{python}
+data = pd.read_csv("finalSentence.csv")
+```
+
+# EDA
+
+```{python}
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set the style of the visualization
+sns.set(style="whitegrid")
+
+# Group the data by president and count the number of sentences for each
+sentence_counts = data['Presidents'].value_counts()
+
+# Create a bar plot of the number of sentences per president
+plt.figure(figsize=(10, 6))
+sns.barplot(x=sentence_counts.index, y=sentence_counts.values, palette="viridis")
+
+# Add labels and title
+plt.xlabel('Presidents')
+plt.ylabel('Number of Sentences')
+plt.title('Number of Sentences per President')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+
+```{python}
+
+# Calculate the length in words of each sentence
+data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
+
+# Group by president and calculate the average sentence length
+average_length = data.groupby('Presidents')['Sentence_Length'].mean().sort_values(ascending=False)
+
+palette = sns.color_palette("viridis", n_colors=len(sentence_counts))
+
+# Create a mapping of president to color based on the order in sentence_counts
+color_mapping = {president: palette[i] for i, president in enumerate(sentence_counts.index)}
+
+# Get colors for the presidents in the order of average_length
+bar_colors = [color_mapping[president] for president in average_length.index]
+
+# Create a bar plot of the average sentence length per president with consistent colors
+plt.figure(figsize=(10, 6))
+sns.barplot(x=average_length.index, y=average_length.values, palette=bar_colors)
+
+# Add labels and title
+plt.xlabel('Presidents')
+plt.ylabel('Average Sentence Length (in words)')
+plt.title('Average Sentence Length per President')
+plt.xticks(rotation=45)
+plt.show()
+
+```
