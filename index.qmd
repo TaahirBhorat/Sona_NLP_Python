@@ -7,7 +7,7 @@ title: "SONA_NLP_Python"
 pip install nltk
 ```
 ```{python}
-pip install requests matplotlib seaborn
+pip install requests matplotlib seaborn sklearn scikit-learn nltk
 ```
 
 ```{python}
@@ -127,4 +127,81 @@ plt.title('Average Sentence Length per President')
 plt.xticks(rotation=45)
 plt.show()
 
+```
+
+# Bag of Words
+
+```{python}
+pip install scikit-learn
+```
+```{python}
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+
+
+# Preprocess text data: lowercasing and removing punctuation
+data['Processed_Sentences'] = data['Sentences'].str.lower().str.replace('[^\w\s]', '', regex=True)
+
+# Extract relevant columns
+text_data = data['Processed_Sentences']
+y = data['Presidents']
+
+# Initialize a CountVectorizer for BOW representation with stop words removal
+vectorizer = CountVectorizer(lowercase=True, token_pattern=r"(?u)\b\w+\b", stop_words='english')
+
+# Fit and transform the text data
+X = vectorizer.fit_transform(text_data)
+
+# Encode the class labels
+le = LabelEncoder()
+y_encoded = le.fit_transform(y)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded)
+
+```
+
+
+# Boosted Tree CatBoost
+
+```{python}
+pip install catboost
+```
+
+
+Here looks like 53 percent accuracy
+
+```{python}
+from catboost import CatBoostClassifier
+from sklearn.metrics import classification_report, accuracy_score
+
+# Initialize CatBoostClassifier
+clf = CatBoostClassifier(
+    iterations=500, # Number of boosting iterations
+    depth=10,       # Depth of the trees
+    learning_rate=0.05, # Learning rate
+    loss_function='MultiClass', # Objective function
+    random_state=42, # Random seed
+    verbose=10      # Output training information every 100 iterations
+)
+
+# Fit the model on the training data
+clf.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred = clf.predict(X_test)
+
+# Decode the predicted labels back to original classes
+y_pred_decoded = le.inverse_transform(y_pred.flatten())
+
+# Evaluate the classifier
+accuracy = accuracy_score(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred, target_names=le.classes_)
+
+# Print the accuracy and classification report
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print('Classification Report:')
+print(classification_rep)
 ```
