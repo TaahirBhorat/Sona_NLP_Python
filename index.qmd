@@ -205,3 +205,40 @@ print(f'Accuracy: {accuracy * 100:.2f}%')
 print('Classification Report:')
 print(classification_rep)
 ```
+
+# Neural Network
+
+```{python}
+pip install tensorflow
+```
+
+```{python}
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# Convert the sparse matrix to dense matrix as neural network needs dense input
+X_train_dense = X_train.toarray()
+X_test_dense = X_test.toarray()
+
+# Define model
+model = Sequential([
+    Dense(512, input_dim=X_train_dense.shape[1], activation='relu'),  # Input layer
+    Dropout(0.5),  # Adding dropout to prevent overfitting
+    Dense(256, activation='relu'),  # Hidden layer
+    Dropout(0.5),  # Adding dropout to prevent overfitting
+    Dense(len(le.classes_), activation='softmax')  # Output layer
+])
+
+# Compile model
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Train model
+model.fit(X_train_dense, y_train, epochs=10, batch_size=32, validation_split=0.2)
+
+# Evaluate model
+loss, accuracy = model.evaluate(X_test_dense, y_test)
+print(f'Loss: {loss:.4f}')
+print(f'Accuracy: {accuracy*100:.2f}%')
+```
+
