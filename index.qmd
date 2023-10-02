@@ -4,7 +4,15 @@ title: "SONA_NLP_Python"
 # Introduction
 
 ```{python}
+pip install nltk
+```
+```{python}
 pip install requests matplotlib seaborn
+```
+
+```{python}
+import sys
+print(sys.executable)
 ```
 
 ```{python}
@@ -94,7 +102,6 @@ plt.show()
 
 
 ```{python}
-
 # Calculate the length in words of each sentence
 data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
 
