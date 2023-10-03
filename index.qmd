@@ -11,11 +11,6 @@ pip install requests matplotlib seaborn sklearn scikit-learn nltk
 ```
 
 ```{python}
-import sys
-print(sys.executable)
-```
-
-```{python}
 import os
 import pandas as pd
 import nltk
@@ -68,7 +63,7 @@ for file_index in range(len(files)):
 df.reset_index(drop=True, inplace=True)
 
 # Save the DataFrame to a CSV file
-df.to_csv('finalSentence.csv', index=False)
+#df.to_csv('finalSentence.csv', index=False)
 ```
 
 
@@ -100,6 +95,10 @@ plt.xticks(rotation=45)
 plt.show()
 ```
 
+```{python}
+data = data[data['Presidents'] != ' Motlanthe']
+data = data[data['Presidents'] != 'deKlerk']
+```
 
 ```{python}
 # Calculate the length in words of each sentence
@@ -129,11 +128,83 @@ plt.show()
 
 ```
 
-# Bag of Words
+# Overall top Words used
+```{python}
+from collections import Counter
+
+# Combine all cleaned sentences into a single string
+all_cleaned_sentences = ' '.join(df['Cleaned_Sentences'])
+
+# Tokenize the string into individual words
+all_words = all_cleaned_sentences.split()
+
+# Count the frequency of each word
+word_counter = Counter(all_words)
+
+# Select the top 20 most frequent non-stopwords
+top_words = word_counter.most_common(20)
+
+# Extract words and their corresponding frequencies for plotting
+words, frequencies = zip(*top_words)
+
+# Create a bar plot representing the frequency of each of the selected words
+plt.figure(figsize=(15, 7))
+plt.bar(words, frequencies, color='skyblue')
+plt.title('Top 20 Most Common Non-Stopwords Across All Presidents')
+plt.xlabel('Words')
+plt.ylabel('Frequency')
+plt.xticks(rotation=45)
+plt.show()
+```
+
+```{python}
+pip install wordcloud
+```
+
+# Word Cloud per president
+
+```{python}
+from wordcloud import WordCloud, STOPWORDS
+import matplotlib.pyplot as plt
+
+# Define a function to remove stop words from a sentence
+def remove_stopwords(sentence):
+    words = sentence.split()
+    cleaned_words = [word for word in words if word.lower() not in STOPWORDS]
+    return ' '.join(cleaned_words)
+
+# Apply the function to remove stop words from each sentence in the DataFrame
+data['Cleaned_Sentences'] = data['Sentences'].apply(remove_stopwords)
+
+# Group the cleaned sentences by president
+grouped = data.groupby('Presidents')['Cleaned_Sentences'].apply(' '.join).reset_index()
+
+# Initialize a dictionary to store word clouds for each president
+wordclouds = {}
+
+# Generate a word cloud for each president
+for index, row in grouped.iterrows():
+    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(row['Cleaned_Sentences'])
+    wordclouds[row['Presidents']] = wordcloud
+
+# Display the word clouds
+plt.figure(figsize=(15, 10))
+for i, (president, wordcloud) in enumerate(wordclouds.items(), 1):
+    plt.subplot(2, 2, i)  # Adjusted subplot arrangement to 2x2 grid
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.title(president)
+    plt.axis("off")
+plt.show()
+```
+
+
+# Bag of Words + Data Split
 
 ```{python}
 pip install scikit-learn
 ```
+
+
 ```{python}
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
@@ -216,6 +287,11 @@ pip install tensorflow
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, BatchNormalization
+from keras.regularizers import l2
+from keras.optimizers import Adam
+from keras.callbacks import EarlyStopping, ModelCheckpoint
 
 # Convert the sparse matrix to dense matrix as neural network needs dense input
 X_train_dense = X_train.toarray()
@@ -223,19 +299,21 @@ X_test_dense = X_test.toarray()
 
 # Define model
 model = Sequential([
-    Dense(512, input_dim=X_train_dense.shape[1], activation='relu'),  # Input layer
-    Dense(256, activation='relu'),  
-    dense(256, activation='relu')
-    Dropout(0.5),  # Adding dropout to prevent overfitting
+    Dense(512, input_dim=X_train_dense.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Input layer
+    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
+    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Hidden layer
     Dense(len(le.classes_), activation='softmax')  # Output layer
 ])
 
 # Compile model
 model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-# Train model
-model.fit(X_train_dense, y_train, epochs=10, batch_size=32, validation_split=0.2)
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
 
+callbacks = [early_stopping, model_checkpoint]
+# Train model
+model.fit(X_train_dense, y_train,  validation_split=0.2, epochs=100, callbacks=callbacks)
 # Evaluate model
 loss, accuracy = model.evaluate(X_test_dense, y_test)
 print(f'Loss: {loss:.4f}')
