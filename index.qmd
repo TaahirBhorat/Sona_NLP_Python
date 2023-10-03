@@ -224,8 +224,8 @@ X_test_dense = X_test.toarray()
 # Define model
 model = Sequential([
     Dense(512, input_dim=X_train_dense.shape[1], activation='relu'),  # Input layer
-    Dropout(0.5),  # Adding dropout to prevent overfitting
-    Dense(256, activation='relu'),  # Hidden layer
+    Dense(256, activation='relu'),  
+    dense(256, activation='relu')
     Dropout(0.5),  # Adding dropout to prevent overfitting
     Dense(len(le.classes_), activation='softmax')  # Output layer
 ])
