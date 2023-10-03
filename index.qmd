@@ -1,11 +1,13 @@
 ---
 title: "SONA_NLP_Python"
 ---
+
 # Introduction
 
 ```{python}
 pip install nltk
 ```
+
 ```{python}
 pip install requests matplotlib seaborn sklearn scikit-learn nltk
 ```
@@ -129,33 +131,6 @@ plt.show()
 ```
 
 # Overall top Words used
-```{python}
-from collections import Counter
-
-# Combine all cleaned sentences into a single string
-all_cleaned_sentences = ' '.join(df['Cleaned_Sentences'])
-
-# Tokenize the string into individual words
-all_words = all_cleaned_sentences.split()
-
-# Count the frequency of each word
-word_counter = Counter(all_words)
-
-# Select the top 20 most frequent non-stopwords
-top_words = word_counter.most_common(20)
-
-# Extract words and their corresponding frequencies for plotting
-words, frequencies = zip(*top_words)
-
-# Create a bar plot representing the frequency of each of the selected words
-plt.figure(figsize=(15, 7))
-plt.bar(words, frequencies, color='skyblue')
-plt.title('Top 20 Most Common Non-Stopwords Across All Presidents')
-plt.xlabel('Words')
-plt.ylabel('Frequency')
-plt.xticks(rotation=45)
-plt.show()
-```
 
 ```{python}
 pip install wordcloud
@@ -299,9 +274,9 @@ X_test_dense = X_test.toarray()
 
 # Define model
 model = Sequential([
-    Dense(512, input_dim=X_train_dense.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Input layer
+    Dense(512, input_dim=X_train_dense.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
     Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
-    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Hidden layer
+    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
     Dense(len(le.classes_), activation='softmax')  # Output layer
 ])
 
@@ -320,3 +295,350 @@ print(f'Loss: {loss:.4f}')
 print(f'Accuracy: {accuracy*100:.2f}%')
 ```
 
+## SVM
+
+
+```{python}
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
+
+# Initialize the SVM classifier
+svm = SVC(random_state=42)
+
+# Initialize Grid Search
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+
+# Perform Grid Search on the training data
+grid_search.fit(X_train, y_train)
+
+# Get the best parameters and the best estimator from Grid Search
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
+
+# Make predictions using the best model
+y_pred_best_svm = best_svm_clf.predict(X_test)
+
+# Evaluate the best model
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+
+best_params, accuracy_best_svm, classification_rep_best_svm
+```
+
+
+
+```{python}
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, accuracy_score
+
+# Initialize the Support Vector Machine classifier
+svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
+
+# Fit the model on the training data
+svm_clf.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred_svm = svm_clf.predict(X_test)
+
+# Evaluate the classifier
+accuracy_svm = accuracy_score(y_test, y_pred_svm)
+classification_rep_svm = classification_report(y_test, y_pred_svm)
+
+# Print the accuracy and classification report
+print(f'test score {accuracy_svm}')
+```
+
+# TF-IDF
+
+```{python}
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+
+# Initialize a TfidfVectorizer with stop words removal
+vectorizer = TfidfVectorizer(stop_words='english')
+
+# Compute the TF-IDF values for each word in each sentence
+X = vectorizer.fit_transform(data['Sentences'])
+
+# Encode the president names as target variable
+y = data['Presidents']
+
+# Split the data into training and testing sets with an 80-20 ratio
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# Display the shapes of the resulting training and testing sets
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+```
+
+
+## Catboost
+
+```{python}
+from catboost import CatBoostClassifier
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.preprocessing import LabelEncoder
+
+# If CatBoost requires numeric labels, we need to fit a LabelEncoder
+le = LabelEncoder()
+y_train_encoded = le.fit_transform(y_train)
+y_test_encoded = le.transform(y_test)
+
+# Initialize CatBoostClassifier
+clf = CatBoostClassifier(
+    iterations=500, # Number of boosting iterations
+    depth=10,       # Depth of the trees
+    learning_rate=0.05, # Learning rate
+    loss_function='MultiClass', # Objective function
+    random_state=42, # Random seed
+    verbose=10      # Output training information every 10 iterations
+)
+
+# Fit the model on the training data (converting sparse matrix to dense)
+clf.fit(X_train.toarray(), y_train_encoded)
+
+# Make predictions on the testing data
+y_pred = clf.predict(X_test.toarray())
+
+# Decode the predicted labels back to original classes (if necessary)
+y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
+
+# Evaluate the classifier
+accuracy = accuracy_score(y_test_encoded, y_pred.flatten().astype(int))
+classification_rep = classification_report(y_test_encoded, y_pred.flatten().astype(int), target_names=le.classes_)
+
+# Print the accuracy and classification report
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print('Classification Report:')
+print(classification_rep)
+```
+
+## SVM
+
+
+grid search SVM
+
+best params:
+10, 'gamma': 'scale', 'kernel': 'rbf'}
+```{python}
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
+
+# Initialize the SVM classifier
+svm = SVC(random_state=42)
+
+# Initialize Grid Search
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+
+# Perform Grid Search on the training data
+grid_search.fit(X_train, y_train)
+
+# Get the best parameters and the best estimator from Grid Search
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
+
+# Make predictions using the best model
+y_pred_best_svm = best_svm_clf.predict(X_test)
+
+# Evaluate the best model
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+
+best_params, accuracy_best_svm, classification_rep_best_svm
+```
+
+```{python}
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, accuracy_score
+
+# Initialize the Support Vector Machine classifier
+svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
+
+# Fit the model on the training data
+svm_clf.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred_svm = svm_clf.predict(X_test)
+
+# Evaluate the classifier
+accuracy_svm = accuracy_score(y_test, y_pred_svm)
+classification_rep_svm = classification_report(y_test, y_pred_svm)
+
+# Print the accuracy and classification report
+accuracy_svm
+```
+
+# Word Embeddings 
+
+```{python}
+pip install gensim
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+from gensim.models import Word2Vec
+from sklearn.model_selection import train_test_split
+
+
+# Tokenize sentences using white-space-based tokenization
+data['Tokenized_Sentences'] = data['Sentences'].apply(lambda x: x.split())
+
+# Train Word2Vec model
+word2vec_model = Word2Vec(sentences=data['Tokenized_Sentences'], vector_size=100, window=5, min_count=1, workers=4)
+
+# Function to calculate sentence embedding
+def sentence_embedding(sentence_tokens, model):
+    """Calculate sentence embedding as the mean of the word embeddings."""
+    embeddings = [model.wv[word] for word in sentence_tokens if word in model.wv.index_to_key]
+    return np.mean(embeddings, axis=0) if len(embeddings) > 0 else np.zeros(model.vector_size)
+
+# Create sentence embeddings
+data['Sentence_Embeddings'] = data['Tokenized_Sentences'].apply(lambda x: sentence_embedding(x, word2vec_model))
+
+# Encode the "Presidents" labels into numerical format
+label_mapping = {label: idx for idx, label in enumerate(data['Presidents'].unique())}
+data['Label'] = data['Presidents'].map(label_mapping)
+
+# Split data into features (X) and target (y)
+X = np.vstack(data['Sentence_Embeddings'].to_numpy())
+y = data['Label'].to_numpy()
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+```
+
+
+Accuracy: 39.53%
+```{python}
+from catboost import CatBoostClassifier
+from sklearn.metrics import accuracy_score, classification_report
+# Initialize CatBoostClassifier
+clf = CatBoostClassifier(
+    iterations=500,          # Number of boosting iterations
+    depth=10,                # Depth of the trees
+    learning_rate=0.05,      # Learning rate
+    loss_function='MultiClass',  # Objective function
+    random_state=42,             # Random seed
+    verbose=10                   # Output training information every 10 iterations
+)
+
+# Fit the model on the training data
+clf.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred = clf.predict(X_test)
+
+# Note: If y_pred is not a flat array, you might need to flatten it or adjust it to match the shape of y_test
+# For example, you might need to use y_pred.flatten() or y_pred[:, 0] depending on the output of the predict method
+
+# Evaluate the classifier
+accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
+classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=label_mapping.keys())
+
+# Print the accuracy and classification report
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print('Classification Report:')
+print(classification_rep)
+```
+
+## SVM
+
+```{python}
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, accuracy_score
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
+
+# Initialize the SVM classifier
+svm = SVC(random_state=42)
+
+# Initialize Grid Search
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+
+# Perform Grid Search on the training data
+grid_search.fit(X_train, y_train)
+
+# Get the best parameters and the best estimator from Grid Search
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
+
+# Make predictions using the best model
+y_pred_best_svm = best_svm_clf.predict(X_test)
+
+# Evaluate the best model
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
+```
+
+
+```{python}
+# Initialize the Support Vector Machine classifier with specific parameters
+specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
+
+# Fit the model on the training data
+specific_svm_clf.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred_specific_svm = specific_svm_clf.predict(X_test)
+
+# Evaluate the classifier
+accuracy_specific_svm = accuracy_score(y_test, y_pred_specific_svm)
+classification_rep_specific_svm = classification_report(y_test, y_pred_specific_svm, target_names=label_mapping.keys())
+
+# Print the accuracy and classification report
+print(f'Accuracy (Specific SVM): {accuracy_specific_svm * 100:.2f}%')
+print('Classification Report (Specific SVM):')
+print(classification_rep_specific_svm)
+```
+
+
+## Neural Network 
+Accuracy: 36.69%
+
+```{python}
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+# Define model
+model = Sequential([
+    Dense(512, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
+    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
+    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
+    Dense(len(label_mapping), activation='softmax')  # Output layer
+])
+
+# Compile model
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Set early stopping and model checkpoint callbacks
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+model_checkpoint = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
+callbacks = [early_stopping, model_checkpoint]
+
+# Train model
+model.fit(X_train, y_train, validation_split=0.2, epochs=100, callbacks=callbacks)
+
+# Evaluate model
+loss, accuracy = model.evaluate(X_test, y_test)
+print(f'Loss: {loss:.4f}')
+print(f'Accuracy: {accuracy*100:.2f}%')
+```
