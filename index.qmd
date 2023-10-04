@@ -4,6 +4,9 @@ title: "SONA_NLP_Python"
 
 # Introduction
 
+In this paper we examine the state of the natioin address(SONA) speeches from all South African presidents from years 1994 to 2023. The aim of this paper is to classify speakers/presidents based on a single sentence extracted from a given SONA speach. The following will proceeed in XXX main sections. Firstly a small literautre review of natural language processing(NLP) will be exmained with a specific focus on NLP classification. Thereafter the data will be explored and cleaning and preprocessing steps will be detailed. Here exploratioin around the data will center on the balance of the dataset as well as the overall and president speicific vocabulary used. The third section of the paper will detail the methods used within this paper. This will include detailing the three feature extraction tools utilised in bag of words(BoW), 
+
+
 ```{python}
 pip install nltk
 ```
@@ -642,3 +645,4 @@ loss, accuracy = model.evaluate(X_test, y_test)
 print(f'Loss: {loss:.4f}')
 print(f'Accuracy: {accuracy*100:.2f}%')
 ```
+
