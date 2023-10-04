@@ -18,6 +18,61 @@ In the penultimate section, a comprehensive discussion of the results is provide
 
 Finally, the paper concludes with a reflective overview of the study as a whole. This concluding section evaluates the study's successes and limitations, reflects on its contributions to the field, and suggests avenues for future research and exploration. Through this reflective lens, the paper not only summarizes its findings but also invites further scholarly engagement with the questions and challenges raised during the study.
 
+# Literature Review
+
+# Methods
+
+A variety of methods were employed throughout this project, though they can be broken down into three main uses: Feature extraction, modelling, and model evaluation 
+
+## Feature Extraction
+
+### Bag of Words (BoW)
+Bag of Words (BoW) simplifies the representation of text into a set of words and their corresponding frequency in a document. Each document is represented as a vector within a multidimensional space where each dimension corresponds to a word from the corpus. Mathematically, given a text \( T \) consisting of sentences \( s_1, s_2, \ldots, s_n \), each sentence is represented as a vector \( v_i \) where each dimension corresponds to a unique word, and the value at each dimension \( j \) is the frequency count of word \( w_j \) in sentence \( s_i \).
+
+\[ v_i = [ \text{count}(w_1), \text{count}(w_2), \ldots, \text{count}(w_m) ] \]
+Here each sentence was considereed a doccument so rows in BoW representation were inidiividual sentences
+
+### Term Frequency-Inverse Document Frequency (TF-IDF)
+TF-IDF emphasizes important words which are frequent in a document but not across documents. Term Frequency (TF) represents the frequency of a word in a document, and Inverse Document Frequency (IDF) diminishes the weight of words that occur frequently in the corpus.
+
+\[ \text{TF}(w, d) = \frac{\text{Number of times word } w \text{ appears in document } d}{\text{Total number of words in document } d} \]
+\[ \text{IDF}(w, D) = \log\left(\frac{\text{Total number of documents in corpus } D}{\text{Number of documents containing word } w}\right) \]
+\[ \text{TF-IDF}(w, d, D) = \text{TF}(w, d) \times \text{IDF}(w, D) \]
+
+### Word Embeddings
+Word2Vec algorithm learns the context of words in the text to generate word embeddings. It constructs a high-dimensional space where similar words are placed closer to each other. Sentence embeddings are calculated as the mean of the word embeddings of the words constituting the sentence.
+
+## Modeling
+
+### Gradient Boosted Trees (CatBoost)
+CatBoost is a gradient boosting algorithm that is based on decision trees. It successively refines its predictions over multiple rounds, each of which consists of creating and adding a new tree that corrects the errors of the combined ensemble of existing trees. The objective is to minimize the loss function by adding weak learners using a gradient descent-like procedure().
+
+### Support Vector Machines (SVM)
+Support Vector Machines (SVM) operate in a multidimensional space, represented by the features of the data points. The SVM constructs a hyperplane in this space to separate the different classes. The optimal hyperplane is the one that maximises the margin, which is the distance between the hyperplane and the nearest data point of each class. SVMs can use different types of kernels (linear, polynomial, radial basis function, etc.) to transform the input space in such a way that separation is easier.
+
+### Feed Forward Neural Networks
+A Feed Forward Neural Network consists of an input layer, hidden layers, and an output layer. Each layer contains neurons, and adjacent layers are fully connected through weighted edges. During training, the weights are adjusted using backpropagation and a gradient descent or variant algorithm to minimize the error between the network's prediction and the actual target values.
+
+## Model Evaluation
+
+Model performance was evaluated based on accuracy:
+
+\[ \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions Made}} \]
+
+Precision, recall, and F1-score for each class were also considered:
+
+\[ \text{Precision} = \frac{\text{True Positive}}{\text{True Positive} + \text{False Positive}} \]
+\[ \text{Recall} = \frac{\text{True Positive}}{\text{True Positive} + \text{False Negative}} \]
+\[ \text{F1 Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} \]
+
+Confusion matrices were generated for each model, offering a clear visualization of the performance of the classification algorithm. It illustrates the correct predictions and the errors made, making it easier to interpret the results, especially in multi-class classification problems. 
+
+For the SVM and Neural Network models, grid searches were performed where necessary to select optimal hyperparameters for performance enhancement. Grid search meticulously works through multiple combinations of hyperparameter tunes, cross-validating as it goes to determine which tune gives the best performance based on a predefined metric, usually accuracy. Each model's training and evaluation were conducted with different feature extraction techniques, providing a thorough understanding of how each feature extraction method impacts the model’s performance.
+
+```{python}
+pip install nltk requests matplotlib seaborn sklearn scikit-learn wordcloud catboost tensorflow gensim
+```
+
 ```{python}
 # General imports
 import os
@@ -56,13 +111,7 @@ from gensim.models import Word2Vec
 # Metrics import
 from sklearn.metrics import classification_report, accuracy_score
 ```
-```{python}
-pip install nltk
-```
 
-```{python}
-pip install requests matplotlib seaborn sklearn scikit-learn nltk
-```
 
 ```{python}
 folder_path = 'speeches'  # Ensure this is your correct folder path
@@ -173,10 +222,7 @@ plt.show()
 
 # Overall top Words used
 
-```{python}
-pip install wordcloud
-```
-
+blah blah blah
 # Word Cloud per president
 
 ```{python}
@@ -213,10 +259,7 @@ plt.show()
 
 # Bag of Words + Data Split
 
-```{python}
-pip install scikit-learn
-```
-
+ayo
 
 ```{python}
 # Preprocess text data: lowercasing and removing punctuation
@@ -244,9 +287,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 
 # Boosted Tree CatBoost
 
-```{python}
-pip install catboost
-```
+
 
 
 Here looks like 53 percent accuracy
@@ -283,9 +324,6 @@ print(classification_rep)
 
 # Neural Network
 
-```{python}
-pip install tensorflow
-```
 
 ```{python}
 # Convert the sparse matrix to dense matrix as neural network needs dense input
@@ -318,7 +356,7 @@ print(f'Accuracy: {accuracy*100:.2f}%')
 ## SVM
 
 
-```{python}
+```{python, eval = FALSE}
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -432,8 +470,10 @@ print(classification_rep)
 grid search SVM
 
 best params:
-10, 'gamma': 'scale', 'kernel': 'rbf'}
-```{python}
+10, 'gamma': 'scale', 'kernel': 'rbf'
+
+
+```{python, eval = FALSE}
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -483,9 +523,6 @@ accuracy_svm
 
 # Word Embeddings 
 
-```{python}
-pip install gensim
-```
 
 ```{python}
 # Tokenize sentences using white-space-based tokenization
