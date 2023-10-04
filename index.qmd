@@ -4,7 +4,19 @@ title: "SONA_NLP_Python"
 
 # Introduction
 
-In this paper we examine the state of the natioin address(SONA) speeches from all South African presidents from years 1994 to 2023. The aim of this paper is to classify speakers/presidents based on a single sentence extracted from a given SONA speach. The following will proceeed in XXX main sections. Firstly a small literautre review of natural language processing(NLP) will be exmained with a specific focus on NLP classification. Thereafter the data will be explored and cleaning and preprocessing steps will be detailed. Here exploratioin around the data will center on the balance of the dataset as well as the overall and president speicific vocabulary used. The third section of the paper will detail the methods used within this paper. This will include detailing the three feature extraction tools utilised in bag of words(BoW), 
+This paper critically analyzes the State of the Nation Address (SONA) speeches delivered by various South African presidents from 1994 to 2023. The primary objective is to categorize each president based on single sentences extracted from their respective SONA speeches. The study unfolds in XXX main sections.
+
+Initially, a concise literature review is presented, with emphasis on the domain of Natural Language Processing (NLP), particularly focusing on classification tasks within NLP. This review lays the groundwork for the methodologies and approaches applied in later sections of the paper.
+
+Subsequent sections offer an in-depth exploration and meticulous cleaning of the data utilized in the study. The exploration phase scrutinizes the dataset's balance and analyzes the vocabulary used, both overall and by each specific president. These preliminary steps are crucial for ensuring the integrity and reliability of the study's findings.
+
+The paper then transitions to a detailed exposition of the methodologies employed in the study. The methods section elucidates the three feature extraction tools deployed: Bag of Words (BoW), Term Frequency-Inverse Document Frequency (TF-IDF), and Word Tokenization. Additionally, it describes the XXX predictive models applied, namely Gradient Boosted Trees, Feed Forward Neural Networks, and Support Vector Machines. Each tool and model is presented with a rationale for its inclusion and an explanation of its contribution to the study's objectives.
+
+Following the methods section, the paper presents and succinctly discusses the study's results. This section provides an initial interpretation of the findings, preparing the ground for the more in-depth analysis that follows.
+
+In the penultimate section, a comprehensive discussion of the results is provided. This discussion delves into the insights gleaned from the findings, offering detailed interpretations and drawing connections with the literature reviewed earlier. This section aims not only to shed light on the study's findings but also to locate these within the broader academic discourse on the subject.
+
+Finally, the paper concludes with a reflective overview of the study as a whole. This concluding section evaluates the study's successes and limitations, reflects on its contributions to the field, and suggests avenues for future research and exploration. Through this reflective lens, the paper not only summarizes its findings but also invites further scholarly engagement with the questions and challenges raised during the study.
 
 
 ```{python}
