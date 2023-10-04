@@ -18,7 +18,44 @@ In the penultimate section, a comprehensive discussion of the results is provide
 
 Finally, the paper concludes with a reflective overview of the study as a whole. This concluding section evaluates the study's successes and limitations, reflects on its contributions to the field, and suggests avenues for future research and exploration. Through this reflective lens, the paper not only summarizes its findings but also invites further scholarly engagement with the questions and challenges raised during the study.
 
+```{python}
+# General imports
+import os
+import pandas as pd
+import re
+import numpy as np
 
+# NLTK imports
+import nltk
+from nltk.tokenize import sent_tokenize
+nltk.download('punkt')
+
+# Visualization imports
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud, STOPWORDS
+
+# Preprocessing imports
+from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS, TfidfVectorizer
+from sklearn.preprocessing import LabelEncoder
+
+# Model selection imports
+from sklearn.model_selection import train_test_split, GridSearchCV
+
+# Machine learning model imports
+from sklearn.svm import SVC
+from catboost import CatBoostClassifier
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+# Word embedding imports
+from gensim.models import Word2Vec
+
+# Metrics import
+from sklearn.metrics import classification_report, accuracy_score
+```
 ```{python}
 pip install nltk
 ```
@@ -28,14 +65,6 @@ pip install requests matplotlib seaborn sklearn scikit-learn nltk
 ```
 
 ```{python}
-import os
-import pandas as pd
-import nltk
-import re
-from nltk.tokenize import sent_tokenize
-
-nltk.download('punkt')
-
 folder_path = 'speeches'  # Ensure this is your correct folder path
 files = os.listdir(folder_path)
 files = sorted([file for file in files if os.path.isfile(os.path.join(folder_path, file)) and file.endswith('.txt')])
@@ -91,9 +120,6 @@ data = pd.read_csv("finalSentence.csv")
 # EDA
 
 ```{python}
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 # Set the style of the visualization
 sns.set(style="whitegrid")
 
@@ -154,9 +180,6 @@ pip install wordcloud
 # Word Cloud per president
 
 ```{python}
-from wordcloud import WordCloud, STOPWORDS
-import matplotlib.pyplot as plt
-
 # Define a function to remove stop words from a sentence
 def remove_stopwords(sentence):
     words = sentence.split()
@@ -196,12 +219,6 @@ pip install scikit-learn
 
 
 ```{python}
-import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer, ENGLISH_STOP_WORDS
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-
-
 # Preprocess text data: lowercasing and removing punctuation
 data['Processed_Sentences'] = data['Sentences'].str.lower().str.replace('[^\w\s]', '', regex=True)
 
@@ -235,9 +252,6 @@ pip install catboost
 Here looks like 53 percent accuracy
 
 ```{python}
-from catboost import CatBoostClassifier
-from sklearn.metrics import classification_report, accuracy_score
-
 # Initialize CatBoostClassifier
 clf = CatBoostClassifier(
     iterations=500, # Number of boosting iterations
@@ -274,15 +288,6 @@ pip install tensorflow
 ```
 
 ```{python}
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, BatchNormalization
-from keras.regularizers import l2
-from keras.optimizers import Adam
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-
 # Convert the sparse matrix to dense matrix as neural network needs dense input
 X_train_dense = X_train.toarray()
 X_test_dense = X_test.toarray()
@@ -314,8 +319,6 @@ print(f'Accuracy: {accuracy*100:.2f}%')
 
 
 ```{python}
-from sklearn.model_selection import GridSearchCV
-
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -348,8 +351,6 @@ best_params, accuracy_best_svm, classification_rep_best_svm
 
 
 ```{python}
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report, accuracy_score
 
 # Initialize the Support Vector Machine classifier
 svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
@@ -371,9 +372,6 @@ print(f'test score {accuracy_svm}')
 # TF-IDF
 
 ```{python}
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
-
 # Initialize a TfidfVectorizer with stop words removal
 vectorizer = TfidfVectorizer(stop_words='english')
 
@@ -394,10 +392,6 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 ## Catboost
 
 ```{python}
-from catboost import CatBoostClassifier
-from sklearn.metrics import classification_report, accuracy_score
-from sklearn.preprocessing import LabelEncoder
-
 # If CatBoost requires numeric labels, we need to fit a LabelEncoder
 le = LabelEncoder()
 y_train_encoded = le.fit_transform(y_train)
@@ -440,8 +434,6 @@ grid search SVM
 best params:
 10, 'gamma': 'scale', 'kernel': 'rbf'}
 ```{python}
-from sklearn.model_selection import GridSearchCV
-
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -472,9 +464,6 @@ best_params, accuracy_best_svm, classification_rep_best_svm
 ```
 
 ```{python}
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report, accuracy_score
-
 # Initialize the Support Vector Machine classifier
 svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
 
@@ -499,12 +488,6 @@ pip install gensim
 ```
 
 ```{python}
-import pandas as pd
-import numpy as np
-from gensim.models import Word2Vec
-from sklearn.model_selection import train_test_split
-
-
 # Tokenize sentences using white-space-based tokenization
 data['Tokenized_Sentences'] = data['Sentences'].apply(lambda x: x.split())
 
@@ -536,8 +519,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 Accuracy: 39.53%
 ```{python}
-from catboost import CatBoostClassifier
-from sklearn.metrics import accuracy_score, classification_report
 # Initialize CatBoostClassifier
 clf = CatBoostClassifier(
     iterations=500,          # Number of boosting iterations
@@ -570,9 +551,6 @@ print(classification_rep)
 ## SVM
 
 ```{python}
-from sklearn.svm import SVC
-from sklearn.metrics import classification_report, accuracy_score
-from sklearn.model_selection import GridSearchCV
 
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
@@ -627,12 +605,6 @@ print(classification_rep_specific_svm)
 Accuracy: 36.69%
 
 ```{python}
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.regularizers import l2
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-
 # Define model
 model = Sequential([
     Dense(512, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
