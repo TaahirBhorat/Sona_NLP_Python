@@ -54,6 +54,8 @@ Gradient Boosted Trees (GBTs) inherently leverage an ensemble methodology, combi
 
 In our deployment of GBTs, using Yandex's CatBoost, careful parameter tuning was essential for optimized performance. We engaged 500 boosting iterations, a 0.05 learning rate, and a tree depth of 10. The boosting iterations define the number of trees in the model, with each iteration adding a new tree that corrects the errors of the ensemble. The learning rate, alternatively known as shrinkage, moderates the influence of each tree, preventing any single tree from dominating the ensemble prediction. The tree depth, meanwhile, influences the model's complexity, with deeper trees allowing for the capture of more complex patterns in the data but at the risk of overfitting. These parameters were selected after running a grid search over hyperparameters choosing the hyperaamters which minimised validation error computed using 5-fold cross validation.
 
+### Support Vector Machines
+
 
 
 ```{python}
@@ -277,7 +279,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 
 
 
-Here looks like 53 percent accuracy
+Here looks like 52 percent accuracy
 
 ```{python}
 # Initialize CatBoostClassifier
@@ -291,10 +293,17 @@ clf = CatBoostClassifier(
 )
 
 # Fit the model on the training data
-clf.fit(X_train, y_train)
+#clf.fit(X_train, y_train)
+
+ # Save the model
+#clf.save_model("catboost_BOW.cbm")
+
+loaded_model = CatBoostClassifier()
+loaded_model.load_model("catboost_BOW.cbm")
+
 
 # Make predictions on the testing data
-y_pred = clf.predict(X_test)
+y_pred = loaded_model.predict(X_test)
 
 # Decode the predicted labels back to original classes
 y_pred_decoded = le.inverse_transform(y_pred.flatten())
@@ -414,7 +423,7 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 
 
 ## Catboost
-
+52.73
 ```{python}
 # If CatBoost requires numeric labels, we need to fit a LabelEncoder
 le = LabelEncoder()
@@ -432,10 +441,17 @@ clf = CatBoostClassifier(
 )
 
 # Fit the model on the training data (converting sparse matrix to dense)
-clf.fit(X_train.toarray(), y_train_encoded)
+#clf.fit(X_train.toarray(), y_train_encoded)
+
+
+ # Save the model
+#clf.save_model("catboost_TFIDF.cbm")
+
+loaded_model = CatBoostClassifier()
+loaded_model.load_model("catboost_TFIDF.cbm")
 
 # Make predictions on the testing data
-y_pred = clf.predict(X_test.toarray())
+y_pred = loaded_model.predict(X_test.toarray())
 
 # Decode the predicted labels back to original classes (if necessary)
 y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
@@ -540,7 +556,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ```
 
 
-Accuracy: 39.53%
+Accuracy: 39.31%
 ```{python}
 # Initialize CatBoostClassifier
 clf = CatBoostClassifier(
@@ -552,11 +568,19 @@ clf = CatBoostClassifier(
     verbose=10                   # Output training information every 10 iterations
 )
 
+
+
 # Fit the model on the training data
-clf.fit(X_train, y_train)
+#clf.fit(X_train, y_train)
+
+ # Save the model
+#clf.save_model("catboost_WordEmbed.cbm")
+
+loaded_model = CatBoostClassifier()
+loaded_model.load_model("catboost_WordEmbed.cbm")
 
 # Make predictions on the testing data
-y_pred = clf.predict(X_test)
+y_pred = loaded_model.predict(X_test)
 
 # Note: If y_pred is not a flat array, you might need to flatten it or adjust it to match the shape of y_test
 # For example, you might need to use y_pred.flatten() or y_pred[:, 0] depending on the output of the predict method
