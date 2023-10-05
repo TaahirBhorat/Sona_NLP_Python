@@ -42,6 +42,19 @@ Sentences from the presidential speeches dataset are tokenized into words. These
 
 These sentence-level vectors serve as the dataset's numerical features, providing a semantically rich representation of the sentences for subsequent machine learning applications in the project. Each vector not only represents its sentence but also mirrors the inherent semantic structure and relationships within the text, offering a meaningful feature set for analysis.By employing these methods, the raw textual data from the speeches is transformed into a numerical format suitable for training machine learning models, with each technique capturing different aspects and nuances of the data's structure and semantics.
 
+## Modelling 
+
+Note that for each of the following predictive models, each of the three feature extraction methods detailed above are applied.
+
+### Gradient Boosted Trees
+
+Gradient Boosting is a general technique where models are built sequentially, with each new model being trained to correct the mistakes of the combined ensemble of existing models. This process is iteratively repeated, progressively improving the model’s accuracy until further improvements are negligible.
+
+Gradient Boosted Trees (GBTs) inherently leverage an ensemble methodology, combining the predictive power of multiple weak learners, in decision trees, to craft a more accurate and robust model. The algorithm incrementally builds an ensemble of trees where each subsequent tree compensates for the errors of the aggregate set of preceding trees. Through this iterative refinement, the algorithm not only enhances its precision but also avoids overfitting, providing a reliable generalization to unseen data.
+
+In our deployment of GBTs, using Yandex's CatBoost, careful parameter tuning was essential for optimized performance. We engaged 500 boosting iterations, a 0.05 learning rate, and a tree depth of 10. The boosting iterations define the number of trees in the model, with each iteration adding a new tree that corrects the errors of the ensemble. The learning rate, alternatively known as shrinkage, moderates the influence of each tree, preventing any single tree from dominating the ensemble prediction. The tree depth, meanwhile, influences the model's complexity, with deeper trees allowing for the capture of more complex patterns in the data but at the risk of overfitting. These parameters were selected after running a grid search over hyperparameters choosing the hyperaamters which minimised validation error computed using 5-fold cross validation.
+
+
 
 ```{python}
 pip install nltk requests matplotlib seaborn sklearn scikit-learn wordcloud catboost tensorflow gensim
