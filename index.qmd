@@ -93,6 +93,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+from catboost import Pool, cv, CatBoostClassifier
 
 # Word embedding imports
 from gensim.models import Word2Vec
@@ -277,49 +278,79 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 # Boosted Tree CatBoost
 
 
-
-
-Here looks like 52.95 percent accuracy
+Here looks like 56.18 percent accuracy
 
 ```{python}
-# Initialize CatBoostClassifier
-clf = CatBoostClassifier(
-    iterations=500, # Number of boosting iterations
-    depth=10,       # Depth of the trees
-    learning_rate=0.05, # Learning rate
-    loss_function='MultiClass', # Objective function
-    random_state=42, # Random seed
-    verbose=10      # Output training information every 100 iterations
-)
 
-# Fit the model on the training data
-#clf.fit(X_train, y_train)
+pool = Pool(data=X_train, label=y_train, cat_features=[])
+# Parameters for the CatBoostClassifier
+params = {
+    'iterations': 3000,          # Number of boosting iterations
+    'depth': 5,                # Depth of the trees
+    'learning_rate': 0.05,      # Learning rate
+    'loss_function': 'MultiClass',  # Objective function
+    'random_seed': 42,             # Random seed
+    'verbose': 10                   # Output training information every 10 iterations
+}
 
- # Save the model
-#clf.save_model("catboost_BOW.cbm")
+#cv_results = cv(
+ #   pool=pool,
+ #   params=params,
+ #   fold_count=5,  # Number of folds in CV
+ #   plot=False,   # Set to True if you want to see the plot of train and test errors during cross-validation
+ #   early_stopping_rounds=10
+#)
 
+# Save cross-validation results to a CSV file
+#cv_results.to_csv('cv_results_over_epochs.csv', index=False)
+
+# Train the model on the full training set and save it
+#clf = CatBoostClassifier(**params)
+#clf.fit(pool)
+#clf.save_model('catboost_BOW.cbm')
+
+# Load the model from the file
 loaded_model = CatBoostClassifier()
-loaded_model.load_model("catboost_BOW.cbm")
-
+loaded_model.load_model('catboost_BOW.cbm')
 
 # Make predictions on the testing data
 y_pred = loaded_model.predict(X_test)
-
-# Decode the predicted labels back to original classes
-y_pred_decoded = le.inverse_transform(y_pred.flatten())
+y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
 
 # Evaluate the classifier
-accuracy = accuracy_score(y_test, y_pred)
-classification_rep = classification_report(y_test, y_pred, target_names=le.classes_)
+accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
+classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
 print(f'Accuracy: {accuracy * 100:.2f}%')
 print('Classification Report:')
 print(classification_rep)
+
 ```
 
-# Neural Network
 
+```{python}
+# Read the CSV file
+new_df = pd.read_csv("cv_results_over_epochs.csv")
+
+# Plotting the mean values for training and validation errors with distinct colors
+plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  # 'b' stands for blue
+plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  # 'r' stands for red
+
+# Adding title and labels to the plot
+plt.title('Training and Validation Error Over Epochs')
+plt.xlabel('Epochs (Iterations)')
+plt.ylabel('Error')
+
+# Adding legend to the plot
+plt.legend()
+
+# Show the plot
+plt.show()
+```
+
+
+# Neural Network
 
 ```{python}
 # Convert the sparse matrix to dense matrix as neural network needs dense input
@@ -350,7 +381,6 @@ print(f'Accuracy: {accuracy*100:.2f}%')
 ```
 
 ## SVM
-
 
 ```{python, eval = FALSE}
 param_grid = {
@@ -423,47 +453,90 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 
 
 ## Catboost
-52.73
+
+55.68
+
+
 ```{python}
-# If CatBoost requires numeric labels, we need to fit a LabelEncoder
+# Initialize LabelEncoder
 le = LabelEncoder()
+
+# Fit and transform the training data
 y_train_encoded = le.fit_transform(y_train)
+
+# Transform the testing data
 y_test_encoded = le.transform(y_test)
 
-# Initialize CatBoostClassifier
-clf = CatBoostClassifier(
-    iterations=500, # Number of boosting iterations
-    depth=10,       # Depth of the trees
-    learning_rate=0.05, # Learning rate
-    loss_function='MultiClass', # Objective function
-    random_state=42, # Random seed
-    verbose=10      # Output training information every 10 iterations
-)
+# Create pool with training data
+pool = Pool(data=X_train, label=y_train_encoded, cat_features=[])
 
-# Fit the model on the training data (converting sparse matrix to dense)
-#clf.fit(X_train.toarray(), y_train_encoded)
+# Parameters for CatBoostClassifier
+params = {
+    'iterations': 3000,
+    'depth': 5,
+    'learning_rate': 0.05,
+    'loss_function': 'MultiClass',
+    'random_seed': 42,
+    'verbose': 10
+}
 
+# Perform cross-validation and save results
+#cv_results = cv(
+#    pool=pool,
+#    params=params,
+#    fold_count=5,
+#    plot=False,
+#    early_stopping_rounds=10
+#)
 
- # Save the model
-#clf.save_model("catboost_TFIDF.cbm")
+# Save cross-validation results to a CSV file
+#cv_results.to_csv('cv_results_over_epochs_2.csv', index=False)
 
+# Train model on full training set and save it
+#clf = CatBoostClassifier(**params)
+#clf.fit(pool)
+#clf.save_model('catboost_TFIDF.cbm')
+
+# Load model from file
 loaded_model = CatBoostClassifier()
-loaded_model.load_model("catboost_TFIDF.cbm")
+loaded_model.load_model('catboost_TFIDF.cbm')
 
-# Make predictions on the testing data
-y_pred = loaded_model.predict(X_test.toarray())
+# Make predictions on testing data
+y_pred = loaded_model.predict(X_test)
+y_pred_class = y_pred.flatten().astype(int)
 
-# Decode the predicted labels back to original classes (if necessary)
-y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
+# Inverse transform the predictions back to original labels
+y_pred_decoded = le.inverse_transform(y_pred_class)
 
-# Evaluate the classifier
-accuracy = accuracy_score(y_test_encoded, y_pred.flatten().astype(int))
-classification_rep = classification_report(y_test_encoded, y_pred.flatten().astype(int), target_names=le.classes_)
+# Evaluate the classifier using the original (non-encoded) labels
+accuracy = accuracy_score(y_test_encoded, y_pred_class)
+classification_rep = classification_report(y_test_encoded, y_pred_class, target_names=le.classes_)
 
-# Print the accuracy and classification report
+# Print accuracy and classification report
 print(f'Accuracy: {accuracy * 100:.2f}%')
 print('Classification Report:')
 print(classification_rep)
+```
+
+
+```{python}
+# Read the CSV file
+new_df = pd.read_csv("cv_results_over_epochs_2.csv")
+
+# Plotting the mean values for training and validation errors with distinct colors
+plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  
+plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  
+
+# Adding title and labels to the plot
+plt.title('Training and Validation Error Over Epochs')
+plt.xlabel('Epochs (Iterations)')
+plt.ylabel('Error')
+
+# Adding legend to the plot
+plt.legend()
+
+# Show the plot
+plt.show()
 ```
 
 ## SVM
@@ -556,43 +629,74 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ```
 
 
-Accuracy: 33.13%
+Accuracy: 40.2%
 ```{python}
-# Initialize CatBoostClassifier
-clf = CatBoostClassifier(
-    iterations=500,          # Number of boosting iterations
-    depth=10,                # Depth of the trees
-    learning_rate=0.05,      # Learning rate
-    loss_function='MultiClass',  # Objective function
-    random_state=42,             # Random seed
-    verbose=10                   # Output training information every 10 iterations
-)
+pool = Pool(data=X_train, label=y_train, cat_features=[])
+# Parameters for the CatBoostClassifier
+params = {
+    'iterations': 3000,          # Number of boosting iterations
+    'depth': 5,                # Depth of the trees
+    'learning_rate': 0.05,      # Learning rate
+    'loss_function': 'MultiClass',  # Objective function
+    'random_seed': 42,             # Random seed
+    'verbose': 10                   # Output training information every 10 iterations
+}
 
+#cv_results = cv(
+ #   pool=pool,
+ #   params=params,
+ #   fold_count=5,  # Number of folds in CV
+ #   plot=False,   # Set to True if you want to see the plot of train and test errors during cross-validation
+  #  early_stopping_rounds=10
+#)
 
+# Save cross-validation results to a CSV file
+#cv_results.to_csv('cv_results_over_epochs_3.csv', index=False)
 
-# Fit the model on the training data
-#clf.fit(X_train, y_train)
+# Train the model on the full training set and save it
+#clf = CatBoostClassifier(**params)
+#clf.fit(pool)
+#clf.save_model('catboost_WordEmbed.cbm')
 
- # Save the model
-#clf.save_model("catboost_WordEmbed.cbm")
-
+# Load the model from the file
 loaded_model = CatBoostClassifier()
-loaded_model.load_model("catboost_WordEmbed.cbm")
+loaded_model.load_model('catboost_WordEmbed.cbm')
 
 # Make predictions on the testing data
 y_pred = loaded_model.predict(X_test)
-
-# Note: If y_pred is not a flat array, you might need to flatten it or adjust it to match the shape of y_test
-# For example, you might need to use y_pred.flatten() or y_pred[:, 0] depending on the output of the predict method
+y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
 
 # Evaluate the classifier
 accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
-classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=label_mapping.keys())
+classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
 print(f'Accuracy: {accuracy * 100:.2f}%')
 print('Classification Report:')
 print(classification_rep)
+
+```
+
+
+
+```{python}
+# Read the CSV file
+new_df = pd.read_csv("cv_results_over_epochs_3.csv")
+
+# Plotting the mean values for training and validation errors with distinct colors
+plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  
+plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  
+
+# Adding title and labels to the plot
+plt.title('Training and Validation Error Over Epochs')
+plt.xlabel('Epochs (Iterations)')
+plt.ylabel('Error')
+
+# Adding legend to the plot
+plt.legend()
+
+# Show the plot
+plt.show()
 ```
 
 ## SVM
