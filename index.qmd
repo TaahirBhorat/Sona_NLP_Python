@@ -63,6 +63,23 @@ pip install nltk requests matplotlib seaborn sklearn scikit-learn wordcloud catb
 ```
 
 ```{python}
+pip install wordcloud
+```
+
+```{python}
+pip install gensim
+```
+
+```{python}
+pip install tensorflow==2.14.0
+```
+
+
+```{python}
+pip install keras==2.14.0
+```
+
+```{python}
 # General imports
 import os
 import pandas as pd
@@ -422,8 +439,8 @@ plt.show()
 Val accurcay 58.80%
 ```{python}
 
-#X_train = X_train.toarray()
-#X_test = X_test.toarray()
+X_train = X_train.toarray()
+X_test = X_test.toarray()
 
 # Define model
 #model = Sequential([
@@ -455,33 +472,33 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ## SVM
 
 ```{python, eval = FALSE}
-param_grid = {
+#param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
     'gamma': ['scale', 'auto']  # Kernel coefficient
-}
+#}
 
 # Initialize the SVM classifier
-svm = SVC(random_state=42)
+#svm = SVC(random_state=42)
 
 # Initialize Grid Search
-grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
 # Perform Grid Search on the training data
-grid_search.fit(X_train, y_train)
+#grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
-best_params = grid_search.best_params_
-best_svm_clf = grid_search.best_estimator_
+#best_params = grid_search.best_params_
+#best_svm_clf = grid_search.best_estimator_
 
 # Make predictions using the best model
-y_pred_best_svm = best_svm_clf.predict(X_test)
+#y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
 
-best_params, accuracy_best_svm, classification_rep_best_svm
+#best_params, accuracy_best_svm, classification_rep_best_svm
 ```
 
 
@@ -621,33 +638,33 @@ best params:
 
 
 ```{python, eval = FALSE}
-param_grid = {
+#param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
     'gamma': ['scale', 'auto']  # Kernel coefficient
-}
+#}
 
 # Initialize the SVM classifier
-svm = SVC(random_state=42)
+#svm = SVC(random_state=42)
 
 # Initialize Grid Search
-grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
 # Perform Grid Search on the training data
-grid_search.fit(X_train, y_train)
+#grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
-best_params = grid_search.best_params_
-best_svm_clf = grid_search.best_estimator_
+#best_params = grid_search.best_params_
+#best_svm_clf = grid_search.best_estimator_
 
 # Make predictions using the best model
-y_pred_best_svm = best_svm_clf.predict(X_test)
+#y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
 
-best_params, accuracy_best_svm, classification_rep_best_svm
+#best_params, accuracy_best_svm, classification_rep_best_svm
 ```
 
 ```{python}
@@ -810,7 +827,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ```
 
 
-Accuracy: 40.2%
+Accuracy: 29.18%
 ```{python}
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
@@ -882,34 +899,34 @@ plt.show()
 
 ```{python, eval = FALSE}
 
-param_grid = {
+#param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
     'gamma': ['scale', 'auto']  # Kernel coefficient
-}
+#}
 
 # Initialize the SVM classifier
-svm = SVC(random_state=42)
+#svm = SVC(random_state=42)
 
 # Initialize Grid Search
-grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
 # Perform Grid Search on the training data
-grid_search.fit(X_train, y_train)
+#grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
-best_params = grid_search.best_params_
-best_svm_clf = grid_search.best_estimator_
+#best_params = grid_search.best_params_
+#best_svm_clf = grid_search.best_estimator_
 
 # Make predictions using the best model
-y_pred_best_svm = best_svm_clf.predict(X_test)
+#y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
+#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
 ```
 
-
+39.64%
 ```{python}
 # Initialize the Support Vector Machine classifier with specific parameters
 specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
@@ -934,29 +951,29 @@ print(classification_rep_specific_svm)
 ## Neural Network 
 Accuracy: 36.69%
 
-```{python}
+```{python, eval = FALSE}
 # Define model
-model = Sequential([
-    Dense(512, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
-    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
-    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
-    Dense(len(label_mapping), activation='softmax')  # Output layer
-])
+#model = Sequential([
+ #   Dense(512, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
+  #  Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
+  #  Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
+  #  Dense(len(label_mapping), activation='softmax')  # Output layer
+#])
 
 # Compile model
-model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Set early stopping and model checkpoint callbacks
-early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
-callbacks = [early_stopping, model_checkpoint]
+#early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+#model_checkpoint = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
+#callbacks = [early_stopping, model_checkpoint]
 
 # Train model
-model.fit(X_train, y_train, validation_split=0.2, epochs=100, callbacks=callbacks)
+#model.fit(X_train, y_train, validation_split=0.2, epochs=100, callbacks=callbacks)
 
 # Evaluate model
-loss, accuracy = model.evaluate(X_test, y_test)
-print(f'Loss: {loss:.4f}')
-print(f'Accuracy: {accuracy*100:.2f}%')
+#loss, accuracy = model.evaluate(X_test, y_test)
+#print(f'Loss: {loss:.4f}')
+#print(f'Accuracy: {accuracy*100:.2f}%')
 ```
 
