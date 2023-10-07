@@ -50,11 +50,25 @@ Note that for each of the following predictive models, each of the three feature
 
 Gradient Boosting is a general technique where models are built sequentially, with each new model being trained to correct the mistakes of the combined ensemble of existing models. This process is iteratively repeated, progressively improving the model’s accuracy until further improvements are negligible.
 
-Gradient Boosted Trees (GBTs) inherently leverage an ensemble methodology, combining the predictive power of multiple weak learners, in decision trees, to craft a more accurate and robust model. The algorithm incrementally builds an ensemble of trees where each subsequent tree compensates for the errors of the aggregate set of preceding trees. Through this iterative refinement, the algorithm not only enhances its precision but also avoids overfitting, providing a reliable generalization to unseen data.
+Gradient Boosted Trees (GBTs) inherently leverage an ensemble methodology, combining the predictive power of multiple weak learners, in decision trees, to create a more accurate and robust model. The algorithm incrementally builds an ensemble of trees where each subsequent tree compensates for the errors of the aggregate set of preceding trees. Through this iterative refinement, the algorithm not only enhances its precision but also avoids overfitting, providing a reliable generalization to unseen data.
 
-In our deployment of GBTs, using Yandex's CatBoost, careful parameter tuning was essential for optimized performance. We engaged 500 boosting iterations, a 0.05 learning rate, and a tree depth of 10. The boosting iterations define the number of trees in the model, with each iteration adding a new tree that corrects the errors of the ensemble. The learning rate, alternatively known as shrinkage, moderates the influence of each tree, preventing any single tree from dominating the ensemble prediction. The tree depth, meanwhile, influences the model's complexity, with deeper trees allowing for the capture of more complex patterns in the data but at the risk of overfitting. These parameters were selected after running a grid search over hyperparameters choosing the hyperaamters which minimised validation error computed using 5-fold cross validation.
+In our deployment of GBTs, using Yandex's CatBoost, careful parameter tuning was essential for optimized performance. We engaged 500 boosting iterations, a 0.05 learning rate, and a tree depth of 10. The boosting iterations define the number of trees in the model, with each iteration adding a new tree that corrects the errors of the ensemble. The learning rate, alternatively known as shrinkage, moderates the influence of each tree, preventing any single tree from dominating the ensemble prediction. The tree depth, meanwhile, influences the model's complexity, with deeper trees allowing for the capture of more complex patterns in the data but at the risk of overfitting. These parameters were selected after running a grid search over hyperparameters choosing the hyperamters which minimised validation error computed using 5-fold cross validation.
 
 ### Support Vector Machines
+
+Support Vector Machines (SVMs) is supervised learning algorithm used for classification tasks. SVMs operate by constructing hyperplanes in a multidimensional space that separates cases of different class labels(). The SVM algorithm is implemented in practice using a kernel. The kernel trick helps in fitting the maximum-margin hyperplane in the transformed feature space. The hyperplane is selected to segregate classes in the best possible way.
+
+In this project, SVM classifiers were employed with various parameter configurations, and their performance was evaluated based on the processed data obtained through the feature extractoin methods previously mentoined.
+A grid search approach was utilized to systematically explore a range of parameter values and identify the optimal configuration for each data representation method. The grid search was performed over a range of values for the `C` parameter, different kernel types, and the gamma coefficient for the Radial Basis Function (RBF) kernel. Specifically, the `C` parameter was explored over the values `[0.1, 1, 10]`. The `C` parameter represents the regularization term, controlnig the trade-off between having a smooth decision boundary and classifying the training points correctly. A smaller value of `C` creates a wider margin but may misclassify more points, while a larger `C` aims for correct classification, potentially leading to a more complex model.
+
+The kernel parameter, with values `['linear', 'rbf']`, specifies the type of hyperplane used to separate the data. The linear kernel is often used when the data is linearly separable, meaning it can be separated by a single line. The RBF kernel is used for non-linear data, transforming it into a higher-dimensional space where it becomes linearly separable. The gamma parameter, with values `['scale', 'auto']`, defines how far the influence of a single training example reaches, with low values meaning 'far' and high values meaning 'close'().
+
+For the SVM model trained on data represented using Bag of Words, the grid search identified the optimal parameters to be `C=0.1`, with a `linear` kernel and `gamma='scale'`. When the data was represented using TF-IDF, the optimal SVM model parameters were found to be `C=10`, using an `RBF` kernel with `gamma='scale'`. Finally, for the Word Embeddings representation, the best-performing SVM model utilized a `C` value of `10`, a `linear` kernel, and `gamma='scale'`.
+
+### Neural Networks
+
+
+
 
 
 
@@ -80,7 +94,16 @@ pip install keras==2.14.0
 ```
 
 ```{python}
+pip install joblib
+```
+
+```{python}
+pip install pickle
+```
+```{python}
 # General imports
+import pickle
+from joblib import dump, load
 import os
 import pandas as pd
 import re
@@ -505,13 +528,22 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```{python}
 
 # Initialize the Support Vector Machine classifier
-svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
+#svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
 
 # Fit the model on the training data
-svm_clf.fit(X_train, y_train)
+#svm_clf.fit(X_train, y_train)
+
+
+# Using pickle
+#with open('svm_model1.pkl', 'wb') as model_file:
+#    pickle.dump(svm_clf, model_file)
+
+# Using pickle
+with open('svm_model1.pkl', 'rb') as model_file:
+    loaded_svm_pickle1 = pickle.load(model_file)
 
 # Make predictions on the testing data
-y_pred_svm = svm_clf.predict(X_test)
+y_pred_svm = loaded_svm_pickle1.predict(X_test)
 
 # Evaluate the classifier
 accuracy_svm = accuracy_score(y_test, y_pred_svm)
@@ -544,7 +576,6 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 ## Catboost
 
 55.68
-
 
 ```{python}
 # Initialize LabelEncoder
@@ -669,13 +700,20 @@ best params:
 
 ```{python}
 # Initialize the Support Vector Machine classifier
-svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
+#svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
 
 # Fit the model on the training data
-svm_clf.fit(X_train, y_train)
+#svm_clf.fit(X_train, y_train)
+
+#with open('svm_model2.pkl', 'wb') as model_file:
+#    pickle.dump(svm_clf, model_file)
+
+# Using pickle
+with open('svm_model2.pkl', 'rb') as model_file:
+    loaded_svm2_pickle = pickle.load(model_file)
 
 # Make predictions on the testing data
-y_pred_svm = svm_clf.predict(X_test)
+y_pred_svm = loaded_svm2_pickle.predict(X_test)
 
 # Evaluate the classifier
 accuracy_svm = accuracy_score(y_test, y_pred_svm)
@@ -827,6 +865,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ```
 
 
+## Catboost
 Accuracy: 29.18%
 ```{python}
 pool = Pool(data=X_train, label=y_train, cat_features=[])
@@ -926,16 +965,25 @@ plt.show()
 #classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
 ```
 
-39.64%
+41.26%
 ```{python}
 # Initialize the Support Vector Machine classifier with specific parameters
-specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
+#specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
 
 # Fit the model on the training data
-specific_svm_clf.fit(X_train, y_train)
+#specific_svm_clf.fit(X_train, y_train)
+
+#with open('svm_model3.pkl', 'wb') as model_file:
+#    pickle.dump(specific_svm_clf, model_file)
+
+# Using pickle
+with open('svm_model3.pkl', 'rb') as model_file:
+    loaded_svm3_pickle = pickle.load(model_file)
 
 # Make predictions on the testing data
-y_pred_specific_svm = specific_svm_clf.predict(X_test)
+y_pred_specific_svm = loaded_svm3_pickle.predict(X_test)
+
+
 
 # Evaluate the classifier
 accuracy_specific_svm = accuracy_score(y_test, y_pred_specific_svm)
