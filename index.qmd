@@ -241,6 +241,7 @@ Prior to investigating the models, a preliminary data exploration was conducted 
 
 ```{python}
 #| fig-cap: "Figure 1: Number of Sentences per President"
+#| echo: false
 #| warning: false
 # Set the style of the visualization
 sns.set(style="whitegrid")
@@ -270,6 +271,7 @@ data = data[data['Presidents'] != 'deKlerk']
 ```{python}
 #| fig-cap: "Figure 2: Average Sentence Length per President"
 #| warning: false
+#| echo: false
 # Calculate the length in words of each sentence
 data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
 
@@ -535,7 +537,7 @@ loaded_model = load_model('NN_final_model_1.h5')
 
 
 # Evaluate the loaded model on the test set
-final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test)
+final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
@@ -880,7 +882,7 @@ loaded_model = load_model('NN_final_model_2.h5')
 
 
 # Evaluate the loaded model on the test set
-final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test)
+final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
@@ -1157,7 +1159,7 @@ loaded_model = load_model('NN_final_model_3.h5')
 
 
 # Evaluate the loaded model on the test set
-final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test)
+final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
