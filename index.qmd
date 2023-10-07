@@ -223,7 +223,7 @@ data = pd.read_csv("finalSentence.csv")
 # EDA
 
 ```{python}
-# | label: Sentence Distribution by President
+#| fig-cap: "A line plot on a polar axis"
 # Set the style of the visualization
 sns.set(style="whitegrid")
 
