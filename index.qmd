@@ -473,9 +473,9 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 
 ```{python, eval = FALSE}
 #param_grid = {
-    'C': [0.1, 1, 10],  # Regularization parameter
-    'kernel': ['linear', 'rbf'],  # Type of SVM
-    'gamma': ['scale', 'auto']  # Kernel coefficient
+#    'C': [0.1, 1, 10],  # Regularization parameter
+#    'kernel': ['linear', 'rbf'],  # Type of SVM
+#    'gamma': ['scale', 'auto']  # Kernel coefficient
 #}
 
 # Initialize the SVM classifier
@@ -639,9 +639,9 @@ best params:
 
 ```{python, eval = FALSE}
 #param_grid = {
-    'C': [0.1, 1, 10],  # Regularization parameter
-    'kernel': ['linear', 'rbf'],  # Type of SVM
-    'gamma': ['scale', 'auto']  # Kernel coefficient
+#    'C': [0.1, 1, 10],  # Regularization parameter
+#    'kernel': ['linear', 'rbf'],  # Type of SVM
+#    'gamma': ['scale', 'auto']  # Kernel coefficient
 #}
 
 # Initialize the SVM classifier
@@ -900,9 +900,9 @@ plt.show()
 ```{python, eval = FALSE}
 
 #param_grid = {
-    'C': [0.1, 1, 10],  # Regularization parameter
-    'kernel': ['linear', 'rbf'],  # Type of SVM
-    'gamma': ['scale', 'auto']  # Kernel coefficient
+#    'C': [0.1, 1, 10],  # Regularization parameter
+#    'kernel': ['linear', 'rbf'],  # Type of SVM
+#    'gamma': ['scale', 'auto']  # Kernel coefficient
 #}
 
 # Initialize the SVM classifier
