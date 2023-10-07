@@ -223,6 +223,7 @@ data = pd.read_csv("finalSentence.csv")
 # EDA
 
 ```{python}
+# | label: Sentence Distribution by President
 # Set the style of the visualization
 sns.set(style="whitegrid")
 
@@ -238,8 +239,6 @@ plt.xlabel('Presidents')
 plt.ylabel('Number of Sentences')
 plt.title('Number of Sentences per President')
 plt.xticks(rotation=45)
-caption = "Figure 1: Sentence Distribution by President"
-plt.figtext(0.5, -0.1, caption, wrap=True, horizontalalignment='center', fontsize=12)
 plt.show()
 
 
