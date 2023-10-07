@@ -97,10 +97,14 @@ For the Gradient Boosted Trees model, the loss function was an essential aspect 
 ```{python}
 #| echo: false
 #| error: false
+#| output: false
 pip install nltk requests matplotlib seaborn sklearn scikit-learn wordcloud catboost tensorflow gensim
 ```
 
 ```{python}
+#| echo: false
+#| error: false
+#| output: false
 pip install wordcloud
 ```
 
