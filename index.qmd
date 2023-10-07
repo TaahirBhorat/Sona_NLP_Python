@@ -135,6 +135,7 @@ pip install joblib
 pip install pickle
 ```
 ```{python}
+#| include: false
 # General imports
 import pickle
 from joblib import dump, load
@@ -178,6 +179,7 @@ from sklearn.metrics import classification_report, accuracy_score
 
 
 ```{python}
+#| echo: false
 folder_path = 'speeches'  # Ensure this is your correct folder path
 files = os.listdir(folder_path)
 files = sorted([file for file in files if os.path.isfile(os.path.join(folder_path, file)) and file.endswith('.txt')])
@@ -227,6 +229,7 @@ df.reset_index(drop=True, inplace=True)
 
 
 ```{python}
+#| echo: false
 data = pd.read_csv("finalSentence.csv")
 ```
 
@@ -238,6 +241,7 @@ Prior to investigating the models, a preliminary data exploration was conducted 
 
 ```{python}
 #| fig-cap: "Figure 1: Number of Sentences per President"
+#| warning: false
 # Set the style of the visualization
 sns.set(style="whitegrid")
 
@@ -258,12 +262,14 @@ plt.show()
 ```
 
 ```{python}
+#| include: false
 data = data[data['Presidents'] != ' Motlanthe']
 data = data[data['Presidents'] != 'deKlerk']
 ```
 
 ```{python}
 #| fig-cap: "Figure 2: Average Sentence Length per President"
+#| warning: false
 # Calculate the length in words of each sentence
 data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
 
@@ -296,6 +302,7 @@ plt.show()
 
 ```{python}
 #| fig-cap: "Figure 4: Word Cloud per President"
+#| echo: false
 # Define a function to remove stop words from a sentence
 def remove_stopwords(sentence):
     words = sentence.split()
@@ -329,6 +336,7 @@ plt.show()
 
 
 ```{python}
+#| echo: false
 # Preprocess text data: lowercasing and removing punctuation
 data['Processed_Sentences'] = data['Sentences'].str.lower().str.replace('[^\w\s]', '', regex=True)
 
@@ -358,6 +366,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 Here looks like 56.18 percent accuracy
 
 ```{python}
+#| echo: false
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
 params = {
@@ -406,6 +415,7 @@ classification_rep = classification_report(y_test, y_pred.flatten().astype(int),
 
 
 ```{python}
+#| echo: false
 # Read the CSV file
 new_df = pd.read_csv("cv_results_over_epochs.csv")
 
@@ -429,6 +439,7 @@ plt.show()
 # Neural Network
 Accuracy: 60.41%
 ```{python}
+#| echo: false
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.models import Sequential, load_model
@@ -498,6 +509,7 @@ plt.show()
 
 Val accurcay 58.80%
 ```{python}
+#| echo: false
 X_train = X_train.toarray()
 X_test = X_test.toarray()
 
@@ -531,6 +543,7 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ## SVM
 
 ```{python, eval = FALSE}
+#| echo: false
 #param_grid = {
 #    'C': [0.1, 1, 10],  # Regularization parameter
 #    'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -562,6 +575,7 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 
 
 ```{python}
+#| echo: false
 # Initialize the Support Vector Machine classifier
 #svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
 
@@ -591,6 +605,7 @@ print(f'test score {accuracy_svm}')
 # TF-IDF
 
 ```{python}
+#| echo: false
 # Initialize a TfidfVectorizer with stop words removal
 vectorizer = TfidfVectorizer(stop_words='english')
 
@@ -613,6 +628,7 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 55.68
 
 ```{python}
+#| echo: false
 # Initialize LabelEncoder
 le = LabelEncoder()
 
@@ -675,6 +691,7 @@ print(classification_rep)
 
 
 ```{python}
+#| echo: false
 # Read the CSV file
 new_df = pd.read_csv("cv_results_over_epochs_2.csv")
 
@@ -704,6 +721,7 @@ best params:
 
 
 ```{python}
+#| echo: false
 #param_grid = {
 #    'C': [0.1, 1, 10],  # Regularization parameter
 #    'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -734,6 +752,7 @@ best params:
 ```
 
 ```{python}
+#| echo: false
 # Initialize the Support Vector Machine classifier
 #svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
 
@@ -763,6 +782,7 @@ accuracy_svm
 ### Neural Net
 
 ```{python}
+#| echo: false
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.models import Sequential, load_model
@@ -833,6 +853,7 @@ plt.show()
 
 Test Accuracy: 59.58%
 ```{python}
+#| echo: false
 #X_train = X_train.toarray()
 #X_test = X_test.toarray()
 encoder = LabelEncoder()
@@ -870,6 +891,7 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 
 
 ```{python}
+#| echo: false
 # Tokenize sentences using white-space-based tokenization
 data['Tokenized_Sentences'] = data['Sentences'].apply(lambda x: x.split())
 
@@ -902,6 +924,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ## Catboost
 Accuracy: 29.18%
 ```{python}
+#| echo: false
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
 params = {
@@ -949,6 +972,7 @@ print(classification_rep)
 ```
 
 ```{python}
+#| echo: false
 # Read the CSV file
 new_df = pd.read_csv("cv_results_over_epochs_3.csv")
 
@@ -971,6 +995,7 @@ plt.show()
 ## SVM
 
 ```{python, eval = FALSE}
+#| echo: false
 #param_grid = {
 #    'C': [0.1, 1, 10],  # Regularization parameter
 #    'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -1000,6 +1025,7 @@ plt.show()
 
 41.26%
 ```{python}
+#| echo: false
 # Initialize the Support Vector Machine classifier with specific parameters
 #specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
 
@@ -1033,6 +1059,7 @@ print(classification_rep_specific_svm)
 Accuracy: 36.69%
 
 ```{python}
+#| echo: false
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.models import Sequential, load_model
@@ -1103,6 +1130,7 @@ plt.show()
 
 Test Accuracy: 36.08%
 ```{python}
+#| echo: false
 #X_train = X_train.toarray()
 #X_test = X_test.toarray()
 encoder = LabelEncoder()
