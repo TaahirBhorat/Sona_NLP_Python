@@ -223,7 +223,7 @@ data = pd.read_csv("finalSentence.csv")
 # EDA
 
 ```{python}
-#| fig-cap: "A line plot on a polar axis"
+#| fig-cap: "Figure 1: Number of Sentences per President"
 # Set the style of the visualization
 sns.set(style="whitegrid")
 
@@ -237,7 +237,6 @@ sns.barplot(x=sentence_counts.index, y=sentence_counts.values, palette="viridis"
 # Add labels and title
 plt.xlabel('Presidents')
 plt.ylabel('Number of Sentences')
-plt.title('Number of Sentences per President')
 plt.xticks(rotation=45)
 plt.show()
 
@@ -250,6 +249,7 @@ data = data[data['Presidents'] != 'deKlerk']
 ```
 
 ```{python}
+#| fig-cap: "Figure 2: Average Sentence Length per President"
 # Calculate the length in words of each sentence
 data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
 
@@ -271,7 +271,6 @@ sns.barplot(x=average_length.index, y=average_length.values, palette=bar_colors)
 # Add labels and title
 plt.xlabel('Presidents')
 plt.ylabel('Average Sentence Length (in words)')
-plt.title('Average Sentence Length per President')
 plt.xticks(rotation=45)
 plt.show()
 
@@ -279,10 +278,11 @@ plt.show()
 
 # Overall top Words used
 
-blah blah blah
 # Word Cloud per president
 
 ```{python}
+
+#| fig-cap: "Figure 4: Word Cloud per President"
 # Define a function to remove stop words from a sentence
 def remove_stopwords(sentence):
     words = sentence.split()
@@ -388,9 +388,9 @@ accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
-print(f'Accuracy: {accuracy * 100:.2f}%')
-print('Classification Report:')
-print(classification_rep)
+#print(f'Accuracy: {accuracy * 100:.2f}%')
+#print('Classification Report:')
+#print(classification_rep)
 
 ```
 
