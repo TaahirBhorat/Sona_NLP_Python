@@ -281,7 +281,6 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 Here looks like 56.18 percent accuracy
 
 ```{python}
-
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
 params = {
@@ -351,33 +350,106 @@ plt.show()
 
 
 # Neural Network
-
+Accuracy: 60.41%
 ```{python}
+import numpy as np
+from sklearn.model_selection import StratifiedKFold
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
 # Convert the sparse matrix to dense matrix as neural network needs dense input
 X_train_dense = X_train.toarray()
 X_test_dense = X_test.toarray()
+seed = 7
+np.random.seed(seed)
+
+# Define 5-fold cross-validation
+#num_folds = 5
+#kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
+
+# Initialize variables to store sum of accuracies for each epoch
+#sum_train_accuracy = []
+#sum_val_accuracy = []
+
+#for train, test in kfold.split(X_train_dense, y_train):
+    # Split data into train and validation sets for this fold
+ #   X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
+ #   y_train_fold, y_val_fold = y_train[train], y_train[test]
+
+    # Define model (adjust as necessary)
+  #  model = Sequential([
+   #     Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
+   #     Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
+   #     Dense(len(np.unique(y_train)), activation='softmax')
+   # ])
+    
+    # Compile model (adjust optimizer, loss, and metrics as necessary)
+   # model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Train model and store training history
+    #history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
+
+    # Append accuracies for each epoch for this fold
+    #sum_train_accuracy.append(history.history['accuracy'])
+    #sum_val_accuracy.append(history.history['val_accuracy'])
+
+# Compute average accuracies for each epoch
+#avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
+#avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
+
+# Save averaged accuracies to CSV
+#avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
+#avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_1.csv', index=False)
+
+# Load averaged accuracies from CSV
+loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_1.csv')
+
+# Plotting
+plt.figure(figsize=(12, 6))
+plt.plot(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1), loaded_avg_accuracies['avg_train_accuracy'], label='Average Training Accuracy')
+plt.plot(range(1, len(loaded_avg_accuracies['avg_val_accuracy']) + 1), loaded_avg_accuracies['avg_val_accuracy'], label='Average Validation Accuracy', linestyle='dashed')
+
+plt.title('Average Training and Validation Accuracy Over Epochs')
+plt.xlabel('Epoch')
+plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1))  # Adjust x-axis ticks to start from 1
+plt.ylabel('Accuracy')
+plt.legend(loc='upper left')
+plt.show()
+```
+
+Val accurcay 58.80%
+```{python}
+
+#X_train = X_train.toarray()
+#X_test = X_test.toarray()
 
 # Define model
-model = Sequential([
-    Dense(512, input_dim=X_train_dense.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-2)),  # Input layer
-    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
-    Dense(256, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-5)),  # Hidden layer
-    Dense(len(le.classes_), activation='softmax')  # Output layer
-])
+#model = Sequential([
+#    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
+#    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
+#    Dense(len(label_mapping), activation='softmax')  # Output layer
+#])
 
 # Compile model
-model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint('best_model.h5', monitor='val_loss', save_best_only=True)
 
-callbacks = [early_stopping, model_checkpoint]
-# Train model
-model.fit(X_train_dense, y_train,  validation_split=0.2, epochs=100, callbacks=callbacks)
-# Evaluate model
-loss, accuracy = model.evaluate(X_test_dense, y_test)
-print(f'Loss: {loss:.4f}')
-print(f'Accuracy: {accuracy*100:.2f}%')
+#epochs = 2
+#model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
+
+# Save the final model
+#model.save('NN_final_model_1.h5')
+
+# Load the final model
+loaded_model = load_model('NN_final_model_1.h5')
+
+
+# Evaluate the loaded model on the test set
+final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test)
+print(f'Test Loss: {final_loss:.4f}')
+print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 ## SVM
@@ -596,6 +668,115 @@ classification_rep_svm = classification_report(y_test, y_pred_svm)
 accuracy_svm
 ```
 
+
+
+### Neural Net
+
+```{python}
+import numpy as np
+from sklearn.model_selection import StratifiedKFold
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+# Convert the sparse matrix to dense matrix as neural network needs dense input
+X_train_dense = X_train.toarray()
+X_test_dense = X_test.toarray()
+
+encoder = LabelEncoder()
+y_train = encoder.fit_transform(y_train)
+#seed = 7
+#np.random.seed(seed)
+
+# Define 5-fold cross-validation
+#num_folds = 5
+#kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
+
+# Initialize variables to store sum of accuracies for each epoch
+#sum_train_accuracy = []
+#sum_val_accuracy = []
+
+#for train, test in kfold.split(X_train_dense, y_train):
+    # Split data into train and validation sets for this fold
+#    X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
+#    y_train_fold, y_val_fold = y_train[train], y_train[test]
+
+#    model = Sequential([
+#        Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
+#        Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
+#        Dense(len(np.unique(y_train)), activation='softmax')
+#    ])
+    
+#    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Train model and store training history
+#    history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
+
+    # Append accuracies for each epoch for this fold
+#    sum_train_accuracy.append(history.history['accuracy'])
+#    sum_val_accuracy.append(history.history['val_accuracy'])
+
+# Compute average accuracies for each epoch
+#avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
+#avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
+
+# Save averaged accuracies to CSV
+#avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
+#avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_2.csv', index=False)
+
+# Load averaged accuracies from CSV
+loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_2.csv')
+
+# Plotting
+plt.figure(figsize=(12, 6))
+plt.plot(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1), loaded_avg_accuracies['avg_train_accuracy'], label='Average Training Accuracy')
+plt.plot(range(1, len(loaded_avg_accuracies['avg_val_accuracy']) + 1), loaded_avg_accuracies['avg_val_accuracy'], label='Average Validation Accuracy', linestyle='dashed')
+
+plt.title('Average Training and Validation Accuracy Over Epochs')
+plt.xlabel('Epoch')
+plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1))  # Adjust x-axis ticks to start from 1
+plt.ylabel('Accuracy')
+plt.legend(loc='upper left')
+plt.show()
+```
+
+Test Accuracy: 59.58%
+```{python}
+
+#X_train = X_train.toarray()
+#X_test = X_test.toarray()
+encoder = LabelEncoder()
+y_test = encoder.fit_transform(y_test)
+# Define model
+#model = Sequential([
+#    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
+#    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
+#    Dense(len(label_mapping), activation='softmax')  # Output layer
+#])
+
+# Compile model
+#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+
+#epochs = 2
+#model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
+
+# Save the final model
+#model.save('NN_final_model_2.h5')
+
+# Load the final model
+loaded_model = load_model('NN_final_model_2.h5')
+
+
+# Evaluate the loaded model on the test set
+final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test)
+print(f'Test Loss: {final_loss:.4f}')
+print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+```
+
+
+
 # Word Embeddings 
 
 
@@ -677,8 +858,6 @@ print(classification_rep)
 
 ```
 
-
-
 ```{python}
 # Read the CSV file
 new_df = pd.read_csv("cv_results_over_epochs_3.csv")
@@ -701,7 +880,7 @@ plt.show()
 
 ## SVM
 
-```{python}
+```{python, eval = FALSE}
 
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
