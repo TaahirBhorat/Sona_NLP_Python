@@ -67,7 +67,31 @@ For the SVM model trained on data represented using Bag of Words, the grid searc
 
 ### Neural Networks
 
+The Neural Network (NN) model developed for the classification task is a multilayer perceptron (MLP), which is a type of feedforward neural network. The input data was converted from a sparse to a dense matrix format, as the latter is requisite for the functioning of neural networks. The architecture employed was the same across all feature extractioin methods as varrynig the model architecture did not prove to yield any siignificant differnce in model perrformance across the feature extraction methods. 
 
+The architecture of the NN consists of an input layer, a hidden layer, and an output layer. The input layer has 505 neurons, with the Rectified Linear Unit (ReLU) serving as the activation function. ReLU was chosen due to its effectiveness in mitigating the vanishing gradient problem, which is prevalent in deep networks. For the initialization of weights in the input layer, the He normal initializer was used. This initializer assists in breaking symmetry and facilitating the learning process. Additionally, to avoid the overfitting phenomenon, an L2 regularization term with a coefficient of $1 \times 10^{-8}$ was applied.
+
+The hidden layer, similar to the input layer, uses the ReLU activation function and the He normal initializer, but with 220 neurons. An L2 regularization term with a coefficient of $1 \times 10^{-7}$ was incorporated to constrain the weights, providing a balance between fitting the training data and maintaining model generalization.
+
+The output layer possesses neurons equal to the number of unique labels in the target variable. The softmax activation function is applied in this layer to output a probability distribution over the classes, making it suitable for multi-class classification tasks.
+
+During the training phase, a stratified 5-fold cross-validation strategy was employed. For each fold, the data was split into training and validation subsets, with the model being trained for 20 epochs. The sparse categorical crossentropy was selected as the loss function, being appropriate for multi-class classification problems. The Adam optimizer was utilized for its adaptive learning rate capabilities, facilitating a faster and more stable convergence to the minimum of the loss function. Following examination of the plot of training versus validation accuracy over epochs the optimal number of epochs fro training was set, and the final model was trainined and subsequently evaluated on the unseen test data. 
+
+## Model Evaluation Metrics
+
+The evaluation of the models' performance employed a suite of metrics to ensure a comprehensive assessment. The primary metric used is accuracy, defined as the ratio of correctly predicted observations to the total observations:
+
+\[
+\text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions Made}}
+\]
+
+While accuracy is a straightforward and informative metric, it may not be sufficiently descriptive in situations where the classes are imbalanced. For this reason, additional evaluative metrics were incorporated into the assessment framework.
+
+The stratified k-fold cross-validation (with \( k = 5 \)) technique used during the training phase of both Support Vector Machines (SVMs) and Neural Networks (NNs) facilitated the calculation of accuracy for both training and validation sets across all folds. The average accuracy computed from these folds provided a robust estimate of each model's generalization performance.
+
+Subsequently, confusion matrices were generated for the models. A confusion matrix is a table used to describe the performance of a classification algorithm. Each row of the matrix represents the instances of the actual class, while each column represents the instances of the predicted class. The entries on the main diagonal of the confusion matrix correspond to correct predictions, whereas other entries reflect the mistakes made by the classifier. Through the confusion matrix, various metrics including precision, recall, and the F1-score were computed to provide a detailed understanding of the model’s performance. Precision (the ratio of true positive predictions to the sum of true positive and false positive predictions), recall (the ratio of true positive predictions to the sum of true positive and false negative predictions), and the F1-score (the harmonic mean of precision and recall) offer deeper insights into the reliability and effectiveness of the models, especially in the presence of class imbalance.
+
+For the Gradient Boosted Trees model, the loss function was an essential aspect of evaluation. The loss function is a measure used to estimate the discrepancy between the predicted values and actual values. During the training process, the algorithm optimizes the model parameters to minimize this loss function, thereby improving the model’s predictive performance. Monitoring the change in the value of the loss function during the training process provides insights into the convergence and stability of the model, helping in understanding whether the model is learning effectively from the training data. For each training epoch, the loss was computed and analyzed to ensure the model was converging to a solution that minimized prediction errors.
 
 
 
@@ -215,6 +239,10 @@ plt.ylabel('Number of Sentences')
 plt.title('Number of Sentences per President')
 plt.xticks(rotation=45)
 plt.show()
+
+"""
+Figure 1: Sentence Distribution by President
+"""
 ```
 
 ```{python}
