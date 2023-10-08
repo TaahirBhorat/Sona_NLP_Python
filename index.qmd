@@ -69,7 +69,7 @@ For the SVM model trained on data represented using Bag of Words, the grid searc
 
 The Neural Network (NN) model developed for the classification task is a multilayer perceptron (MLP), which is a type of feedforward neural network. The input data was converted from a sparse to a dense matrix format, as the latter is requisite for the functioning of neural networks. The architecture employed was the same across all feature extractioin methods as varrynig the model architecture did not prove to yield any siignificant differnce in model perrformance across the feature extraction methods. 
 
-The architecture of the NN consists of an input layer, a hidden layer, and an output layer. The input layer has 505 neurons, with the Rectified Linear Unit (ReLU) serving as the activation function. ReLU was chosen due to its effectiveness in mitigating the vanishing gradient problem, which is prevalent in deep networks. For the initialization of weights in the input layer, the He normal initializer was used. This initializer assists in breaking symmetry and facilitating the learning process. Additionally, to avoid the overfitting phenomenon, an L2 regularization term with a coefficient of $1 \times 10^{-8}$ was applied.
+The architecture of the NN consists of an input layer, a hidden layer, and an output layer. The input layer has 505 neurons, with the Rectified Linear Unit (ReLU) serving as the activation function. ReLU was chosen due to its effectiveness in mitigating the vanishing gradient problem, which is prevalent in deep networks. For the initialization of weights in the input layer, the He normal initializer was used. This initializer assists in breaking symmetry and facilitating the learning process(), and ensures a less-naive starting point for the weights. Additionally, to avoid the overfitting phenomenon, an L2 regularization term with a coefficient of $1 \times 10^{-8}$ was applied.
 
 The hidden layer, similar to the input layer, uses the ReLU activation function and the He normal initializer, but with 220 neurons. An L2 regularization term with a coefficient of $1 \times 10^{-7}$ was incorporated to constrain the weights, providing a balance between fitting the training data and maintaining model generalization.
 
@@ -235,9 +235,8 @@ data = pd.read_csv("finalSentence.csv")
 
 # Results
 
-# Data Exploration Results
-Prior to investigating the models, a preliminary data exploration was conducted to understand the data better. We begin first by plotting number of sentences per preseident to understand the balance of the dataset shown in figure 1. In Figure 2 after dropping presidents XXX and XXX we plot the average seentence length in words per president to understand the complexity of sentence ini length per president. Thereafter a overall word count across all presidents is plotted in figure 3 to investigate the words most used(excluding stopwords). Finally we plot in figure 4 a wordcloud per president to try and understand the nuance of each presidents vocabulary.  
-
+## Data Exploration Results
+Prior to investigating the models, a preliminary data exploration was conducted to understand the data better. We begin first by plotting number of sentences per preseident to understand the balance of the dataset shown in figure 1. The bar plot displays the distribution of sentence counts associated with six South African presidents: Zuma, Mbeki, Ramaphosa, Mandela, Motlanthe, and de Klerk. Zuma leads with 2629 sentences, suggesting he is the most frequently mentioned in the dataset. Mbeki follows closely with 2397 sentences, and Ramaphosa is third with 2279 sentences. Mandela is associated with 1671 sentences, significantly fewer than the top three. Motlanthe and de Klerk are least mentioned, with only 264 and 97 sentences respectively, indicating they are not as prominently featured in the dataset's source. Hence guven the inbalance of the dataset including Motlanthe and de Klerk, we choose to drop these two presidents from our dataset moving forward
 
 ```{python}
 #| fig-cap: "Figure 1: Number of Sentences per President"
@@ -267,6 +266,11 @@ plt.show()
 data = data[data['Presidents'] != ' Motlanthe']
 data = data[data['Presidents'] != 'deKlerk']
 ```
+
+
+ 
+ Figure 2 illustrates the average sentence lengths for four South African presidents: Mbeki, Mandela, Ramaphosa, and Zuma. Mbeki's sentences are the longest, averaging around $30.99$ words, indicating more complex or detailed discourse related to him. Mandela’s average is slightly shorter at $25.87$ words per sentence, followed by Ramaphosa with $22.83$ words. Zuma has the shortest sentences, averaging $19.43$ words, suggesting more concise communication associated with him. These differences might reflect variations in communication styles or the nature of the texts related to each president in the dataset.
+
 
 ```{python}
 #| fig-cap: "Figure 2: Average Sentence Length per President"
@@ -361,11 +365,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 
 ```
 
+## Bag of Words
+### Boosted Trees
 
-# Boosted Tree CatBoost
-
-
-Here looks like 56.18 percent accuracy
+Figure 5 shows
 
 ```{python}
 #| echo: false
@@ -438,7 +441,7 @@ plt.show()
 ```
 
 
-# Neural Network
+### Neural Network
 Accuracy: 60.41%
 ```{python}
 #| echo: false
@@ -542,7 +545,7 @@ print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
-## SVM
+### SVMs
 
 ```{python, eval = FALSE}
 #| echo: false
@@ -604,7 +607,7 @@ classification_rep_svm = classification_report(y_test, y_pred_svm)
 print(f'test score {accuracy_svm}')
 ```
 
-# TF-IDF
+## TF-IDF
 
 ```{python}
 #| echo: false
@@ -625,9 +628,8 @@ X_train.shape, X_test.shape, y_train.shape, y_test.shape
 ```
 
 
-## Catboost
+### Boosted Trees
 
-55.68
 
 ```{python}
 #| echo: false

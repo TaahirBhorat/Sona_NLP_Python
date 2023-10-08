@@ -122,27 +122,32 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#model-evaluation-metrics" id="toc-model-evaluation-metrics" class="nav-link" data-scroll-target="#model-evaluation-metrics">Model Evaluation Metrics</a></li>
   </ul></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
-  <li><a href="#data-exploration-results" id="toc-data-exploration-results" class="nav-link" data-scroll-target="#data-exploration-results">Data Exploration Results</a></li>
-  <li><a href="#overall-top-words-used" id="toc-overall-top-words-used" class="nav-link" data-scroll-target="#overall-top-words-used">Overall top Words used</a></li>
-  <li><a href="#word-cloud-per-president" id="toc-word-cloud-per-president" class="nav-link" data-scroll-target="#word-cloud-per-president">Word Cloud per president</a></li>
-  <li><a href="#boosted-tree-catboost" id="toc-boosted-tree-catboost" class="nav-link" data-scroll-target="#boosted-tree-catboost">Boosted Tree CatBoost</a></li>
-  <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
-  <li><a href="#svm" id="toc-svm" class="nav-link" data-scroll-target="#svm">SVM</a></li>
+  <li><a href="#data-exploration-results" id="toc-data-exploration-results" class="nav-link" data-scroll-target="#data-exploration-results">Data Exploration Results</a></li>
+  </ul></li>
+  <li><a href="#overall-top-words-used" id="toc-overall-top-words-used" class="nav-link" data-scroll-target="#overall-top-words-used">Overall top Words used</a></li>
+  <li><a href="#word-cloud-per-president" id="toc-word-cloud-per-president" class="nav-link" data-scroll-target="#word-cloud-per-president">Word Cloud per president</a>
+  <ul class="collapse">
+  <li><a href="#bag-of-words" id="toc-bag-of-words" class="nav-link" data-scroll-target="#bag-of-words">Bag of Words</a>
+  <ul class="collapse">
+  <li><a href="#boosted-trees" id="toc-boosted-trees" class="nav-link" data-scroll-target="#boosted-trees">Boosted Trees</a></li>
+  <li><a href="#neural-network" id="toc-neural-network" class="nav-link" data-scroll-target="#neural-network">Neural Network</a></li>
+  <li><a href="#svms" id="toc-svms" class="nav-link" data-scroll-target="#svms">SVMs</a></li>
   </ul></li>
   <li><a href="#tf-idf" id="toc-tf-idf" class="nav-link" data-scroll-target="#tf-idf">TF-IDF</a>
   <ul class="collapse">
-  <li><a href="#catboost" id="toc-catboost" class="nav-link" data-scroll-target="#catboost">Catboost</a></li>
-  <li><a href="#svm-1" id="toc-svm-1" class="nav-link" data-scroll-target="#svm-1">SVM</a>
+  <li><a href="#boosted-trees-1" id="toc-boosted-trees-1" class="nav-link" data-scroll-target="#boosted-trees-1">Boosted Trees</a></li>
+  </ul></li>
+  <li><a href="#svm" id="toc-svm" class="nav-link" data-scroll-target="#svm">SVM</a>
   <ul class="collapse">
   <li><a href="#neural-net" id="toc-neural-net" class="nav-link" data-scroll-target="#neural-net">Neural Net</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#word-embeddings-1" id="toc-word-embeddings-1" class="nav-link" data-scroll-target="#word-embeddings-1">Word Embeddings</a>
   <ul class="collapse">
-  <li><a href="#catboost-1" id="toc-catboost-1" class="nav-link" data-scroll-target="#catboost-1">Catboost</a></li>
-  <li><a href="#svm-2" id="toc-svm-2" class="nav-link" data-scroll-target="#svm-2">SVM</a></li>
+  <li><a href="#catboost" id="toc-catboost" class="nav-link" data-scroll-target="#catboost">Catboost</a></li>
+  <li><a href="#svm-1" id="toc-svm-1" class="nav-link" data-scroll-target="#svm-1">SVM</a></li>
   <li><a href="#neural-network-1" id="toc-neural-network-1" class="nav-link" data-scroll-target="#neural-network-1">Neural Network</a></li>
   </ul></li>
   </ul>
@@ -223,7 +228,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="neural-networks" class="level3">
 <h3 class="anchored" data-anchor-id="neural-networks">Neural Networks</h3>
 <p>The Neural Network (NN) model developed for the classification task is a multilayer perceptron (MLP), which is a type of feedforward neural network. The input data was converted from a sparse to a dense matrix format, as the latter is requisite for the functioning of neural networks. The architecture employed was the same across all feature extractioin methods as varrynig the model architecture did not prove to yield any siignificant differnce in model perrformance across the feature extraction methods.</p>
-<p>The architecture of the NN consists of an input layer, a hidden layer, and an output layer. The input layer has 505 neurons, with the Rectified Linear Unit (ReLU) serving as the activation function. ReLU was chosen due to its effectiveness in mitigating the vanishing gradient problem, which is prevalent in deep networks. For the initialization of weights in the input layer, the He normal initializer was used. This initializer assists in breaking symmetry and facilitating the learning process. Additionally, to avoid the overfitting phenomenon, an L2 regularization term with a coefficient of <span class="math inline">\(1 \times 10^{-8}\)</span> was applied.</p>
+<p>The architecture of the NN consists of an input layer, a hidden layer, and an output layer. The input layer has 505 neurons, with the Rectified Linear Unit (ReLU) serving as the activation function. ReLU was chosen due to its effectiveness in mitigating the vanishing gradient problem, which is prevalent in deep networks. For the initialization of weights in the input layer, the He normal initializer was used. This initializer assists in breaking symmetry and facilitating the learning process(), and ensures a less-naive starting point for the weights. Additionally, to avoid the overfitting phenomenon, an L2 regularization term with a coefficient of <span class="math inline">\(1 \times 10^{-8}\)</span> was applied.</p>
 <p>The hidden layer, similar to the input layer, uses the ReLU activation function and the He normal initializer, but with 220 neurons. An L2 regularization term with a coefficient of <span class="math inline">\(1 \times 10^{-7}\)</span> was incorporated to constrain the weights, providing a balance between fitting the training data and maintaining model generalization.</p>
 <p>The output layer possesses neurons equal to the number of unique labels in the target variable. The softmax activation function is applied in this layer to output a probability distribution over the classes, making it suitable for multi-class classification tasks.</p>
 <p>During the training phase, a stratified 5-fold cross-validation strategy was employed. For each fold, the data was split into training and validation subsets, with the model being trained for 20 epochs. The sparse categorical crossentropy was selected as the loss function, being appropriate for multi-class classification problems. The Adam optimizer was utilized for its adaptive learning rate capabilities, facilitating a faster and more stable convergence to the minimum of the loss function. Following examination of the plot of training versus validation accuracy over epochs the optimal number of epochs fro training was set, and the final model was trainined and subsequently evaluated on the unseen test data.</p>
@@ -241,10 +246,9 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
-</section>
-<section id="data-exploration-results" class="level1">
-<h1>Data Exploration Results</h1>
-<p>Prior to investigating the models, a preliminary data exploration was conducted to understand the data better. We begin first by plotting number of sentences per preseident to understand the balance of the dataset shown in figure 1. In Figure 2 after dropping presidents XXX and XXX we plot the average seentence length in words per president to understand the complexity of sentence ini length per president. Thereafter a overall word count across all presidents is plotted in figure 3 to investigate the words most used(excluding stopwords). Finally we plot in figure 4 a wordcloud per president to try and understand the nuance of each presidents vocabulary.</p>
+<section id="data-exploration-results" class="level2">
+<h2 class="anchored" data-anchor-id="data-exploration-results">Data Exploration Results</h2>
+<p>Prior to investigating the models, a preliminary data exploration was conducted to understand the data better. We begin first by plotting number of sentences per preseident to understand the balance of the dataset shown in figure 1. The bar plot displays the distribution of sentence counts associated with six South African presidents: Zuma, Mbeki, Ramaphosa, Mandela, Motlanthe, and de Klerk. Zuma leads with 2629 sentences, suggesting he is the most frequently mentioned in the dataset. Mbeki follows closely with 2397 sentences, and Ramaphosa is third with 2279 sentences. Mandela is associated with 1671 sentences, significantly fewer than the top three. Motlanthe and de Klerk are least mentioned, with only 264 and 97 sentences respectively, indicating they are not as prominently featured in the dataset’s source. Hence guven the inbalance of the dataset including Motlanthe and de Klerk, we choose to drop these two presidents from our dataset moving forward</p>
 <div class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -255,6 +259,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+<p>Figure 2 illustrates the average sentence lengths for four South African presidents: Mbeki, Mandela, Ramaphosa, and Zuma. Mbeki’s sentences are the longest, averaging around <span class="math inline">\(30.99\)</span> words, indicating more complex or detailed discourse related to him. Mandela’s average is slightly shorter at <span class="math inline">\(25.87\)</span> words per sentence, followed by Ramaphosa with <span class="math inline">\(22.83\)</span> words. Zuma has the shortest sentences, averaging <span class="math inline">\(19.43\)</span> words, suggesting more concise communication associated with him. These differences might reflect variations in communication styles or the nature of the texts related to each president in the dataset.</p>
 <div class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -265,6 +270,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+</section>
 </section>
 <section id="overall-top-words-used" class="level1">
 <h1>Overall top Words used</h1>
@@ -281,18 +287,19 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-</section>
-<section id="boosted-tree-catboost" class="level1">
-<h1>Boosted Tree CatBoost</h1>
-<p>Here looks like 56.18 percent accuracy</p>
+<section id="bag-of-words" class="level2">
+<h2 class="anchored" data-anchor-id="bag-of-words">Bag of Words</h2>
+<section id="boosted-trees" class="level3">
+<h3 class="anchored" data-anchor-id="boosted-trees">Boosted Trees</h3>
+<p>Figure 5 shows</p>
 <div class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
-<section id="neural-network" class="level1">
-<h1>Neural Network</h1>
+<section id="neural-network" class="level3">
+<h3 class="anchored" data-anchor-id="neural-network">Neural Network</h3>
 <p>Accuracy: 60.41%</p>
 <div class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
@@ -306,8 +313,9 @@ ul.task-list li input[type="checkbox"] {
 Test Accuracy: 58.80%</code></pre>
 </div>
 </div>
-<section id="svm" class="level2">
-<h2 class="anchored" data-anchor-id="svm">SVM</h2>
+</section>
+<section id="svms" class="level3">
+<h3 class="anchored" data-anchor-id="svms">SVMs</h3>
 <div class="cell" data-execution_count="21">
 <div class="cell-output cell-output-stdout">
 <pre><code>test score 0.5935412026726058</code></pre>
@@ -315,16 +323,15 @@ Test Accuracy: 58.80%</code></pre>
 </div>
 </section>
 </section>
-<section id="tf-idf" class="level1">
-<h1>TF-IDF</h1>
+<section id="tf-idf" class="level2">
+<h2 class="anchored" data-anchor-id="tf-idf">TF-IDF</h2>
 <div class="cell" data-execution_count="22">
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>((7180, 11183), (1796, 11183), (7180,), (1796,))</code></pre>
 </div>
 </div>
-<section id="catboost" class="level2">
-<h2 class="anchored" data-anchor-id="catboost">Catboost</h2>
-<p>55.68</p>
+<section id="boosted-trees-1" class="level3">
+<h3 class="anchored" data-anchor-id="boosted-trees-1">Boosted Trees</h3>
 <div class="cell" data-execution_count="23">
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy: 55.68%
@@ -348,8 +355,9 @@ weighted avg       0.56      0.56      0.55      1796
 </div>
 </div>
 </section>
-<section id="svm-1" class="level2">
-<h2 class="anchored" data-anchor-id="svm-1">SVM</h2>
+</section>
+<section id="svm" class="level2">
+<h2 class="anchored" data-anchor-id="svm">SVM</h2>
 <p>grid search SVM</p>
 <p>best params: 10, ‘gamma’: ‘scale’, ‘kernel’: ‘rbf’</p>
 <div class="cell" data-execution_count="26">
@@ -376,23 +384,37 @@ Test Accuracy: 59.58%</code></pre>
 </section>
 <section id="word-embeddings-1" class="level1">
 <h1>Word Embeddings</h1>
-<section id="catboost-1" class="level2">
-<h2 class="anchored" data-anchor-id="catboost-1">Catboost</h2>
+<section id="catboost" class="level2">
+<h2 class="anchored" data-anchor-id="catboost">Catboost</h2>
 <p>Accuracy: 29.18%</p>
 <div class="cell" data-execution_count="30">
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 29.51%
+<pre><code>Accuracy: 29.18%
 Classification Report:
               precision    recall  f1-score   support
 
      Mandela       0.00      0.00      0.00       334
-       Mbeki       0.00      0.00      0.00       480
-   Ramaphosa       0.30      0.99      0.45       526
-        Zuma       0.32      0.02      0.04       456
+       Mbeki       1.00      0.00      0.00       480
+   Ramaphosa       0.29      0.94      0.45       526
+        Zuma       0.28      0.06      0.10       456
 
-    accuracy                           0.30      1796
-   macro avg       0.15      0.25      0.12      1796
-weighted avg       0.17      0.30      0.14      1796
+    accuracy                           0.29      1796
+   macro avg       0.39      0.25      0.14      1796
+weighted avg       0.42      0.29      0.16      1796
+</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
+
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+
+/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
+
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+
+/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
+
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
 </code></pre>
 </div>
 </div>
@@ -402,23 +424,23 @@ weighted avg       0.17      0.30      0.14      1796
 </div>
 </div>
 </section>
-<section id="svm-2" class="level2">
-<h2 class="anchored" data-anchor-id="svm-2">SVM</h2>
+<section id="svm-1" class="level2">
+<h2 class="anchored" data-anchor-id="svm-1">SVM</h2>
 <p>41.26%</p>
 <div class="cell" data-execution_count="33">
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy (Specific SVM): 31.18%
+<pre><code>Accuracy (Specific SVM): 31.68%
 Classification Report (Specific SVM):
               precision    recall  f1-score   support
 
      Mandela       0.00      0.00      0.00       334
-       Mbeki       0.33      0.04      0.07       480
-        Zuma       0.44      0.37      0.40       526
-   Ramaphosa       0.27      0.76      0.39       456
+       Mbeki       0.35      0.05      0.08       480
+        Zuma       0.47      0.34      0.40       526
+   Ramaphosa       0.27      0.80      0.41       456
 
-    accuracy                           0.31      1796
-   macro avg       0.26      0.29      0.22      1796
-weighted avg       0.28      0.31      0.24      1796
+    accuracy                           0.32      1796
+   macro avg       0.28      0.30      0.22      1796
+weighted avg       0.30      0.32      0.24      1796
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -448,8 +470,8 @@ Precision and F-score are ill-defined and being set to 0.0 in labels with no pre
 <p>Test Accuracy: 36.08%</p>
 <div class="cell" data-execution_count="35">
 <div class="cell-output cell-output-stdout">
-<pre><code>Test Loss: 1.3538
-Test Accuracy: 34.41%</code></pre>
+<pre><code>Test Loss: 1.3484
+Test Accuracy: 34.69%</code></pre>
 </div>
 </div>
 
