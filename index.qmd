@@ -368,7 +368,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 ## Bag of Words
 ### Boosted Trees
 
-Figure 5 shows
+Figure 5 shows the mean loss over each 5-fold cross validation eover 300 epochs over the boosted tree. Both losses exhibit a downward trend, signifying improvement in model performance with successive iterations. The training loss demonstrates a consistent decrease, reflecting the model's enhanced fitting to the training data. Concurrently, the validation loss also descends, suggesting improved model generalization to unseen data. Notably, the training loss decreases at a slightly accelerated rate compared to the validation loss. This observed trend warrants careful monitoring to prevent potential overfitting, ensuring the model maintains its predictive accuracy on external datasets.
 
 ```{python}
 #| echo: false
@@ -412,11 +412,35 @@ accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
-#print(f'Accuracy: {accuracy * 100:.2f}%')
-#print('Classification Report:')
-#print(classification_rep)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+print('Classification Report:')
+print(classification_rep)
 
 ```
+
+```{python}
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred.flatten().astype(int))
+
+# Get class names from the label encoder
+classes = le.classes_
+
+# Create a heatmap plot of the confusion matrix
+plt.figure(figsize=(10,7))
+sns.set(font_scale=1.4) # for label size
+sns.heatmap(cm, annot=True, annot_kws={"size": 16}, fmt='g', cmap='Blues', xticklabels=classes, yticklabels=classes)
+
+# Add plot labels and show the plot
+plt.xlabel('Predicted label')
+plt.ylabel('True label')
+plt.title('Confusion Matrix')
+plt.show()
+```
+
 
 
 ```{python}
