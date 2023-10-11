@@ -125,10 +125,6 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#data-exploration-results" id="toc-data-exploration-results" class="nav-link" data-scroll-target="#data-exploration-results">Data Exploration Results</a></li>
-  </ul></li>
-  <li><a href="#overall-top-words-used" id="toc-overall-top-words-used" class="nav-link" data-scroll-target="#overall-top-words-used">Overall top Words used</a></li>
-  <li><a href="#word-cloud-per-president" id="toc-word-cloud-per-president" class="nav-link" data-scroll-target="#word-cloud-per-president">Word Cloud per president</a>
-  <ul class="collapse">
   <li><a href="#bag-of-words" id="toc-bag-of-words" class="nav-link" data-scroll-target="#bag-of-words">Bag of Words</a>
   <ul class="collapse">
   <li><a href="#boosted-trees" id="toc-boosted-trees" class="nav-link" data-scroll-target="#boosted-trees">Boosted Trees</a></li>
@@ -144,9 +140,9 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#word-embeddings-1" id="toc-word-embeddings-1" class="nav-link" data-scroll-target="#word-embeddings-1">Word Embeddings</a>
   <ul class="collapse">
   <li><a href="#catboost" id="toc-catboost" class="nav-link" data-scroll-target="#catboost">Catboost</a></li>
-  </ul></li>
   <li><a href="#svm-1" id="toc-svm-1" class="nav-link" data-scroll-target="#svm-1">SVM</a></li>
   <li><a href="#neural-network-1" id="toc-neural-network-1" class="nav-link" data-scroll-target="#neural-network-1">Neural Network</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -267,13 +263,6 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="overall-top-words-used" class="level1">
-<h1>Overall top Words used</h1>
-</section>
-<section id="word-cloud-per-president" class="level1">
-<h1>Word Cloud per president</h1>
 <div class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -284,28 +273,12 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
+</section>
 <section id="bag-of-words" class="level2">
 <h2 class="anchored" data-anchor-id="bag-of-words">Bag of Words</h2>
 <section id="boosted-trees" class="level3">
 <h3 class="anchored" data-anchor-id="boosted-trees">Boosted Trees</h3>
 <p>Figure 5 shows the mean loss over each 5-fold cross validation eover 300 epochs over the boosted tree. Both losses exhibit a downward trend, signifying improvement in model performance with successive iterations. The training loss demonstrates a consistent decrease, reflecting the model’s enhanced fitting to the training data. Concurrently, the validation loss also descends, suggesting improved model generalization to unseen data. Notably, the training loss decreases at a slightly accelerated rate compared to the validation loss. This observed trend warrants careful monitoring to prevent potential overfitting, ensuring the model maintains its predictive accuracy on external datasets.</p>
-<div class="cell" data-execution_count="16">
-<div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 56.18%
-Classification Report:
-              precision    recall  f1-score   support
-
-     Mandela       0.52      0.28      0.36       334
-       Mbeki       0.60      0.58      0.59       480
-   Ramaphosa       0.62      0.55      0.58       456
-        Zuma       0.52      0.73      0.61       526
-
-    accuracy                           0.56      1796
-   macro avg       0.56      0.54      0.54      1796
-weighted avg       0.56      0.56      0.55      1796
-</code></pre>
-</div>
-</div>
 <div class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
@@ -328,98 +301,48 @@ weighted avg       0.56      0.56      0.55      1796
 </div>
 </div>
 <p>Val accurcay 58.80%</p>
-<div class="cell" data-execution_count="21">
-<div class="cell-output cell-output-stdout">
-<pre><code>Test Loss: 1.0892
-Test Accuracy: 58.80%</code></pre>
-</div>
-</div>
 <p>The confusion matrix for the Neural Network classifier exhibits varying degrees of classification accuracy across different classes. For Mandela, out of 334 instances, 170 were correctly classified, yielding a classification accuracy of 50.9%. The Mbeki class had 264 correct predictions out of 480 instances, resulting in a 55.0% accuracy. The classifier achieved higher accuracy for Ramaphosa, correctly classifying 291 out of 456 instances (63.8%). The highest accuracy was observed for the Zuma class, with 331 correct predictions out of 526 instances, translating to a classification accuracy of 62.9.</p>
 <p>With respect to the misclassifications: Mandela was often misclassified as Mbeki (92 instances) or Zuma (45 instances). Mbeki instances were misclassified as Mandela (91 instances) and Zuma (76 instances). There were 97 Ramaphosa instances misclassified as Zuma, with smaller numbers for Mandela and Mbeki misclassifications. For the Zuma class, there were 88, 52, and 55 instances misclassified as Ramaphosa, Mandela, and Mbeki respectively.</p>
-<div class="cell" data-execution_count="22">
-<div class="cell-output cell-output-stdout">
-<pre><code> 1/57 [..............................] - ETA: 5s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code> 9/57 [===&gt;..........................] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>17/57 [=======&gt;......................] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>25/57 [============&gt;.................] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>33/57 [================&gt;.............] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>41/57 [====================&gt;.........] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>48/57 [========================&gt;.....] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>57/57 [==============================] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>57/57 [==============================] - 0s 7ms/step</code></pre>
-</div>
+<div class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-23-output-10.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 <section id="svms" class="level3">
 <h3 class="anchored" data-anchor-id="svms">SVMs</h3>
-<div class="cell" data-execution_count="24">
-<div class="cell-output cell-output-stdout">
-<pre><code>test score 0.5935412026726058</code></pre>
-</div>
-</div>
 <p>The confusion matrix of the SVM classifier indicates varying classification accuracy for the different classes. For the Mandela class, there were 139 correct predictions out of 334 instances, resulting in a classification accuracy of 41.6%. The Mbeki class had an accuracy of 54.8%, with 263 correct predictions out of 480 instances. The classifier was more accurate in identifying Ramaphosa, correctly classifying 271 out of 456 instances, yielding an accuracy of 59.4%. The highest classification accuracy was observed for the Zuma class, with 393 correct predictions out of 526 instances, achieving a 74.7% accuracy rate.</p>
 <p>Patterns of misclassification were also observed across the classes. For instance, Mandela was often misclassified as Mbeki (80 instances) and Zuma (77 instances). Instances of Mbeki were misclassified as Mandela (71 instances) and Zuma (99 instances). Ramaphosa was misclassified as Zuma in 126 instances, with smaller numbers for Mandela and Mbeki. The Zuma class had instances misclassified as Ramaphosa (64), Mandela (25), and Mbeki (44).</p>
-<div class="cell" data-execution_count="25">
+<div class="cell" data-execution_count="26">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-26-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-27-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 </section>
 <section id="tf-idf" class="level2">
 <h2 class="anchored" data-anchor-id="tf-idf">TF-IDF</h2>
-<div class="cell" data-execution_count="26">
-<div class="cell-output cell-output-display" data-execution_count="26">
-<pre><code>((7180, 11183), (1796, 11183), (7180,), (1796,))</code></pre>
-</div>
-</div>
 <section id="boosted-trees-1" class="level3">
 <h3 class="anchored" data-anchor-id="boosted-trees-1">Boosted Trees</h3>
 <p>The results of the training over epochs for the GBT model using TF-IDF can be seen in the appendix(Figure XXX), though is largely the same in behaviour as the GBT model trainined usinig the BoW feature extraction. Hence the final model chosen has the same hyperpararmeters.</p>
-<div class="cell" data-execution_count="28">
-<div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-29-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>The confusion matrix for the Gradient Boosting Trees (GBT) classifier reveals a classification accuracy of 28.7% for Mandela, with 96 correct predictions out of 334 instances. The Mbeki class demonstrated a higher accuracy of 59.2% with 284 correct predictions from 480 instances. The Ramaphosa class was accurately identified in 261 out of 456 instances, yielding an accuracy of 57.2%. The Zuma class exhibited the highest classification accuracy at 68.3%, with 359 correct predictions from 526 instances.</p>
-<p>In terms of misclassifications, Mandela was often confused with Mbeki (113 instances) and Zuma (82 instances). Instances labeled as Mbeki were misclassified as Mandela (44 instances), Ramaphosa (60 instances), and Zuma (92 instances). There were 125 instances of Ramaphosa misclassified as Zuma, with additional misclassifications into Mandela (18 instances) and Mbeki (52 instances). The Zuma class saw misclassifications into Mandela (18 instances), Mbeki (65 instances), and Ramaphosa (84 instances). These misclassification patterns provide important insights for future model refinement and improvement.</p>
 <div class="cell" data-execution_count="29">
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-30-output-1.png" class="img-fluid"></p>
 </div>
 </div>
+<p>The confusion matrix for the Gradient Boosting Trees (GBT) classifier reveals a classification accuracy of 28.7% for Mandela, with 96 correct predictions out of 334 instances. The Mbeki class demonstrated a higher accuracy of 59.2% with 284 correct predictions from 480 instances. The Ramaphosa class was accurately identified in 261 out of 456 instances, yielding an accuracy of 57.2%. The Zuma class exhibited the highest classification accuracy at 68.3%, with 359 correct predictions from 526 instances.</p>
+<p>In terms of misclassifications, Mandela was often confused with Mbeki (113 instances) and Zuma (82 instances). Instances labeled as Mbeki were misclassified as Mandela (44 instances), Ramaphosa (60 instances), and Zuma (92 instances). There were 125 instances of Ramaphosa misclassified as Zuma, with additional misclassifications into Mandela (18 instances) and Mbeki (52 instances). The Zuma class saw misclassifications into Mandela (18 instances), Mbeki (65 instances), and Ramaphosa (84 instances). These misclassification patterns provide important insights for future model refinement and improvement.</p>
+<div class="cell" data-execution_count="30">
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-31-output-1.png" class="img-fluid"></p>
+</div>
+</div>
 </section>
 <section id="svm" class="level3">
 <h3 class="anchored" data-anchor-id="svm">SVM</h3>
-<p>grid search SVM</p>
-<p>best params: 10, ‘gamma’: ‘scale’, ‘kernel’: ‘rbf’</p>
-<div class="cell" data-execution_count="31">
-<div class="cell-output cell-output-display" data-execution_count="31">
-<pre><code>0.6146993318485523</code></pre>
-</div>
-</div>
-<div class="cell" data-execution_count="32">
+<div class="cell" data-execution_count="33">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-33-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>In Figure XXX for the SVM classifier using TF- IDF feature extraction the confusion matrix denotes: Mandela at 42.8%, with 143 correct predictions out of 334; Mbeki at 61.9%, with 297 correct predictions out of 480; Ramaphosa at 64.3%, with 293 correct predictions out of 456; and Zuma at 70.5%, with 371 correct predictions out of 526.</p>
@@ -427,13 +350,13 @@ Test Accuracy: 58.80%</code></pre>
 </section>
 <section id="neural-net" class="level3">
 <h3 class="anchored" data-anchor-id="neural-net">Neural Net</h3>
-<div class="cell" data-execution_count="33">
+<div class="cell" data-execution_count="34">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-34-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-35-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Test Accuracy: 59.58%</p>
-<div class="cell" data-execution_count="34">
+<div class="cell" data-execution_count="35">
 <div class="cell-output cell-output-stdout">
 <pre><code>Test Loss: 1.0468
 Test Accuracy: 59.58%</code></pre>
@@ -441,21 +364,9 @@ Test Accuracy: 59.58%</code></pre>
 </div>
 <p>Figure XXX illustrates the confusion matrix for the NN trained using TF-IDF feature extraction. For Mandela, the NN secured 182 correct predictions from 334 instances, resulting in an accuracy rate of 54.5%. The Mbeki class observed an accuracy of 60.6% with 291 correct predictions from 480 instances. For the Ramaphosa class, 276 correct predictions were made from 456 instances, yielding an accuracy of 60.5%. The highest accuracy was noted for the Zuma class, with 321 correct predictions from 526 instances, amounting to an accuracy of 61.0%.</p>
 <p>In terms of misclassifications, the NN mistaken 85 Mandela instances as Mbeki, 26 as Ramaphosa, and 41 as Zuma. For the Mbeki class, 91 instances were erroneously labeled as Mandela, 35 as Ramaphosa, and 63 as Zuma. The NN misidentified 40 Ramaphosa instances as Mandela, 33 as Mbeki, and 107 as Zuma. Furthermore, the Zuma class had instances misclassified as Mandela (62), Mbeki (70), and Ramaphosa (73).</p>
-<div class="cell" data-execution_count="35">
-<div class="cell-output cell-output-stdout">
-<pre><code> 1/57 [..............................] - ETA: 4s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>27/57 [=============&gt;................] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>53/57 [==========================&gt;...] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>57/57 [==============================] - 0s 2ms/step</code></pre>
-</div>
+<div class="cell" data-execution_count="37">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-36-output-5.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-38-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -465,56 +376,39 @@ Test Accuracy: 59.58%</code></pre>
 <section id="catboost" class="level3">
 <h3 class="anchored" data-anchor-id="catboost">Catboost</h3>
 <p>Accuracy: 29.18%</p>
-<div class="cell" data-execution_count="37">
-<div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 29.18%
-Classification Report:
-              precision    recall  f1-score   support
+<div class="cell" data-execution_count="39">
+<div class="cell-output cell-output-stderr">
+<pre><code>/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
 
-     Mandela       0.00      0.00      0.00       334
-       Mbeki       0.00      0.00      0.00       480
-   Ramaphosa       0.29      0.95      0.45       526
-        Zuma       0.26      0.05      0.08       456
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
 
-    accuracy                           0.29      1796
-   macro avg       0.14      0.25      0.13      1796
-weighted avg       0.15      0.29      0.15      1796
+/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
+
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+
+/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
+
+Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
 </code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="38">
-<div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-39-output-1.png" class="img-fluid"></p>
-</div>
-</div>
-<p>In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For the Mandela class, out of 334 instances, there were no correct predictions, resulting in a classification accuracy of 0%. The Mbeki class similarly did not have any correct predictions for its primary label from 480 instances, but 3 instances were misclassified as Mandela. The Ramaphosa class achieved the highest accuracy, with 505 correct predictions out of 526 instances, translating to an accuracy of 96.0%. The Zuma class had 14 correct predictions from 456 instances, yielding an accuracy of 3.1%.</p>
-<p>Looking at misclassifications, the Mandela class had a significant 323 instances misclassified as Ramaphosa and 11 as Zuma. The Mbeki class saw a substantial 464 instances misclassified as Ramaphosa and 13 as Zuma. The Ramaphosa class had 21 instances misclassified as Zuma. Lastly, the Zuma class had a significant 442 instances misclassified as Ramaphosa.</p>
-<p>The significant misclassifications into the Ramaphosa class from other categories suggest a strong bias in the classifier towards this class, which is concerning yet somewhat unsurprising given the models performance in terms of accuracy and F1-score.</p>
 <div class="cell" data-execution_count="40">
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-41-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-</section>
-</section>
-<section id="svm-1" class="level2">
-<h2 class="anchored" data-anchor-id="svm-1">SVM</h2>
+<p>In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For the Mandela class, out of 334 instances, there were no correct predictions, resulting in a classification accuracy of 0%. The Mbeki class similarly did not have any correct predictions for its primary label from 480 instances, but 3 instances were misclassified as Mandela. The Ramaphosa class achieved the highest accuracy, with 505 correct predictions out of 526 instances, translating to an accuracy of 96.0%. The Zuma class had 14 correct predictions from 456 instances, yielding an accuracy of 3.1%.</p>
+<p>Looking at misclassifications, the Mandela class had a significant 323 instances misclassified as Ramaphosa and 11 as Zuma. The Mbeki class saw a substantial 464 instances misclassified as Ramaphosa and 13 as Zuma. The Ramaphosa class had 21 instances misclassified as Zuma. Lastly, the Zuma class had a significant 442 instances misclassified as Ramaphosa.</p>
+<p>The significant misclassifications into the Ramaphosa class from other categories suggest a strong bias in the classifier towards this class, which is concerning yet somewhat unsurprising given the models performance in terms of accuracy and F1-score.</p>
 <div class="cell" data-execution_count="42">
-<div class="cell-output cell-output-stdout">
-<pre><code>Accuracy (Specific SVM): 29.12%
-Classification Report (Specific SVM):
-              precision    recall  f1-score   support
-
-     Mandela       0.00      0.00      0.00       334
-       Mbeki       0.00      0.00      0.00       480
-        Zuma       0.29      0.98      0.45       526
-   Ramaphosa       0.21      0.02      0.03       456
-
-    accuracy                           0.29      1796
-   macro avg       0.13      0.25      0.12      1796
-weighted avg       0.14      0.29      0.14      1796
-</code></pre>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-43-output-1.png" class="img-fluid"></p>
 </div>
+</div>
+</section>
+<section id="svm-1" class="level3">
+<h3 class="anchored" data-anchor-id="svm-1">SVM</h3>
+<div class="cell" data-execution_count="44">
 <div class="cell-output cell-output-stderr">
 <pre><code>/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
 
@@ -531,35 +425,30 @@ Precision and F-score are ill-defined and being set to 0.0 in labels with no pre
 </div>
 </div>
 <p>In Figure XXX we see the word embeddnigs SVM confusion matrix: Ghe model upon inivestigation here has failed greatly. It has simiply predicted all sentencees belonging to Ramaphosa and hence cannot be interpretted at any meaningful level</p>
-<div class="cell" data-execution_count="44">
+<div class="cell" data-execution_count="46">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-45-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-47-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
-<section id="neural-network-1" class="level2">
-<h2 class="anchored" data-anchor-id="neural-network-1">Neural Network</h2>
+<section id="neural-network-1" class="level3">
+<h3 class="anchored" data-anchor-id="neural-network-1">Neural Network</h3>
 <p>Accuracy: 36.69%</p>
-<div class="cell" data-execution_count="45">
+<div class="cell" data-execution_count="47">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Test Accuracy: 36.69%</p>
-<div class="cell" data-execution_count="46">
-<div class="cell-output cell-output-stdout">
-<pre><code>Test Loss: 1.5088
-Test Accuracy: 30.79%</code></pre>
-</div>
-</div>
 <p>We finally examine the confusion matrix for the NN using word embeddings in figure XXX. The Neural Network classifier’s performance varied across the classes. In the Mandela class, out of 334 instances, none were correctly predicted, with a substantial portion (235 instances) being misclassified as Ramaphosa. The Mbeki class had a somewhat better accuracy of 28.3%, securing 136 correct predictions out of 480 instances, but a notable 323 instances were erroneously labeled as Ramaphosa. The classifier’s strongest performance was with the Ramaphosa class, achieving an accuracy of 81.9%, correctly predicting 431 out of 526 instances, though 73 were misclassified as Mbeki. The Zuma class resulted in an accuracy of 9.0%, with 41 accurate predictions from 456 instances. However, a significant number, 347 instances, were mislabeled as Ramaphosa. This recurrent bias towards predicting the Ramaphosa class in the Neural Network’s outputs suggests potential areas for model refinement.</p>
-<div class="cell" data-execution_count="48">
+<div class="cell" data-execution_count="50">
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 
 
+</section>
 </section>
 </section>
 

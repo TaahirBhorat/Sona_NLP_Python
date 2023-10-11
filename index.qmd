@@ -297,9 +297,7 @@ plt.show()
 
 ```
 
-# Overall top Words used
 
-# Word Cloud per president
 
 ```{python}
 #| fig-cap: "Figure 4: Word Cloud per President"
@@ -407,12 +405,11 @@ accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
-print(f'Accuracy: {accuracy * 100:.2f}%')
-print('Classification Report:')
-print(classification_rep)
+#print(f'Accuracy: {accuracy * 100:.2f}%')
+#print('Classification Report:')
+#print(classification_rep)
 
 ```
-
 
 
 
@@ -581,8 +578,8 @@ loaded_model = load_model('NN_final_model_1.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-print(f'Test Loss: {final_loss:.4f}')
-print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+#print(f'Test Loss: {final_loss:.4f}')
+#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 
@@ -592,15 +589,20 @@ The confusion matrix for the Neural Network classifier exhibits varying degrees 
 With respect to the misclassifications: Mandela was often misclassified as Mbeki (92 instances) or Zuma (45 instances). Mbeki instances were misclassified as Mandela (91 instances) and Zuma (76 instances). There were 97 Ramaphosa instances misclassified as Zuma, with smaller numbers for Mandela and Mbeki misclassifications. For the Zuma class, there were 88, 52, and 55 instances misclassified as Ramaphosa, Mandela, and Mbeki respectively. 
 
 ```{python}
+#| include: false
+# Obtain model's predictions on the test set
+y_pred = loaded_model.predict(X_test)
+y_pred_classes = np.argmax(y_pred, axis=1)  # Convert probabilities to class labels
+```
+
+```{python}
 #| echo: false
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-# Obtain model's predictions on the test set
-y_pred = loaded_model.predict(X_test)
-y_pred_classes = np.argmax(y_pred, axis=1)  # Convert probabilities to class labels
+
 
 # Compute the confusion matrix
 cm = confusion_matrix(y_test, y_pred_classes)
@@ -676,7 +678,7 @@ accuracy_svm = accuracy_score(y_test, y_pred_svm)
 classification_rep_svm = classification_report(y_test, y_pred_svm)
 
 # Print the accuracy and classification report
-print(f'test score {accuracy_svm}')
+#print(f'test score {accuracy_svm}')
 ```
 
 The confusion matrix of the SVM classifier indicates varying classification accuracy for the different classes. For the Mandela class, there were 139 correct predictions out of 334 instances, resulting in a classification accuracy of 41.6%. The Mbeki class had an accuracy of 54.8%, with 263 correct predictions out of 480 instances. The classifier was more accurate in identifying Ramaphosa, correctly classifying 271 out of 456 instances, yielding an accuracy of 59.4%. The highest classification accuracy was observed for the Zuma class, with 393 correct predictions out of 526 instances, achieving a 74.7% accuracy rate.
@@ -720,7 +722,7 @@ y = data['Presidents']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 # Display the shapes of the resulting training and testing sets
-X_train.shape, X_test.shape, y_train.shape, y_test.shape
+#X_train.shape, X_test.shape, y_train.shape, y_test.shape
 ```
 
 
@@ -837,12 +839,6 @@ plt.show()
 ### SVM
 
 
-grid search SVM
-
-best params:
-10, 'gamma': 'scale', 'kernel': 'rbf'
-
-
 ```{python}
 #| echo: false
 #param_grid = {
@@ -897,7 +893,7 @@ accuracy_svm = accuracy_score(y_test, y_pred_svm)
 classification_rep_svm = classification_report(y_test, y_pred_svm)
 
 # Print the accuracy and classification report
-accuracy_svm
+#accuracy_svm
 ```
 
 ```{python}
@@ -1034,11 +1030,15 @@ Figure XXX illustrates the confusion matrix for the NN trained using TF-IDF feat
 
 In terms of misclassifications, the NN mistaken 85 Mandela instances as Mbeki, 26 as Ramaphosa, and 41 as Zuma. For the Mbeki class, 91 instances were erroneously labeled as Mandela, 35 as Ramaphosa, and 63 as Zuma. The NN misidentified 40 Ramaphosa instances as Mandela, 33 as Mbeki, and 107 as Zuma. Furthermore, the Zuma class had instances misclassified as Mandela (62), Mbeki (70), and Ramaphosa (73). 
 
+```{python}
+#| include: false
+y_pred_nn2 = loaded_model.predict(X_test)
+y_pred_nn2_classes = np.argmax(y_pred_nn2, axis=1) 
+```
 
 ```{python}
 #| echo: false
-y_pred_nn2 = loaded_model.predict(X_test)
-y_pred_nn2_classes = np.argmax(y_pred_nn2, axis=1)  # Convert probabilities to class labels
+ # Convert probabilities to class labels
 
 # Compute the confusion matrix
 # Note: Ensure that y_test is the encoded version of the true labels
@@ -1136,9 +1136,9 @@ accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
 # Print the accuracy and classification report
-print(f'Accuracy: {accuracy * 100:.2f}%')
-print('Classification Report:')
-print(classification_rep)
+#print(f'Accuracy: {accuracy * 100:.2f}%')
+#print('Classification Report:')
+#print(classification_rep)
 
 ```
 
@@ -1201,7 +1201,7 @@ plt.axis('off')  # Hide the axis values
 plt.show()
 ```
 
-## SVM
+### SVM
 
 ```{python, eval = FALSE}
 #| echo: false
@@ -1258,9 +1258,9 @@ accuracy_specific_svm = accuracy_score(y_test, y_pred_specific_svm)
 classification_rep_specific_svm = classification_report(y_test, y_pred_specific_svm, target_names=label_mapping.keys())
 
 # Print the accuracy and classification report
-print(f'Accuracy (Specific SVM): {accuracy_specific_svm * 100:.2f}%')
-print('Classification Report (Specific SVM):')
-print(classification_rep_specific_svm)
+#print(f'Accuracy (Specific SVM): {accuracy_specific_svm * 100:.2f}%')
+#print('Classification Report (Specific SVM):')
+#print(classification_rep_specific_svm)
 ```
 
 
@@ -1294,7 +1294,7 @@ plt.axis('off')  # Hide the axis values
 plt.show()
 ```
 
-## Neural Network 
+### Neural Network 
 Accuracy: 36.69%
 
 ```{python}
@@ -1397,8 +1397,8 @@ loaded_model = load_model('NN_final_model_3.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-print(f'Test Loss: {final_loss:.4f}')
-print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+#print(f'Test Loss: {final_loss:.4f}')
+#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 
