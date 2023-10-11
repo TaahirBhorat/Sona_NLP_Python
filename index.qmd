@@ -1165,12 +1165,9 @@ plt.show()
 
 
 
-In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.
-
-Misclassifications were also evident. Notably, 183 Mandela instances were misclassified as Ramaphosa and 111 as Zuma. For Mbeki, the classifier misidentified 244 instances as Ramaphosa and 150 as Zuma. The Ramaphosa class had 141 instances misclassified as Zuma, with smaller numbers of misclassifications into Mandela (39) and Mbeki (4). For Zuma, there were 254 instances misclassified as Ramaphosa, 36 as Mandela, and 3 as Mbeki.
-
 ```{python}
 #| echo: false
+#| eval: false
 cm_catboost2 = confusion_matrix(y_test, y_pred.flatten().astype(int))
 
 # Visualize the confusion matrix
@@ -1181,9 +1178,28 @@ sns.heatmap(cm_catboost2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 
 ax_catboost2.set_title('CatBoost2 Confusion Matrix')
 ax_catboost2.set_xlabel('Predicted Label')
 ax_catboost2.set_ylabel('True Label')
-plt.show()
+#fig_catboost2.savefig('GBTWE.png', dpi=400,bbox_inches='tight')
 ```
 
+
+
+In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For the Mandela class, out of 334 instances, there were no correct predictions, resulting in a classification accuracy of 0%. The Mbeki class similarly did not have any correct predictions for its primary label from 480 instances, but 3 instances were misclassified as Mandela. The Ramaphosa class achieved the highest accuracy, with 505 correct predictions out of 526 instances, translating to an accuracy of  96.0%. The Zuma class had 14 correct predictions from 456 instances, yielding an accuracy of 3.1%.
+
+Looking at misclassifications, the Mandela class had a significant 323 instances misclassified as Ramaphosa and 11 as Zuma. The Mbeki class saw a substantial 464 instances misclassified as Ramaphosa and 13 as Zuma. The Ramaphosa class had 21 instances misclassified as Zuma. Lastly, the Zuma class had a significant 442 instances misclassified as Ramaphosa.
+
+The significant misclassifications into the Ramaphosa class from other categories suggest a strong bias in the classifier towards this class, which is concerning yet somewhat unsurprising given the models performance in terms of accuracy and F1-score.
+
+```{python}
+#| echo: false
+import matplotlib.image as mpimg
+# Load the saved image
+img = mpimg.imread('GBTWE.png')
+
+# Display the image
+plt.imshow(img)
+plt.axis('off')  # Hide the axis values
+plt.show()
+```
 
 ## SVM
 
@@ -1248,12 +1264,10 @@ print(classification_rep_specific_svm)
 ```
 
 
-In Figure XXX we see the word embeddnigs SVM confusion matrix: For the Mandela class, 13 correct predictions were made out of 334 instances, yielding a classification accuracy of 3.9%. The Mbeki class observed a more substantial accuracy of 61.5, with 295 correct predictions from 480 instances. The classifier identified the Ramaphosa class accurately in 269 out of 526 instances, resulting in a 51.1% accuracy rate. The Zuma class had 142 correct predictions out of 456 instances, translating to an accuracy of 31.1%.
-
-Regarding misclassifications, a significant number of Mandela instances, 178, were misclassified as Mbeki, followed by 79 as Ramaphosa and 64 as Zuma. In the Mbeki class, 117 instances were identified as Ramaphosa and 55 as Zuma, with a smaller misclassification into Mandela (13 instances). For the Ramaphosa class, 149 instances were misclassified as Mbeki, 94 as Zuma, and a minor count into Mandela (14 instances). For the Zuma class, there were notable misclassifications into Mbeki (141 instances) and Ramaphosa (151 instances), with a smaller number into Mandela (22 instances). 
-
+In Figure XXX we see the word embeddnigs SVM confusion matrix: Ghe model upon inivestigation here has failed greatly. It has simiply predicted all sentencees belonging to Ramaphosa and hence cannot be interpretted at any meaningful level 
 ```{python}
 #| echo: false
+#| eval: false
 cm_specific_svm = confusion_matrix(y_test, y_pred_specific_svm)
 
 # Visualize the confusion matrix
@@ -1264,10 +1278,21 @@ sns.heatmap(cm_specific_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size
 ax_specific_svm.set_title('Specific SVM Confusion Matrix')
 ax_specific_svm.set_xlabel('Predicted Label')
 ax_specific_svm.set_ylabel('True Label')
-plt.show()
+#fig_specific_svm.savefig('SVMWE.png', dpi=400,bbox_inches='tight')
 
 ```
 
+```{python}
+#| echo: false
+import matplotlib.image as mpimg
+# Load the saved image
+img = mpimg.imread('SVMWE.png')
+
+# Display the image
+plt.imshow(img)
+plt.axis('off')  # Hide the axis values
+plt.show()
+```
 
 ## Neural Network 
 Accuracy: 36.69%
@@ -1377,13 +1402,9 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 
-
-We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%. In a similar vein as the SVM, we find that the model tends to
-
-In terms of misclassifications, the Mandela class was predominantly misclassified as Mbeki (196 instances), followed by Ramaphosa (111 instances) and Zuma (27 instances). For the Mbeki class, there were 131 instances misclassified as Ramaphosa and 20 as Zuma. In the Ramaphosa class, a significant 214 instances were misclassified as Mbeki, with 29 as Zuma. Lastly, the Zuma class had substantial misclassifications into Mbeki (205 instances) and Ramaphosa (204 instances). These patterns highlight areas of misclassification and suggest potential avenues for improving the SVM classifier's performance. Overall this model seemed to overpredict sentences as belonging to either Mbeki or Ramaphosa.
-
 ```{python}
 #| echo: false
+#| eval: false
 y_pred_nn3 = loaded_model.predict(X_test)
 y_pred_nn3_classes = np.argmax(y_pred_nn3, axis=1)  # Convert probabilities to class labels
 
@@ -1399,5 +1420,20 @@ ax_nn3.set_title('NN3 Confusion Matrix')
 ax_nn3.set_xlabel('Predicted Label')
 ax_nn3.set_ylabel('True Label')
 plt.show()
+
+#fig_nn3.savefig("NNWE.png",dpi=400,bbox_inches='tight')
 ```
 
+We finally examine the confusion matrix for the NN using word embeddings in figure XXX. The Neural Network classifier's performance varied across the classes. In the Mandela class, out of 334 instances, none were correctly predicted, with a substantial portion (235 instances) being misclassified as Ramaphosa. The Mbeki class had a somewhat better accuracy of 28.3%, securing 136 correct predictions out of 480 instances, but a notable 323 instances were erroneously labeled as Ramaphosa. The classifier's strongest performance was with the Ramaphosa class, achieving an accuracy of 81.9%, correctly predicting 431 out of 526 instances, though 73 were misclassified as Mbeki. The Zuma class resulted in an accuracy of 9.0%, with 41 accurate predictions from 456 instances. However, a significant number, 347 instances, were mislabeled as Ramaphosa. This recurrent bias towards predicting the Ramaphosa class in the Neural Network's outputs suggests potential areas for model refinement.
+
+```{python}
+#| echo: false
+import matplotlib.image as mpimg
+# Load the saved image
+img = mpimg.imread('NNWE.png')
+
+# Display the image
+plt.imshow(img)
+plt.axis('off')  # Hide the axis values
+plt.show()
+```
