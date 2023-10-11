@@ -138,15 +138,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#tf-idf" id="toc-tf-idf" class="nav-link" data-scroll-target="#tf-idf">TF-IDF</a>
   <ul class="collapse">
   <li><a href="#boosted-trees-1" id="toc-boosted-trees-1" class="nav-link" data-scroll-target="#boosted-trees-1">Boosted Trees</a></li>
-  </ul></li>
-  <li><a href="#svm" id="toc-svm" class="nav-link" data-scroll-target="#svm">SVM</a>
-  <ul class="collapse">
+  <li><a href="#svm" id="toc-svm" class="nav-link" data-scroll-target="#svm">SVM</a></li>
   <li><a href="#neural-net" id="toc-neural-net" class="nav-link" data-scroll-target="#neural-net">Neural Net</a></li>
-  </ul></li>
   </ul></li>
   <li><a href="#word-embeddings-1" id="toc-word-embeddings-1" class="nav-link" data-scroll-target="#word-embeddings-1">Word Embeddings</a>
   <ul class="collapse">
   <li><a href="#catboost" id="toc-catboost" class="nav-link" data-scroll-target="#catboost">Catboost</a></li>
+  </ul></li>
   <li><a href="#svm-1" id="toc-svm-1" class="nav-link" data-scroll-target="#svm-1">SVM</a></li>
   <li><a href="#neural-network-1" id="toc-neural-network-1" class="nav-link" data-scroll-target="#neural-network-1">Neural Network</a></li>
   </ul></li>
@@ -238,9 +236,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="model-evaluation-metrics">Model Evaluation Metrics</h2>
 <p>The evaluation of the models’ performance employed a suite of metrics to ensure a comprehensive assessment. The primary metric used is accuracy, defined as the ratio of correctly predicted observations to the total observations:</p>
 <p><span class="math inline">\(\text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions Made}}\)</span></p>
-<p>While accuracy is a straightforward and informative metric, it may not be sufficiently descriptive in situations where the classes are imbalanced. For this reason, additional evaluative metrics were incorporated into the assessment framework.</p>
-<p>The stratified k-fold cross-validation (with <span class="math inline">\(k = 5\)</span> ) technique used during the training phase of both Support Vector Machines (SVMs) and Neural Networks (NNs) facilitated the calculation of accuracy for both training and validation sets across all folds. The average accuracy computed from these folds provided a robust estimate of each model’s generalization performance.</p>
-<p>Subsequently, confusion matrices were generated for the models. A confusion matrix is a table used to describe the performance of a classification algorithm. Each row of the matrix represents the instances of the actual class, while each column represents the instances of the predicted class. The entries on the main diagonal of the confusion matrix correspond to correct predictions, whereas other entries reflect the mistakes made by the classifier. Through the confusion matrix, various metrics including precision, recall, and the F1-score were computed to provide a detailed understanding of the model’s performance. Precision (the ratio of true positive predictions to the sum of true positive and false positive predictions), recall (the ratio of true positive predictions to the sum of true positive and false negative predictions), and the F1-score (the harmonic mean of precision and recall) offer deeper insights into the reliability and effectiveness of the models, especially in the presence of class imbalance.</p>
+<p>While accuracy is a straightforward and informative metric, it may not be sufficiently descriptive in situations where the classes are imbalanced. For this reason, additional evaluative metrics were incorporated into the assessment framework. The stratified k-fold cross-validation (with <span class="math inline">\(k = 5\)</span> ) technique used during the training phase of both Support Vector Machines (SVMs) and Neural Networks (NNs) facilitated the calculation of accuracy for both training and validation sets across all folds. The average accuracy computed from these folds provided a robust estimate of each model’s generalization performance.</p>
+<p>Subsequently, confusion matrices were generated for the models. A confusion matrix is a table used to describe the performance of a classification algorithm. Each row of the matrix represents the instances of the actual class, while each column represents the instances of the predicted class. The entries on the main diagonal of the confusion matrix correspond to correct predictions, whereas other entries reflect the mistakes made by the classifier. Through the confusion matrix, vthe F1-score was computed to provide a detailed understanding of the model’s performance, F1 score is compoed of two other metrics in precision and recall. Precision (the ratio of true positive predictions to the sum of true positive and false positive predictions), recall (the ratio of true positive predictions to the sum of true positive and false negative predictions), are both utilized to form F1-score (the harmonic mean of precision and recall).</p>
 <p>For the Gradient Boosted Trees model, the loss function was an essential aspect of evaluation. The loss function is a measure used to estimate the discrepancy between the predicted values and actual values. During the training process, the algorithm optimizes the model parameters to minimize this loss function, thereby improving the model’s predictive performance. Monitoring the change in the value of the loss function during the training process provides insights into the convergence and stability of the model, helping in understanding whether the model is learning effectively from the training data. For each training epoch, the loss was computed and analyzed to ensure the model was converging to a solution that minimized prediction errors.</p>
 </section>
 </section>
@@ -344,19 +341,16 @@ Test Accuracy: 58.80%</code></pre>
 <pre><code> 1/57 [..............................] - ETA: 5s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code> 9/57 [===&gt;..........................] - ETA: 0s</code></pre>
+<pre><code>10/57 [====&gt;.........................] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>17/57 [=======&gt;......................] - ETA: 0s</code></pre>
+<pre><code>19/57 [=========&gt;....................] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>25/57 [============&gt;.................] - ETA: 0s</code></pre>
+<pre><code>28/57 [=============&gt;................] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>33/57 [================&gt;.............] - ETA: 0s</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>39/57 [===================&gt;..........] - ETA: 0s</code></pre>
+<pre><code>37/57 [==================&gt;...........] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>46/57 [=======================&gt;......] - ETA: 0s</code></pre>
@@ -365,10 +359,10 @@ Test Accuracy: 58.80%</code></pre>
 <pre><code>55/57 [===========================&gt;..] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>57/57 [==============================] - 0s 7ms/step</code></pre>
+<pre><code>57/57 [==============================] - 0s 6ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-23-output-10.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-23-output-9.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
@@ -411,9 +405,8 @@ Test Accuracy: 58.80%</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="svm" class="level2">
-<h2 class="anchored" data-anchor-id="svm">SVM</h2>
+<section id="svm" class="level3">
+<h3 class="anchored" data-anchor-id="svm">SVM</h3>
 <p>grid search SVM</p>
 <p>best params: 10, ‘gamma’: ‘scale’, ‘kernel’: ‘rbf’</p>
 <div class="cell" data-execution_count="31">
@@ -428,6 +421,7 @@ Test Accuracy: 58.80%</code></pre>
 </div>
 <p>In Figure XXX for the SVM classifier using TF- IDF feature extraction the confusion matrix denotes: Mandela at 42.8%, with 143 correct predictions out of 334; Mbeki at 61.9%, with 297 correct predictions out of 480; Ramaphosa at 64.3%, with 293 correct predictions out of 456; and Zuma at 70.5%, with 371 correct predictions out of 526.</p>
 <p>In terms of misclassifications, 94 Mandela instances were classified as Mbeki, 41 as Ramaphosa, and 56 as Zuma. For the Mbeki class, 59 instances were misclassified as Mandela, 44 as Ramaphosa, and 80 as Zuma. The classifier misidentified 23 Ramaphosa instances as Mandela, 31 as Mbeki, and 109 as Zuma. Finally, in the Zuma category, there were 25 instances misclassified as Mandela, 55 as Mbeki, and 75 as Ramaphosa.</p>
+</section>
 <section id="neural-net" class="level3">
 <h3 class="anchored" data-anchor-id="neural-net">Neural Net</h3>
 <div class="cell" data-execution_count="33">
@@ -449,37 +443,39 @@ Test Accuracy: 59.58%</code></pre>
 <pre><code> 1/57 [..............................] - ETA: 4s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>28/57 [=============&gt;................] - ETA: 0s</code></pre>
+<pre><code>27/57 [=============&gt;................] - ETA: 0s</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>54/57 [===========================&gt;..] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>57/57 [==============================] - 0s 2ms/step</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-36-output-4.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-36-output-5.png" class="img-fluid"></p>
 </div>
 </div>
 </section>
 </section>
-</section>
-<section id="word-embeddings-1" class="level1">
-<h1>Word Embeddings</h1>
-<section id="catboost" class="level2">
-<h2 class="anchored" data-anchor-id="catboost">Catboost</h2>
+<section id="word-embeddings-1" class="level2">
+<h2 class="anchored" data-anchor-id="word-embeddings-1">Word Embeddings</h2>
+<section id="catboost" class="level3">
+<h3 class="anchored" data-anchor-id="catboost">Catboost</h3>
 <p>Accuracy: 29.18%</p>
 <div class="cell" data-execution_count="37">
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 29.68%
+<pre><code>Accuracy: 28.84%
 Classification Report:
               precision    recall  f1-score   support
 
      Mandela       0.00      0.00      0.00       334
-       Mbeki       0.00      0.00      0.00       480
-   Ramaphosa       0.30      0.96      0.45       526
-        Zuma       0.33      0.06      0.11       456
+       Mbeki       0.25      0.00      0.00       480
+   Ramaphosa       0.29      0.92      0.45       526
+        Zuma       0.22      0.07      0.10       456
 
-    accuracy                           0.30      1796
-   macro avg       0.16      0.26      0.14      1796
-weighted avg       0.17      0.30      0.16      1796
+    accuracy                           0.29      1796
+   macro avg       0.19      0.25      0.14      1796
+weighted avg       0.21      0.29      0.16      1796
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -502,33 +498,31 @@ Precision and F-score are ill-defined and being set to 0.0 in labels with no pre
 <p><img src="index_files/figure-html/cell-39-output-1.png" class="img-fluid"></p>
 </div>
 </div>
-<p>In Figure 6 we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.</p>
+<p>In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.</p>
 <p>Misclassifications were also evident. Notably, 183 Mandela instances were misclassified as Ramaphosa and 111 as Zuma. For Mbeki, the classifier misidentified 244 instances as Ramaphosa and 150 as Zuma. The Ramaphosa class had 141 instances misclassified as Zuma, with smaller numbers of misclassifications into Mandela (39) and Mbeki (4). For Zuma, there were 254 instances misclassified as Ramaphosa, 36 as Mandela, and 3 as Mbeki.</p>
 <div class="cell" data-execution_count="39">
-<div class="cell-output cell-output-display" data-execution_count="39">
-<pre><code>Text(64.5, 0.5, 'True Label')</code></pre>
-</div>
 <div class="cell-output cell-output-display">
-<p><img src="index_files/figure-html/cell-40-output-2.png" class="img-fluid"></p>
+<p><img src="index_files/figure-html/cell-40-output-1.png" class="img-fluid"></p>
 </div>
 </div>
+</section>
 </section>
 <section id="svm-1" class="level2">
 <h2 class="anchored" data-anchor-id="svm-1">SVM</h2>
 <div class="cell" data-execution_count="41">
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy (Specific SVM): 29.45%
+<pre><code>Accuracy (Specific SVM): 29.29%
 Classification Report (Specific SVM):
               precision    recall  f1-score   support
 
      Mandela       0.00      0.00      0.00       334
        Mbeki       0.00      0.00      0.00       480
-        Zuma       0.30      0.96      0.45       526
-   Ramaphosa       0.26      0.06      0.09       456
+        Zuma       0.29      1.00      0.45       526
+   Ramaphosa       0.00      0.00      0.00       456
 
     accuracy                           0.29      1796
-   macro avg       0.14      0.25      0.14      1796
-weighted avg       0.15      0.29      0.16      1796
+   macro avg       0.07      0.25      0.11      1796
+weighted avg       0.09      0.29      0.13      1796
 </code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
@@ -565,18 +559,18 @@ Precision and F-score are ill-defined and being set to 0.0 in labels with no pre
 <p>Test Accuracy: 36.69%</p>
 <div class="cell" data-execution_count="44">
 <div class="cell-output cell-output-stdout">
-<pre><code>Test Loss: 1.5293
-Test Accuracy: 29.90%</code></pre>
+<pre><code>Test Loss: 1.3490
+Test Accuracy: 35.19%</code></pre>
 </div>
 </div>
-<p>We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%.</p>
+<p>We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%. In a similar vein as the SVM, we find that the model tends to</p>
 <p>In terms of misclassifications, the Mandela class was predominantly misclassified as Mbeki (196 instances), followed by Ramaphosa (111 instances) and Zuma (27 instances). For the Mbeki class, there were 131 instances misclassified as Ramaphosa and 20 as Zuma. In the Ramaphosa class, a significant 214 instances were misclassified as Mbeki, with 29 as Zuma. Lastly, the Zuma class had substantial misclassifications into Mbeki (205 instances) and Ramaphosa (204 instances). These patterns highlight areas of misclassification and suggest potential avenues for improving the SVM classifier’s performance. Overall this model seemed to overpredict sentences as belonging to either Mbeki or Ramaphosa.</p>
 <div class="cell" data-execution_count="45">
 <div class="cell-output cell-output-stdout">
-<pre><code> 1/57 [..............................] - ETA: 2s</code></pre>
+<pre><code> 1/57 [..............................] - ETA: 3s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>40/57 [====================&gt;.........] - ETA: 0s</code></pre>
+<pre><code>43/57 [=====================&gt;........] - ETA: 0s</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>57/57 [==============================] - 0s 1ms/step</code></pre>

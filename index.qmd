@@ -83,16 +83,11 @@ The evaluation of the models' performance employed a suite of metrics to ensure 
 
 $\text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Number of Predictions Made}}$
 
-While accuracy is a straightforward and informative metric, it may not be sufficiently descriptive in situations where the classes are imbalanced. For this reason, additional evaluative metrics were incorporated into the assessment framework.
+While accuracy is a straightforward and informative metric, it may not be sufficiently descriptive in situations where the classes are imbalanced. For this reason, additional evaluative metrics were incorporated into the assessment framework. The stratified k-fold cross-validation (with $k = 5$ ) technique used during the training phase of both Support Vector Machines (SVMs) and Neural Networks (NNs) facilitated the calculation of accuracy for both training and validation sets across all folds. The average accuracy computed from these folds provided a robust estimate of each model's generalization performance.
 
-The stratified k-fold cross-validation (with $k = 5$ ) technique used during the training phase of both Support Vector Machines (SVMs) and Neural Networks (NNs) facilitated the calculation of accuracy for both training and validation sets across all folds. The average accuracy computed from these folds provided a robust estimate of each model's generalization performance.
-
-Subsequently, confusion matrices were generated for the models. A confusion matrix is a table used to describe the performance of a classification algorithm. Each row of the matrix represents the instances of the actual class, while each column represents the instances of the predicted class. The entries on the main diagonal of the confusion matrix correspond to correct predictions, whereas other entries reflect the mistakes made by the classifier. Through the confusion matrix, various metrics including precision, recall, and the F1-score were computed to provide a detailed understanding of the model’s performance. Precision (the ratio of true positive predictions to the sum of true positive and false positive predictions), recall (the ratio of true positive predictions to the sum of true positive and false negative predictions), and the F1-score (the harmonic mean of precision and recall) offer deeper insights into the reliability and effectiveness of the models, especially in the presence of class imbalance.
+Subsequently, confusion matrices were generated for the models. A confusion matrix is a table used to describe the performance of a classification algorithm. Each row of the matrix represents the instances of the actual class, while each column represents the instances of the predicted class. The entries on the main diagonal of the confusion matrix correspond to correct predictions, whereas other entries reflect the mistakes made by the classifier. Through the confusion matrix, vthe F1-score was computed to provide a detailed understanding of the model’s performance, F1 score is compoed of two other metrics in precision and recall. Precision (the ratio of true positive predictions to the sum of true positive and false positive predictions), recall (the ratio of true positive predictions to the sum of true positive and false negative predictions), are both utilized to form  F1-score (the harmonic mean of precision and recall). 
 
 For the Gradient Boosted Trees model, the loss function was an essential aspect of evaluation. The loss function is a measure used to estimate the discrepancy between the predicted values and actual values. During the training process, the algorithm optimizes the model parameters to minimize this loss function, thereby improving the model’s predictive performance. Monitoring the change in the value of the loss function during the training process provides insights into the convergence and stability of the model, helping in understanding whether the model is learning effectively from the training data. For each training epoch, the loss was computed and analyzed to ensure the model was converging to a solution that minimized prediction errors.
-
-
-
 
 ```{python}
 #| echo: false
@@ -839,7 +834,7 @@ ax_catboost.set_ylabel('True Label')
 plt.show()
 ```
 
-## SVM
+### SVM
 
 
 grid search SVM
@@ -1063,7 +1058,7 @@ plt.show()
 
 
 
-# Word Embeddings 
+## Word Embeddings 
 
 
 ```{python}
@@ -1097,7 +1092,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 ```
 
 
-## Catboost
+### Catboost
 Accuracy: 29.18%
 ```{python}
 #| echo: false
@@ -1170,7 +1165,7 @@ plt.show()
 
 
 
-In Figure 6 we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.
+In Figure XXX we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.
 
 Misclassifications were also evident. Notably, 183 Mandela instances were misclassified as Ramaphosa and 111 as Zuma. For Mbeki, the classifier misidentified 244 instances as Ramaphosa and 150 as Zuma. The Ramaphosa class had 141 instances misclassified as Zuma, with smaller numbers of misclassifications into Mandela (39) and Mbeki (4). For Zuma, there were 254 instances misclassified as Ramaphosa, 36 as Mandela, and 3 as Mbeki.
 
@@ -1186,7 +1181,7 @@ sns.heatmap(cm_catboost2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 
 ax_catboost2.set_title('CatBoost2 Confusion Matrix')
 ax_catboost2.set_xlabel('Predicted Label')
 ax_catboost2.set_ylabel('True Label')
-
+plt.show()
 ```
 
 
@@ -1383,7 +1378,7 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 
 
 
-We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%.
+We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%. In a similar vein as the SVM, we find that the model tends to
 
 In terms of misclassifications, the Mandela class was predominantly misclassified as Mbeki (196 instances), followed by Ramaphosa (111 instances) and Zuma (27 instances). For the Mbeki class, there were 131 instances misclassified as Ramaphosa and 20 as Zuma. In the Ramaphosa class, a significant 214 instances were misclassified as Mbeki, with 29 as Zuma. Lastly, the Zuma class had substantial misclassifications into Mbeki (205 instances) and Ramaphosa (204 instances). These patterns highlight areas of misclassification and suggest potential avenues for improving the SVM classifier's performance. Overall this model seemed to overpredict sentences as belonging to either Mbeki or Ramaphosa.
 
@@ -1405,3 +1400,4 @@ ax_nn3.set_xlabel('Predicted Label')
 ax_nn3.set_ylabel('True Label')
 plt.show()
 ```
+
