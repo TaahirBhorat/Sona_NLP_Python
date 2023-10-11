@@ -418,28 +418,6 @@ print(classification_rep)
 
 ```
 
-```{python}
-import seaborn as sns
-import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix
-
-# Compute confusion matrix
-cm = confusion_matrix(y_test, y_pred.flatten().astype(int))
-
-# Get class names from the label encoder
-classes = le.classes_
-
-# Create a heatmap plot of the confusion matrix
-plt.figure(figsize=(10,7))
-sns.set(font_scale=1.4) # for label size
-sns.heatmap(cm, annot=True, annot_kws={"size": 16}, fmt='g', cmap='Blues', xticklabels=classes, yticklabels=classes)
-
-# Add plot labels and show the plot
-plt.xlabel('Predicted label')
-plt.ylabel('True label')
-plt.title('Confusion Matrix')
-plt.show()
-```
 
 
 
@@ -465,7 +443,47 @@ plt.show()
 ```
 
 
+Figure 6 shows the Boosted Tree's performance for the categories: Mandela, Mbeki, Ramaphosa, and Zuma. The diagonal entries represent correct classifications: 93 for Mandela, 278 for Mbeki, 253 for Ramaphosa, and 385 for Zuma, indicating varying degrees of accuracy across classes. Notably, the Boosted Tree's is most accurate when predicting Zuma and least accurate for Mandela. The off-diagonal elements reveal misclassifications. For instance, Mandela is often mistaken as Mbeki (98 times) and Zuma (100 times). Similarly, Zuma is misclassified as Ramaphosa 67 times. 
+
+```{python}
+#| echo: false
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred.flatten().astype(int))
+
+# Get class names from the label encoder
+classes = le.classes_
+
+# Create a heatmap plot of the confusion matrix
+plt.figure(figsize=(10,7))
+sns.set(font_scale=1.4) # for label size
+sns.heatmap(cm, annot=True, annot_kws={"size": 16}, fmt='g', cmap='Blues', xticklabels=classes, yticklabels=classes)
+
+# Add plot labels and show the plot
+plt.xlabel('Predicted label')
+plt.ylabel('True label')
+plt.title('Confusion Matrix')
+plt.show()
+```
+
+
+  
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+
 ### Neural Network
+
+Within the BoW feature extraction  we move to analyzr the Neural Network(NN) modelling results. Figure X Shoes the mean training and validation accuracy across 20 epochs using 5-fold cross validation on the training dataset. We notably observe little evidence of significant learning in the validatioin set over the epochs, with the validation accuacy remainiing constant over the 20 epochs. Hence given this the final model selected was chosen to simiply run on 2 epochs. A possible reason for this could be the choice of the kernel weight initialiizer whoch provides a non-naive initial set of weights for the NN.
+
+
 Accuracy: 60.41%
 ```{python}
 #| echo: false
@@ -536,6 +554,9 @@ plt.legend(loc='upper left')
 plt.show()
 ```
 
+
+
+
 Val accurcay 58.80%
 ```{python}
 #| echo: false
@@ -568,6 +589,38 @@ final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
+
+
+
+The confusion matrix for the Neural Network classifier exhibits varying degrees of classification accuracy across different classes. For Mandela, out of 334 instances, 170 were correctly classified, yielding a classification accuracy of 50.9%. The Mbeki class had 264 correct predictions out of 480 instances, resulting in a 55.0% accuracy. The classifier achieved higher accuracy for Ramaphosa, correctly classifying 291 out of 456 instances (63.8%). The highest accuracy was observed for the Zuma class, with 331 correct predictions out of 526 instances, translating to a classification accuracy of 62.9.
+
+With respect to the misclassifications: Mandela was often misclassified as Mbeki (92 instances) or Zuma (45 instances). Mbeki instances were misclassified as Mandela (91 instances) and Zuma (76 instances). There were 97 Ramaphosa instances misclassified as Zuma, with smaller numbers for Mandela and Mbeki misclassifications. For the Zuma class, there were 88, 52, and 55 instances misclassified as Ramaphosa, Mandela, and Mbeki respectively. 
+
+```{python}
+#| echo: false
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+# Obtain model's predictions on the test set
+y_pred = loaded_model.predict(X_test)
+y_pred_classes = np.argmax(y_pred, axis=1)  # Convert probabilities to class labels
+
+# Compute the confusion matrix
+cm = confusion_matrix(y_test, y_pred_classes)
+
+# Visualize the confusion matrix
+plt.figure(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12},xticklabels=classes, yticklabels=classes)  # font size
+
+plt.title('Confusion Matrix')
+plt.xlabel('Predicted Label')
+plt.ylabel('True Label')
+plt.show()
+```
+
 
 ### SVMs
 
@@ -631,7 +684,31 @@ classification_rep_svm = classification_report(y_test, y_pred_svm)
 print(f'test score {accuracy_svm}')
 ```
 
+The confusion matrix of the SVM classifier indicates varying classification accuracy for the different classes. For the Mandela class, there were 139 correct predictions out of 334 instances, resulting in a classification accuracy of 41.6%. The Mbeki class had an accuracy of 54.8%, with 263 correct predictions out of 480 instances. The classifier was more accurate in identifying Ramaphosa, correctly classifying 271 out of 456 instances, yielding an accuracy of 59.4%. The highest classification accuracy was observed for the Zuma class, with 393 correct predictions out of 526 instances, achieving a 74.7% accuracy rate.
+
+Patterns of misclassification were also observed across the classes. For instance, Mandela was often misclassified as Mbeki (80 instances) and Zuma (77 instances). Instances of Mbeki were misclassified as Mandela (71 instances) and Zuma (99 instances). Ramaphosa was misclassified as Zuma in 126 instances, with smaller numbers for Mandela and Mbeki. The Zuma class had instances misclassified as Ramaphosa (64), Mandela (25), and Mbeki (44). 
+```{python}
+#| echo: false
+# Compute the confusion matrix
+cm_svm = confusion_matrix(y_test, y_pred_svm)
+
+# Visualize the confusion matrix
+fig_svm, ax_svm = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_svm,xticklabels=classes, yticklabels=classes)  
+
+ax_svm.set_title('SVM Confusion Matrix')
+ax_svm.set_xlabel('Predicted Label')
+ax_svm.set_ylabel('True Label')
+plt.show()
+
+```
+
+
+
+
 ## TF-IDF
+
 
 ```{python}
 #| echo: false
@@ -712,10 +789,12 @@ accuracy = accuracy_score(y_test_encoded, y_pred_class)
 classification_rep = classification_report(y_test_encoded, y_pred_class, target_names=le.classes_)
 
 # Print accuracy and classification report
-print(f'Accuracy: {accuracy * 100:.2f}%')
-print('Classification Report:')
-print(classification_rep)
+#print(f'Accuracy: {accuracy * 100:.2f}%')
+#print('Classification Report:')
+#print(classification_rep)
 ```
+
+The results of the training over epochs for the GBT model using TF-IDF can be seen in the appendix(Figure XXX), though is largely the same in behaviour as the GBT model trainined usinig the BoW feature extraction. Hence the final model chosen has the same hyperpararmeters. 
 
 
 ```{python}
@@ -736,6 +815,27 @@ plt.ylabel('Error')
 plt.legend()
 
 # Show the plot
+plt.show()
+```
+
+
+The confusion matrix for the Gradient Boosting Trees (GBT) classifier reveals a classification accuracy of 28.7% for Mandela, with 96 correct predictions out of 334 instances. The Mbeki class demonstrated a higher accuracy of 59.2% with 284 correct predictions from 480 instances. The Ramaphosa class was accurately identified in 261 out of 456 instances, yielding an accuracy of 57.2%. The Zuma class exhibited the highest classification accuracy at 68.3%, with 359 correct predictions from 526 instances.
+
+In terms of misclassifications, Mandela was often confused with Mbeki (113 instances) and Zuma (82 instances). Instances labeled as Mbeki were misclassified as Mandela (44 instances), Ramaphosa (60 instances), and Zuma (92 instances). There were 125 instances of Ramaphosa misclassified as Zuma, with additional misclassifications into Mandela (18 instances) and Mbeki (52 instances). The Zuma class saw misclassifications into Mandela (18 instances), Mbeki (65 instances), and Ramaphosa (84 instances). These misclassification patterns provide important insights for future model refinement and improvement.
+
+
+```{python}
+#| echo: false
+cm_catboost = confusion_matrix(y_test_encoded, y_pred_class)
+
+# Visualize the confusion matrix
+fig_catboost, ax_catboost = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_catboost, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_catboost,xticklabels=classes, yticklabels=classes)  
+
+ax_catboost.set_title('CatBoost Confusion Matrix')
+ax_catboost.set_xlabel('Predicted Label')
+ax_catboost.set_ylabel('True Label')
 plt.show()
 ```
 
@@ -805,6 +905,26 @@ classification_rep_svm = classification_report(y_test, y_pred_svm)
 accuracy_svm
 ```
 
+```{python}
+#| echo: false
+# Compute the confusion matrix
+cm_svm2 = confusion_matrix(y_test, y_pred_svm)
+
+# Visualize the confusion matrix
+fig_svm2, ax_svm2 = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_svm2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_svm2,xticklabels=classes, yticklabels=classes)  # font size
+
+ax_svm2.set_title('SVM2 Confusion Matrix')
+ax_svm2.set_xlabel('Predicted Label')
+ax_svm2.set_ylabel('True Label')
+plt.show()
+```
+
+
+In Figure XXX for the SVM classifier using TF- IDF feature extraction the confusion matrix denotes: Mandela at 42.8%, with 143 correct predictions out of 334; Mbeki at 61.9%, with 297 correct predictions out of 480; Ramaphosa at 64.3%, with 293 correct predictions out of 456; and Zuma at 70.5%, with 371 correct predictions out of 526.
+
+In terms of misclassifications, 94 Mandela instances were classified as Mbeki, 41 as Ramaphosa, and 56 as Zuma. For the Mbeki class, 59 instances were misclassified as Mandela, 44 as Ramaphosa, and 80 as Zuma. The classifier misidentified 23 Ramaphosa instances as Mandela, 31 as Mbeki, and 109 as Zuma. Finally, in the Zuma category, there were 25 instances misclassified as Mandela, 55 as Mbeki, and 75 as Ramaphosa.
 
 
 ### Neural Net
@@ -915,6 +1035,34 @@ print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 
 
 
+Figure XXX illustrates the confusion matrix for the NN trained using TF-IDF feature extraction. For Mandela, the NN secured 182 correct predictions from 334 instances, resulting in an accuracy rate of 54.5%. The Mbeki class observed an accuracy of 60.6% with 291 correct predictions from 480 instances. For the Ramaphosa class, 276 correct predictions were made from 456 instances, yielding an accuracy of 60.5%. The highest accuracy was noted for the Zuma class, with 321 correct predictions from 526 instances, amounting to an accuracy of 61.0%.
+
+In terms of misclassifications, the NN mistaken 85 Mandela instances as Mbeki, 26 as Ramaphosa, and 41 as Zuma. For the Mbeki class, 91 instances were erroneously labeled as Mandela, 35 as Ramaphosa, and 63 as Zuma. The NN misidentified 40 Ramaphosa instances as Mandela, 33 as Mbeki, and 107 as Zuma. Furthermore, the Zuma class had instances misclassified as Mandela (62), Mbeki (70), and Ramaphosa (73). 
+
+
+```{python}
+#| echo: false
+y_pred_nn2 = loaded_model.predict(X_test)
+y_pred_nn2_classes = np.argmax(y_pred_nn2, axis=1)  # Convert probabilities to class labels
+
+# Compute the confusion matrix
+# Note: Ensure that y_test is the encoded version of the true labels
+cm_nn2 = confusion_matrix(y_test, y_pred_nn2_classes)
+
+# Visualize the confusion matrix
+fig_nn2, ax_nn2 = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_nn2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_nn2,xticklabels=classes, yticklabels=classes )  # font size
+
+ax_nn2.set_title('NN2 Confusion Matrix')
+ax_nn2.set_xlabel('Predicted Label')
+ax_nn2.set_ylabel('True Label')
+plt.show()
+```
+
+
+
+
 # Word Embeddings 
 
 
@@ -1020,6 +1168,28 @@ plt.legend()
 plt.show()
 ```
 
+
+
+In Figure 6 we look to the confusion matrix of the GBT using word embeddings. For Mandela, there were 38 correct predictions from 334 instances, translating to an accuracy of 11.4%. The Mbeki class had 10 correct predictions from 480 instances, resulting in an accuracy of just 2.1%. The classifier showed a stronger performance for the Ramaphosa class, correctly identifying 342 out of 526 instances, yielding an accuracy of 65.0%. The Zuma class had 163 correct predictions from 456 instances, resulting in an accuracy of 35.7%.
+
+Misclassifications were also evident. Notably, 183 Mandela instances were misclassified as Ramaphosa and 111 as Zuma. For Mbeki, the classifier misidentified 244 instances as Ramaphosa and 150 as Zuma. The Ramaphosa class had 141 instances misclassified as Zuma, with smaller numbers of misclassifications into Mandela (39) and Mbeki (4). For Zuma, there were 254 instances misclassified as Ramaphosa, 36 as Mandela, and 3 as Mbeki.
+
+```{python}
+#| echo: false
+cm_catboost2 = confusion_matrix(y_test, y_pred.flatten().astype(int))
+
+# Visualize the confusion matrix
+fig_catboost2, ax_catboost2 = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_catboost2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_catboost2,xticklabels=classes, yticklabels=classes)  # font size
+
+ax_catboost2.set_title('CatBoost2 Confusion Matrix')
+ax_catboost2.set_xlabel('Predicted Label')
+ax_catboost2.set_ylabel('True Label')
+
+```
+
+
 ## SVM
 
 ```{python, eval = FALSE}
@@ -1051,7 +1221,7 @@ plt.show()
 #classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
 ```
 
-41.26%
+
 ```{python}
 #| echo: false
 # Initialize the Support Vector Machine classifier with specific parameters
@@ -1080,6 +1250,27 @@ classification_rep_specific_svm = classification_report(y_test, y_pred_specific_
 print(f'Accuracy (Specific SVM): {accuracy_specific_svm * 100:.2f}%')
 print('Classification Report (Specific SVM):')
 print(classification_rep_specific_svm)
+```
+
+
+In Figure XXX we see the word embeddnigs SVM confusion matrix: For the Mandela class, 13 correct predictions were made out of 334 instances, yielding a classification accuracy of 3.9%. The Mbeki class observed a more substantial accuracy of 61.5, with 295 correct predictions from 480 instances. The classifier identified the Ramaphosa class accurately in 269 out of 526 instances, resulting in a 51.1% accuracy rate. The Zuma class had 142 correct predictions out of 456 instances, translating to an accuracy of 31.1%.
+
+Regarding misclassifications, a significant number of Mandela instances, 178, were misclassified as Mbeki, followed by 79 as Ramaphosa and 64 as Zuma. In the Mbeki class, 117 instances were identified as Ramaphosa and 55 as Zuma, with a smaller misclassification into Mandela (13 instances). For the Ramaphosa class, 149 instances were misclassified as Mbeki, 94 as Zuma, and a minor count into Mandela (14 instances). For the Zuma class, there were notable misclassifications into Mbeki (141 instances) and Ramaphosa (151 instances), with a smaller number into Mandela (22 instances). 
+
+```{python}
+#| echo: false
+cm_specific_svm = confusion_matrix(y_test, y_pred_specific_svm)
+
+# Visualize the confusion matrix
+fig_specific_svm, ax_specific_svm = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_specific_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_specific_svm,xticklabels=classes, yticklabels=classes)  # font size
+
+ax_specific_svm.set_title('Specific SVM Confusion Matrix')
+ax_specific_svm.set_xlabel('Predicted Label')
+ax_specific_svm.set_ylabel('True Label')
+plt.show()
+
 ```
 
 
@@ -1156,7 +1347,7 @@ plt.legend(loc='upper left')
 plt.show()
 ```
 
-Test Accuracy: 36.08%
+Test Accuracy: 36.69%
 ```{python}
 #| echo: false
 #X_train = X_train.toarray()
@@ -1190,3 +1381,27 @@ print(f'Test Loss: {final_loss:.4f}')
 print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
+
+
+We finally examine the confusion matrix for the NN using word embeddings in figure XXX. For the Mandela class, there were no correct predictions from the 334 instances, resulting in a classification accuracy of 0%, notably the model did not predict a single sentence as belonging to Madela. The Mbeki class secured a higher accuracy of 68.5%, with 329 correct predictions out of 480 instances. The Ramaphosa class was correctly identified in 283 out of 526 instances, translating to an accuracy of 53.8%. The Zuma class saw 47 correct predictions from 456 instances, yielding an accuracy of 10.3%.
+
+In terms of misclassifications, the Mandela class was predominantly misclassified as Mbeki (196 instances), followed by Ramaphosa (111 instances) and Zuma (27 instances). For the Mbeki class, there were 131 instances misclassified as Ramaphosa and 20 as Zuma. In the Ramaphosa class, a significant 214 instances were misclassified as Mbeki, with 29 as Zuma. Lastly, the Zuma class had substantial misclassifications into Mbeki (205 instances) and Ramaphosa (204 instances). These patterns highlight areas of misclassification and suggest potential avenues for improving the SVM classifier's performance. Overall this model seemed to overpredict sentences as belonging to either Mbeki or Ramaphosa.
+
+```{python}
+#| echo: false
+y_pred_nn3 = loaded_model.predict(X_test)
+y_pred_nn3_classes = np.argmax(y_pred_nn3, axis=1)  # Convert probabilities to class labels
+
+# Compute the confusion matrix
+cm_nn3 = confusion_matrix(y_test, y_pred_nn3_classes)
+
+# Visualize the confusion matrix
+fig_nn3, ax_nn3 = plt.subplots(figsize=(10, 7))
+sns.set(font_scale=1.2)  # for label size
+sns.heatmap(cm_nn3, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_nn3,xticklabels=classes, yticklabels=classes)  # font size
+
+ax_nn3.set_title('NN3 Confusion Matrix')
+ax_nn3.set_xlabel('Predicted Label')
+ax_nn3.set_ylabel('True Label')
+plt.show()
+```
