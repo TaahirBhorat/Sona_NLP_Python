@@ -46,7 +46,7 @@
     "href": "index.html#model-evaluation",
     "title": "SONA_NLP_Python",
     "section": "Model Evaluation",
-    "text": "Model Evaluation\n\nAccuracy\n\\[\n\\begin{table}[]\n\\begin{tabular}{|l|l|l|l|}\n\\hline\n{\\ul \\textbf{Models/Feature Extraction}} & \\textbf{Bag of Words} & \\textbf{TF-IDF} & \\textbf{Word Embeddings} \\\\ \\hline\n\\textbf{Boosted Trees(Catboost)}         & 56.180                & 55.569          & 28.900                   \\\\ \\hline\n\\textbf{Support Vector Machines}         & 59.354                & 61.470          & 29.291                   \\\\ \\hline\n\\textbf{Neural Networks}                 & 58.797                & 59.580          & 33.852                   \\\\ \\hline\n\\end{tabular}\n\\end{table}\\]"
+    "text": "Model Evaluation\n\nAccuracy\n\n\n\n                                                \nFigure X: Accuracy across models and feature extraction methods"
   },
   {
     "objectID": "index.html#bag-of-words",

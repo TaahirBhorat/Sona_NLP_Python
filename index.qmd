@@ -129,10 +129,30 @@ pip install joblib
 #| include: false
 pip install pickle
 ```
+
+```{python}
+#| include: false
+pip install plotly
+```
+
+```{python}
+#| include: false
+pip install nbformat==4.2.0
+```
+
+```{python}
+#| include: false
+pip install --upgrade nbformat
+```
+```{python}
+#| include: false
+pip install ipython
+```
 ```{python}
 #| include: false
 # General imports
 import pickle
+import nbformat
 from joblib import dump, load
 import os
 import pandas as pd
@@ -361,16 +381,58 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 
 ## Model Evaluation
 ### Accuracy
-$$
-\begin{table}[]
-\begin{tabular}{|l|l|l|l|}
-\hline
-{\ul \textbf{Models/Feature Extraction}} & \textbf{Bag of Words} & \textbf{TF-IDF} & \textbf{Word Embeddings} \\ \hline
-\textbf{Boosted Trees(Catboost)}         & 56.180                & 55.569          & 28.900                   \\ \hline
-\textbf{Support Vector Machines}         & 59.354                & 61.470          & 29.291                   \\ \hline
-\textbf{Neural Networks}                 & 58.797                & 59.580          & 33.852                   \\ \hline
-\end{tabular}
-\end{table}$$
+
+```{python}
+#| echo: false
+#| fig-cap: "Figure X: Accuracy across models and feature extraction methods"
+import plotly.graph_objects as go
+
+# Creating the DataFrame
+data_tab1 = {
+    'Models/Feature Extraction': ['Boosted Trees(Catboost)', 'Support Vector Machines', 'Neural Networks'],
+    'Bag of Words': [56.180, 59.354, 58.797],
+    'TF-IDF': [55.569, 61.470, 59.580],
+    'Word Embeddings': [28.900, 29.291, 33.852]
+}
+df
+
+df_tab1 = pd.DataFrame(data_tab1)
+
+# Styling for the model names similar to header but bold
+model_column_style = dict(
+    values=df_tab1['Models/Feature Extraction'],
+    font=dict(color='black', size=12, family="Arial, sans-serif"),
+    align='left'
+)
+
+# Creating the table plot with a more academic look and distinct first column
+fig = go.Figure(data=[go.Table(
+    columnwidth=[200, 100, 100, 150], # Adjusting column width
+    header=dict(values=list(df_tab1.columns),
+                fill_color='lightgrey',
+                line=dict(color='darkslategray', width=1),
+                font=dict(color='black', size=12, family="Arial, sans-serif"),
+                align='left',
+                height=30),  # Adjusting header cell height
+    cells=dict(
+        values=[model_column_style['values']] + [df_tab1[col] for col in df_tab1.columns if col != 'Models/Feature Extraction'],
+        fill=dict(color=['lightgrey', 'white', 'white', 'white']),
+        line=dict(color='darkslategray', width=1),
+        font=dict(color='black', size=11, family="Arial, sans-serif"),
+        align='left',
+        height=30)  # Adjusting cell height
+)])
+
+# Tight layout
+fig.update_layout(
+    margin=dict(t=10, b=0, l=10, r=10)
+)
+
+fig.show()
+```
+
+
+
 
 
 ## Bag of Words
