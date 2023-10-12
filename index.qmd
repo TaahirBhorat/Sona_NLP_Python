@@ -358,6 +358,21 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 
 ```
 
+
+## Model Evaluation
+### Accuracy
+$$
+\begin{table}[]
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\ul \textbf{Models/Feature Extraction}} & \textbf{Bag of Words} & \textbf{TF-IDF} & \textbf{Word Embeddings} \\ \hline
+\textbf{Boosted Trees(Catboost)}         & 56.180                & 55.569          & 28.900                   \\ \hline
+\textbf{Support Vector Machines}         & 59.354                & 61.470          & 29.291                   \\ \hline
+\textbf{Neural Networks}                 & 58.797                & 59.580          & 33.852                   \\ \hline
+\end{tabular}
+\end{table}$$
+
+
 ## Bag of Words
 ### Boosted Trees
 
@@ -1020,8 +1035,8 @@ loaded_model = load_model('NN_final_model_2.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-print(f'Test Loss: {final_loss:.4f}')
-print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+#print(f'Test Loss: {final_loss:.4f}')
+#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 
@@ -1096,6 +1111,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 Accuracy: 29.18%
 ```{python}
 #| echo: false
+#| include: false
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
 params = {
@@ -1235,6 +1251,7 @@ plt.show()
 
 ```{python}
 #| echo: false
+#| include: false
 # Initialize the Support Vector Machine classifier with specific parameters
 #specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
 

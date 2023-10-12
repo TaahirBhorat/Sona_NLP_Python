@@ -125,6 +125,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#data-exploration-results" id="toc-data-exploration-results" class="nav-link" data-scroll-target="#data-exploration-results">Data Exploration Results</a></li>
+  <li><a href="#model-evaluation" id="toc-model-evaluation" class="nav-link" data-scroll-target="#model-evaluation">Model Evaluation</a>
+  <ul class="collapse">
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy">Accuracy</a></li>
+  </ul></li>
   <li><a href="#bag-of-words" id="toc-bag-of-words" class="nav-link" data-scroll-target="#bag-of-words">Bag of Words</a>
   <ul class="collapse">
   <li><a href="#boosted-trees" id="toc-boosted-trees" class="nav-link" data-scroll-target="#boosted-trees">Boosted Trees</a></li>
@@ -274,6 +278,22 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
+<section id="model-evaluation" class="level2">
+<h2 class="anchored" data-anchor-id="model-evaluation">Model Evaluation</h2>
+<section id="accuracy" class="level3">
+<h3 class="anchored" data-anchor-id="accuracy">Accuracy</h3>
+<p><span class="math display">\[
+\begin{table}[]
+\begin{tabular}{|l|l|l|l|}
+\hline
+{\ul \textbf{Models/Feature Extraction}} &amp; \textbf{Bag of Words} &amp; \textbf{TF-IDF} &amp; \textbf{Word Embeddings} \\ \hline
+\textbf{Boosted Trees(Catboost)}         &amp; 56.180                &amp; 55.569          &amp; 28.900                   \\ \hline
+\textbf{Support Vector Machines}         &amp; 59.354                &amp; 61.470          &amp; 29.291                   \\ \hline
+\textbf{Neural Networks}                 &amp; 58.797                &amp; 59.580          &amp; 33.852                   \\ \hline
+\end{tabular}
+\end{table}\]</span></p>
+</section>
+</section>
 <section id="bag-of-words" class="level2">
 <h2 class="anchored" data-anchor-id="bag-of-words">Bag of Words</h2>
 <section id="boosted-trees" class="level3">
@@ -356,12 +376,6 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <p>Test Accuracy: 59.58%</p>
-<div class="cell" data-execution_count="35">
-<div class="cell-output cell-output-stdout">
-<pre><code>Test Loss: 1.0468
-Test Accuracy: 59.58%</code></pre>
-</div>
-</div>
 <p>Figure XXX illustrates the confusion matrix for the NN trained using TF-IDF feature extraction. For Mandela, the NN secured 182 correct predictions from 334 instances, resulting in an accuracy rate of 54.5%. The Mbeki class observed an accuracy of 60.6% with 291 correct predictions from 480 instances. For the Ramaphosa class, 276 correct predictions were made from 456 instances, yielding an accuracy of 60.5%. The highest accuracy was noted for the Zuma class, with 321 correct predictions from 526 instances, amounting to an accuracy of 61.0%.</p>
 <p>In terms of misclassifications, the NN mistaken 85 Mandela instances as Mbeki, 26 as Ramaphosa, and 41 as Zuma. For the Mbeki class, 91 instances were erroneously labeled as Mandela, 35 as Ramaphosa, and 63 as Zuma. The NN misidentified 40 Ramaphosa instances as Mandela, 33 as Mbeki, and 107 as Zuma. Furthermore, the Zuma class had instances misclassified as Mandela (62), Mbeki (70), and Ramaphosa (73).</p>
 <div class="cell" data-execution_count="37">
@@ -376,22 +390,6 @@ Test Accuracy: 59.58%</code></pre>
 <section id="catboost" class="level3">
 <h3 class="anchored" data-anchor-id="catboost">Catboost</h3>
 <p>Accuracy: 29.18%</p>
-<div class="cell" data-execution_count="39">
-<div class="cell-output cell-output-stderr">
-<pre><code>/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-
-/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-
-/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-</code></pre>
-</div>
-</div>
 <div class="cell" data-execution_count="40">
 <div class="cell-output cell-output-display">
 <p><img src="index_files/figure-html/cell-41-output-1.png" class="img-fluid"></p>
@@ -408,22 +406,6 @@ Precision and F-score are ill-defined and being set to 0.0 in labels with no pre
 </section>
 <section id="svm-1" class="level3">
 <h3 class="anchored" data-anchor-id="svm-1">SVM</h3>
-<div class="cell" data-execution_count="44">
-<div class="cell-output cell-output-stderr">
-<pre><code>/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-
-/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-
-/opt/anaconda3/envs/firstEnv/lib/python3.10/site-packages/sklearn/metrics/_classification.py:1469: UndefinedMetricWarning:
-
-Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
-</code></pre>
-</div>
-</div>
 <p>In Figure XXX we see the word embeddnigs SVM confusion matrix: Ghe model upon inivestigation here has failed greatly. It has simiply predicted all sentencees belonging to Ramaphosa and hence cannot be interpretted at any meaningful level</p>
 <div class="cell" data-execution_count="46">
 <div class="cell-output cell-output-display">
