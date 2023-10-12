@@ -382,6 +382,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2,
 ## Model Evaluation
 ### Accuracy
 
+From the accuracy table (Figure X), it's evident that the feature extraction method plays a pivotal role in the performance of models when classifying the origin of SONA presidential sentences. When employing the Bag of Words technique, the Support Vector Machines (SVM) model yields the highest accuracy at 59.354%, closely followed by Neural Networks with 58.797% and Boosted Trees (Catboost) at 56.182%. The TF-IDF method sees a similar trend, with SVM leading at 61.471%, Neural Networks registering 59.581%, and Boosted Trees (Catboost) trailing slightly at 55.569%. It's noteworthy that SVM attains its peak accuracy with the TF-IDF extraction method. However, all three models exhibit a sharp decline in performance when using Word Embeddings, with accuracies plummeting to below 34%. This indicates that, for this particular task, traditional methods like Bag of Words and TF-IDF outperform Word Embeddings. It should be noted that the word embeddings feature extraction despite setting a random state, varried in iits performance across different runs, though across all runs still performed the worst of all feature extraction methods investigated in terms of accuracy. 
+
 ```{python}
 #| echo: false
 #| fig-cap: "Figure X: Accuracy across models and feature extraction methods"
@@ -390,9 +392,9 @@ import plotly.graph_objects as go
 # Creating the DataFrame
 data_tab1 = {
     'Models/Feature Extraction': ['Boosted Trees(Catboost)', 'Support Vector Machines', 'Neural Networks'],
-    'Bag of Words': [56.180, 59.354, 58.797],
-    'TF-IDF': [55.569, 61.470, 59.580],
-    'Word Embeddings': [28.900, 29.291, 33.852]
+    'Bag of Words': [56.182, 59.354, 58.797],
+    'TF-IDF': [55.569, 61.471, 59.581],
+    'Word Embeddings': [28.902, 29.291, 33.852]
 }
 
 df_tab1 = pd.DataFrame(data_tab1)
@@ -431,8 +433,58 @@ fig.update_layout(
 fig.show()
 ```
 
+### F1 Score
 
+The F1-Score table (Figure X) provides insights into the harmonic mean between precision and recall for different models and feature extraction techniques. Using the Bag of Words method, Neural Networks achieve the highest F1-Score at 58.113%, slightly ahead of Support Vector Machines (SVM) which scores 57.850%. The Boosted Trees (Catboost) model lags a bit behind with a score of 53.552%. When the TF-IDF extraction technique is applied, SVM emerges as the top performer with a score of 60.121%. This is followed closely by the Neural Networks model with an F1-Score of 59.113%. Again, Boosted Trees (Catboost) secures the third position, achieving an F1-Score of 53.294%. However, when Word Embeddings are used for feature extraction, there is a notable drop in performance across all models. The Neural Networks model fares the best in this category with an F1-Score of 26.420%, while both SVM and Boosted Trees (Catboost) register scores below 15%. The stark contrast in performance when using Word Embeddings, compared to the other two methods, underscores its limitation for this specific task.
 
+```{python}
+#| echo: false
+#| fig-cap: "Figure X: F1-Score across models and feature extraction methods"
+import plotly.graph_objects as go
+
+# Creating the DataFrame
+data_tab1 = {
+    'Models/Feature Extraction': ['Boosted Trees(Catboost)', 'Support Vector Machines', 'Neural Networks'],
+    'Bag of Words': [53.552, 57.850, 58.113],
+    'TF-IDF': [53.294, 60.121, 59.113],
+    'Word Embeddings': [14.470, 13.271, 26.420]
+}
+
+df_tab1 = pd.DataFrame(data_tab1)
+
+# Styling for the model names similar to header but bold
+model_column_style = dict(
+    values=df_tab1['Models/Feature Extraction'],
+    font=dict(color='black', size=12, family="Arial, sans-serif"),
+    align='left'
+)
+
+# Creating the table plot with a more academic look and distinct first column
+fig = go.Figure(data=[go.Table(
+    columnwidth=[200, 100, 100, 150], # Adjusting column width
+    header=dict(values=list(df_tab1.columns),
+                fill_color='lightgrey',
+                line=dict(color='darkslategray', width=1),
+                font=dict(color='black', size=12, family="Arial, sans-serif"),
+                align='left',
+                height=30),  # Adjusting header cell height
+    cells=dict(
+        values=[model_column_style['values']] + [df_tab1[col] for col in df_tab1.columns if col != 'Models/Feature Extraction'],
+        fill=dict(color=['lightgrey', 'white', 'white', 'white']),
+        line=dict(color='darkslategray', width=1),
+        font=dict(color='black', size=11, family="Arial, sans-serif"),
+        align='left',
+        height=30)  # Adjusting cell height
+)])
+
+# Tight layout
+fig.update_layout(
+    height = len(df_tab1) * 30 + 60,
+    margin=dict(t=10, b=0, l=10, r=10)
+)
+
+fig.show()
+```
 
 
 ## Bag of Words
