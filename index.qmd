@@ -394,7 +394,6 @@ data_tab1 = {
     'TF-IDF': [55.569, 61.470, 59.580],
     'Word Embeddings': [28.900, 29.291, 33.852]
 }
-df
 
 df_tab1 = pd.DataFrame(data_tab1)
 
@@ -425,6 +424,7 @@ fig = go.Figure(data=[go.Table(
 
 # Tight layout
 fig.update_layout(
+    height = len(df_tab1) * 30 + 60,
     margin=dict(t=10, b=0, l=10, r=10)
 )
 
