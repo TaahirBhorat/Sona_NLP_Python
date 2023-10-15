@@ -1581,23 +1581,3 @@ The results from the Neural Networks, while promising, did not significantly ove
 
 In summary, while the study has successfully delineated the linguistic tendencies across various South African presidents, it has also highlighted challenges and potential avenues for refinement. The interplay of feature extraction methods, model selection, and data intricacies presents a complex landscape, emphasizing the multifaceted nature of political speech classification. Future research can build upon these findings, integrating more advanced models, addressing dataset imbalances, and potentially fusing insights from other academic disciplines for a holistic understanding.
 
-
-# Bibliography
-
-Akuma, S., Lubem, T. and Adom, I.T. (2022) ‘Comparing bag of words and TF-IDF with different models for hate speech detection from live tweets’, International Journal of Information Technology, 14(7), pp. 3629–3635. doi:10.1007/s41870-022-01096-4. 
-
-Brownlee, J. (2021) Gradient boosting with Scikit-learn, XGBoost, LIGHTGBM, and CatBoost, MachineLearningMastery.com. Available at: https://machinelearningmastery.com/gradient-boosting-with-scikit-learn-xgboost-lightgbm-and-catboost/ (Accessed: 4 October 2023). 
-
-Friedman, J.H. (2001) ‘Greedy function approximation: A gradient boosting machine.’, The Annals of Statistics, 29(5). doi:10.1214/aos/1013203451. 
-
-Goodfellow, I., Bengio, Y. and Courville, A., 2016. Deep learning. MIT press.
-
-Glorot, X., Bordes, A. and Bengio, Y., 2011. Deep sparse rectifier neural networks. In Proceedings of the fourteenth international conference on artificial intelligence and statistics (pp. 315-323).
-
-He, K., Zhang, X., Ren, S. and Sun, J., 2015. Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification. In Proceedings of the IEEE international conference on computer vision (pp. 1026-1034).
-
-Řehůřek, R. (2022) Gensim: Topic modelling for humans, Word2Vec Model - gensim. Available at: https://radimrehurek.com/gensim/auto_examples/tutorials/run_word2vec.html#:~:text=Word2Vec%20is%20a%20more%20recent,each%20other%20have%20differing%20meanings. (Accessed: 6 October 2023). 
-
-Shmilovici, A. (2005) ‘Support Vector Machines’, Data Mining and Knowledge Discovery Handbook, pp. 257–276. doi:10.1007/0-387-25465-x_12. 
-
-Sklearn (2023) Sklearn.svm.SVC, scikit. Available at: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html (Accessed: 13 October 2023). 
