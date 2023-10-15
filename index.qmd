@@ -317,8 +317,34 @@ plt.show()
 
 ```
 
+In figure 3, the term "government" stands out as the most frequently used, highlighting the focus on governance in the presidential speeches. References to "South," "Africa," and economic terms like "development" and "economic" suggest an emphasis on regional affairs and economic growth. Words such as "people," "public," and "national" underscore the significance of civic engagement and national identity. 
+
+```{python}
+#| fig-cap: "Figure 3: Top 20 most common words used across all presidents"
+#| echo: false
+#| warning: false
+
+# Use CountVectorizer to count word frequencies
+vectorizer = CountVectorizer(stop_words='english', max_features=20)
+X = vectorizer.fit_transform(data['Sentences'])
+word_freq_df = pd.DataFrame({'word': vectorizer.get_feature_names_out(),
+                             'frequency': np.asarray(X.sum(axis=0)).ravel()})
+
+word_freq_df = word_freq_df.sort_values('frequency', ascending=False)
+
+# Plotting the bar plot for the top 20 words
+plt.figure(figsize=(12, 8))
+sns.barplot(x='frequency', y='word', data=word_freq_df)
+plt.title('Top 20 most common words used across all presidents')
+plt.xlabel('Frequency')
+plt.ylabel('Word')
+plt.show()
+
+```
 
 
+
+From figure 4 we can examine the word clouds of South African presidents Mandela, Ramaphosa, Mbeki, and Zuma, noting the distinct thematic priorities that emerge. Mandela's discourse leaned towards nation-building, emphasizing "government," "people," and "national." Ramaphosa highlighted economic terms like "investment" and "growth," while maintaining a strong national identity. Mbeki's governance approach is reflected in terms such as "process" and "system," with "South African" underscoring unity. Zuma's tenure was marked by infrastructure and economic themes, seen in "development" and "economy." Across all leaders, a shared commitment to governance and the South African populace is evident. 
 ```{python}
 #| fig-cap: "Figure 4: Word Cloud per President"
 #| echo: false
@@ -590,8 +616,6 @@ plt.show()
 ```
 
 
-  
-
 ```{python}
 #| echo: false
 import matplotlib.pyplot as plt
@@ -603,7 +627,6 @@ import seaborn as sns
 
  Figure X Shoes the mean training and validation accuracy across 20 epochs using 5-fold cross validation on the training dataset. We observe little evidence of significant learning in the validatioin set over the epochs, with the validation accuacy remainiing constant over the 20 epochs. Hence given this the final model selected was chosen to simiply run on 2 epochs. A possible reason for this could be the choice of the kernel weight initialiizer whoch provides a non-naive initial set of weights for the NN.
 
-Accuracy: 60.41%
 ```{python}
 #| echo: false
 import numpy as np
@@ -676,7 +699,6 @@ plt.show()
 
 
 
-Val accurcay 58.80%
 ```{python}
 #| echo: false
 X_train = X_train.toarray()
@@ -917,34 +939,7 @@ classification_rep = classification_report(y_test_encoded, y_pred_class, target_
 #print(classification_rep)
 ```
 
-The results of the training over epochs for the GBT model using TF-IDF can be seen in the appendix(Figure XXX), though is largely the same in behaviour as the GBT model trainined usinig the BoW feature extraction. Hence the final model chosen has the same hyperpararmeters. 
-
-
-```{python}
-#| echo: false
-# Read the CSV file
-new_df = pd.read_csv("cv_results_over_epochs_2.csv")
-
-# Plotting the mean values for training and validation errors with distinct colors
-plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  
-plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  
-
-# Adding title and labels to the plot
-plt.title('Training and Validation Error Over Epochs')
-plt.xlabel('Epochs (Iterations)')
-plt.ylabel('Error')
-
-# Adding legend to the plot
-plt.legend()
-
-# Show the plot
-plt.show()
-```
-
-
-The confusion matrix for the Gradient Boosting Trees (GBT) classifier reveals a classification accuracy of 28.7% for Mandela, with 96 correct predictions. The Mbeki class demonstrated a higher accuracy of 59.2% with 284 correct predictions from 480 instances. The Ramaphosa class was accurately identified in 261 out of 456 instances, yielding an accuracy of 57.2%. The Zuma class exhibited the highest classification accuracy at 68.3%, with 359 correct predictions from 526 instances.
-
-In terms of misclassifications these appear less pronounced but we do see, Mandela was often confused with Mbeki (113 instances).
+The results of the training over epochs for the GBT model using TF-IDF can be seen in the appendix(Figure XXX), though is largely the same in behaviour as the GBT model trainined usinig the BoW feature extraction. Hence the final model chosen has the same hyperpararmeters.The confusion matrix for the Gradient Boosting Trees (GBT) classifier reveals a classification accuracy of 28.7% for Mandela, with 96 correct predictions. The Mbeki class demonstrated a higher accuracy of 59.2% with 284 correct predictions from 480 instances. The Ramaphosa class was accurately identified in 261 out of 456 instances, yielding an accuracy of 57.2%. The Zuma class exhibited the highest classification accuracy at 68.3%, with 359 correct predictions from 526 instances. In terms of misclassifications these appear less pronounced but we do see, Mandela was often confused with Mbeki (113 instances).
 
 ```{python}
 #| echo: false
@@ -1099,20 +1094,7 @@ y_train = encoder.fit_transform(y_train)
 #avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
 #avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_2.csv', index=False)
 
-# Load averaged accuracies from CSV
-loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_2.csv')
 
-# Plotting
-plt.figure(figsize=(12, 6))
-plt.plot(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1), loaded_avg_accuracies['avg_train_accuracy'], label='Average Training Accuracy')
-plt.plot(range(1, len(loaded_avg_accuracies['avg_val_accuracy']) + 1), loaded_avg_accuracies['avg_val_accuracy'], label='Average Validation Accuracy', linestyle='dashed')
-
-plt.title('Average Training and Validation Accuracy Over Epochs')
-plt.xlabel('Epoch')
-plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1))  # Adjust x-axis ticks to start from 1
-plt.ylabel('Accuracy')
-plt.legend(loc='upper left')
-plt.show()
 ```
 
 Test Accuracy: 59.58%
@@ -1268,27 +1250,6 @@ classification_rep = classification_report(y_test, y_pred.flatten().astype(int),
 
 ```
 
-```{python}
-#| echo: false
-# Read the CSV file
-new_df = pd.read_csv("cv_results_over_epochs_3.csv")
-
-# Plotting the mean values for training and validation errors with distinct colors
-plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  
-plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  
-
-# Adding title and labels to the plot
-plt.title('Training and Validation Error Over Epochs')
-plt.xlabel('Epochs (Iterations)')
-plt.ylabel('Error')
-
-# Adding legend to the plot
-plt.legend()
-
-# Show the plot
-plt.show()
-```
-
 
 
 ```{python}
@@ -1420,7 +1381,6 @@ plt.show()
 ```
 
 ### Neural Network 
-Accuracy: 36.69%
 
 ```{python}
 #| echo: false
@@ -1476,23 +1436,9 @@ y_train = encoder.fit_transform(y_train)
 #avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
 #avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_3.csv', index=False)
 
-# Load averaged accuracies from CSV
-loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_3.csv')
 
-# Plotting
-plt.figure(figsize=(12, 6))
-plt.plot(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1), loaded_avg_accuracies['avg_train_accuracy'], label='Average Training Accuracy')
-plt.plot(range(1, len(loaded_avg_accuracies['avg_val_accuracy']) + 1), loaded_avg_accuracies['avg_val_accuracy'], label='Average Validation Accuracy', linestyle='dashed')
-
-plt.title('Average Training and Validation Accuracy Over Epochs')
-plt.xlabel('Epoch')
-plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1))  # Adjust x-axis ticks to start from 1
-plt.ylabel('Accuracy')
-plt.legend(loc='upper left')
-plt.show()
 ```
 
-Test Accuracy: 36.69%
 ```{python}
 #| echo: false
 #X_train = X_train.toarray()
