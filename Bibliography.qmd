@@ -1,7 +1,6 @@
 ---
 title: "Bibliography"
 ---
-.testing 
 
 Akuma, S., Lubem, T. and Adom, I.T. (2022) ‘Comparing bag of words and TF-IDF with different models for hate speech detection from live tweets’, International Journal of Information Technology, 14(7), pp. 3629–3635. doi:10.1007/s41870-022-01096-4. 
 
