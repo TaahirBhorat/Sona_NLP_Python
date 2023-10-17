@@ -10,6 +10,11 @@ Following the methods section, the paper presents and succinctly discusses the s
 
 # Literature Review
 
+NLP has become an in-vogue machine learning practice recently, the availability of rich sources of textual data through platforms like Twitter, coupled with the explosion of transformer-based models usage has led to the topic of text analysis to become a highly researched and applied method(Khurana et al., 2022). The first phase of NLP relies on feature extraction, methods traditional methods like BoW proposed and TF-IDF, while high in dimensionality, provide a sparse matrix representation of otherwise complex text data(Dogra et al., 2022). Other more recent methods like word embeddings, have been shown to be extremely useful, picking up semantics and nuance previously undiscovered. Models used for sentence classifications include traditional machine learning methods like Naive Bayes classifiers and SVMS(Dogra et al., 2022) as well as more standard classification methods like random forests and more recently gradient-boosted trees and advanced neural network architectures. 
+
+Newer transformer learning-based transfer learning models like BERT proposed by (Devlin et al., 2019) have garnered massive attention due to their significant performance in NLP tasks ranging from sentiment analysis to classification tasks in NLP. Though these methods are computationally very expensive and are rooted in a large corpus that they are trained on(Kotei & Thirunavukarasu, 2023).
+
+
 # Methods
 
 The methods applied fall into four main categories that also follow the workflow of the project. More specifically, data pre-processing, feature extraction, modelling and model evaluation.
@@ -185,14 +190,14 @@ from sklearn.metrics import classification_report, accuracy_score
 
 ```{python}
 #| echo: false
-folder_path = 'speeches'  # Ensure this is your correct folder path
+folder_path = 'speeches' 
 files = os.listdir(folder_path)
 files = sorted([file for file in files if os.path.isfile(os.path.join(folder_path, file)) and file.endswith('.txt')])
 
 president_names = []
 
-# Updated regex pattern to handle more cases
-pattern = r'_(.+?)\.txt'  # Non-greedy match to get the president name
+
+pattern = r'_(.+?)\.txt'  
 
 for file in files:
     match = re.search(pattern, file)
@@ -253,11 +258,9 @@ sns.set(style="whitegrid")
 # Group the data by president and count the number of sentences for each
 sentence_counts = data['Presidents'].value_counts()
 
-# Create a bar plot of the number of sentences per president
 plt.figure(figsize=(10, 6))
 sns.barplot(x=sentence_counts.index, y=sentence_counts.values, palette="viridis")
 
-# Add labels and title
 plt.xlabel('Presidents')
 plt.ylabel('Number of Sentences')
 plt.xticks(rotation=45)
@@ -284,18 +287,14 @@ data = data[data['Presidents'] != 'deKlerk']
 # Calculate the length in words of each sentence
 data['Sentence_Length'] = data['Sentences'].apply(lambda x: len(x.split()))
 
-# Group by president and calculate the average sentence length
 average_length = data.groupby('Presidents')['Sentence_Length'].mean().sort_values(ascending=False)
 
 palette = sns.color_palette("viridis", n_colors=len(sentence_counts))
 
-# Create a mapping of president to color based on the order in sentence_counts
 color_mapping = {president: palette[i] for i, president in enumerate(sentence_counts.index)}
 
-# Get colors for the presidents in the order of average_length
 bar_colors = [color_mapping[president] for president in average_length.index]
 
-# Create a bar plot of the average sentence length per president with consistent colors
 plt.figure(figsize=(10, 6))
 sns.barplot(x=average_length.index, y=average_length.values, palette=bar_colors)
 
@@ -338,30 +337,26 @@ From Figure 4 we can examine the word clouds of South African presidents Mandela
 ```{python}
 #| fig-cap: "Figure 4: Word Cloud per President"
 #| echo: false
-# Define a function to remove stop words from a sentence
+# function to remove stop words from a sentence
 def remove_stopwords(sentence):
     words = sentence.split()
     cleaned_words = [word for word in words if word.lower() not in STOPWORDS]
     return ' '.join(cleaned_words)
 
-# Apply the function to remove stop words from each sentence in the DataFrame
 data['Cleaned_Sentences'] = data['Sentences'].apply(remove_stopwords)
 
-# Group the cleaned sentences by president
 grouped = data.groupby('Presidents')['Cleaned_Sentences'].apply(' '.join).reset_index()
 
-# Initialize a dictionary to store word clouds for each president
 wordclouds = {}
 
-# Generate a word cloud for each president
+#  word cloud for each president
 for index, row in grouped.iterrows():
     wordcloud = WordCloud(width=800, height=400, background_color='white').generate(row['Cleaned_Sentences'])
     wordclouds[row['Presidents']] = wordcloud
 
-# Display the word clouds
 plt.figure(figsize=(15, 10))
 for i, (president, wordcloud) in enumerate(wordclouds.items(), 1):
-    plt.subplot(2, 2, i)  # Adjusted subplot arrangement to 2x2 grid
+    plt.subplot(2, 2, i)  
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.title(president)
     plt.axis("off")
@@ -372,24 +367,21 @@ plt.show()
 
 ```{python}
 #| echo: false
-# Preprocess text data: lowercasing and removing punctuation
+
 data['Processed_Sentences'] = data['Sentences'].str.lower().str.replace('[^\w\s]', '', regex=True)
 
-# Extract relevant columns
 text_data = data['Processed_Sentences']
 y = data['Presidents']
 
-# Initialize a CountVectorizer for BOW representation with stop words removal
 vectorizer = CountVectorizer(lowercase=True, token_pattern=r"(?u)\b\w+\b", stop_words='english')
 
-# Fit and transform the text data
 X = vectorizer.fit_transform(text_data)
 
 # Encode the class labels
 le = LabelEncoder()
 y_encoded = le.fit_transform(y)
 
-# Split the data into training and testing sets
+# Split the data
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42, stratify=y_encoded)
 
 ```
@@ -414,14 +406,12 @@ data_tab1 = {
 
 df_tab1 = pd.DataFrame(data_tab1)
 
-# Styling for the model names similar to header but bold
 model_column_style = dict(
     values=df_tab1['Models/Feature Extraction'],
     font=dict(color='black', size=12, family="Arial, sans-serif"),
     align='left'
 )
 
-# Creating the table plot with a more academic look and distinct first column
 fig = go.Figure(data=[go.Table(
     columnwidth=[200, 100, 100, 150], # Adjusting column width
     header=dict(values=list(df_tab1.columns),
@@ -439,7 +429,6 @@ fig = go.Figure(data=[go.Table(
         height=30)  # Adjusting cell height
 )])
 
-# Tight layout
 fig.update_layout(
     height = len(df_tab1) * 30 + 60,
     margin=dict(t=10, b=0, l=10, r=10)
@@ -474,7 +463,6 @@ model_column_style = dict(
     align='left'
 )
 
-# Creating the table plot with a more academic look and distinct first column
 fig = go.Figure(data=[go.Table(
     columnwidth=[200, 100, 100, 150], # Adjusting column width
     header=dict(values=list(df_tab1.columns),
@@ -492,7 +480,6 @@ fig = go.Figure(data=[go.Table(
         height=30)  # Adjusting cell height
 )])
 
-# Tight layout
 fig.update_layout(
     height = len(df_tab1) * 30 + 60,
     margin=dict(t=10, b=0, l=10, r=10)
@@ -524,7 +511,7 @@ params = {
  #   pool=pool,
  #   params=params,
  #   fold_count=5,  # Number of folds in CV
- #   plot=False,   # Set to True if you want to see the plot of train and test errors during cross-validation
+ #   plot=False,   
  #   early_stopping_rounds=10
 #)
 
@@ -748,8 +735,6 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 # Compute the confusion matrix
 cm = confusion_matrix(y_test, y_pred_classes)
-
-# Visualize the confusion matrix
 plt.figure(figsize=(10, 7))
 sns.set(font_scale=1.2)  # for label size
 sns.heatmap(cm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12},xticklabels=classes, yticklabels=classes)  # font size
@@ -819,8 +804,6 @@ y_pred_svm = loaded_svm_pickle1.predict(X_test)
 accuracy_svm = accuracy_score(y_test, y_pred_svm)
 classification_rep_svm = classification_report(y_test, y_pred_svm)
 
-# Print the accuracy and classification report
-#print(f'test score {accuracy_svm}')
 ```
 
 Figure 9 shows for the Mandela class, there were 139(41.6%). The Mbeki class had an accuracy of 54.8%. The classifier was more accurate in identifying Ramaphosa, correctly classifying 271 (59.4%). The highest classification accuracy was observed for the Zuma class, with 393 correct, achieving 74.7% accuracy.
@@ -864,8 +847,6 @@ y = data['Presidents']
 # Split the data into training and testing sets with an 80-20 ratio
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-# Display the shapes of the resulting training and testing sets
-#X_train.shape, X_test.shape, y_train.shape, y_test.shape
 ```
 
 
@@ -928,10 +909,6 @@ y_pred_decoded = le.inverse_transform(y_pred_class)
 accuracy = accuracy_score(y_test_encoded, y_pred_class)
 classification_rep = classification_report(y_test_encoded, y_pred_class, target_names=le.classes_)
 
-# Print accuracy and classification report
-#print(f'Accuracy: {accuracy * 100:.2f}%')
-#print('Classification Report:')
-#print(classification_rep)
 ```
 
 
@@ -985,7 +962,6 @@ plt.show()
 #accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
 #classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
 
-#best_params, accuracy_best_svm, classification_rep_best_svm
 ```
 
 ```{python}
@@ -1255,7 +1231,6 @@ classification_rep = classification_report(y_test, y_pred.flatten().astype(int),
 #| eval: false
 cm_catboost2 = confusion_matrix(y_test, y_pred.flatten().astype(int))
 
-# Visualize the confusion matrix
 fig_catboost2, ax_catboost2 = plt.subplots(figsize=(10, 7))
 sns.set(font_scale=1.2)  # for label size
 sns.heatmap(cm_catboost2, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_catboost2,xticklabels=classes, yticklabels=classes)  # font size
@@ -1279,10 +1254,8 @@ The significant misclassifications into the Ramaphosa class from other categorie
 import matplotlib.image as mpimg
 # Load the saved image
 img = mpimg.imread('GBTWE.png')
-
-# Display the image
 plt.imshow(img)
-plt.axis('off')  # Hide the axis values
+plt.axis('off')  
 plt.show()
 ```
 
@@ -1330,7 +1303,6 @@ plt.show()
 #with open('svm_model3.pkl', 'wb') as model_file:
 #    pickle.dump(specific_svm_clf, model_file)
 
-# Using pickle
 with open('svm_model3.pkl', 'rb') as model_file:
     loaded_svm3_pickle = pickle.load(model_file)
 
@@ -1343,10 +1315,6 @@ y_pred_specific_svm = loaded_svm3_pickle.predict(X_test)
 accuracy_specific_svm = accuracy_score(y_test, y_pred_specific_svm)
 classification_rep_specific_svm = classification_report(y_test, y_pred_specific_svm, target_names=label_mapping.keys())
 
-# Print the accuracy and classification report
-#print(f'Accuracy (Specific SVM): {accuracy_specific_svm * 100:.2f}%')
-#print('Classification Report (Specific SVM):')
-#print(classification_rep_specific_svm)
 ```
 
 
@@ -1356,11 +1324,10 @@ In Figure 14 we see the word embeddings SVM confusion matrix: The model upon inv
 #| eval: false
 cm_specific_svm = confusion_matrix(y_test, y_pred_specific_svm)
 
-# Visualize the confusion matrix
+
 fig_specific_svm, ax_specific_svm = plt.subplots(figsize=(10, 7))
 sns.set(font_scale=1.2)  # for label size
-sns.heatmap(cm_specific_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_specific_svm,xticklabels=classes, yticklabels=classes)  # font size
-
+sns.heatmap(cm_specific_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_specific_svm,xticklabels=classes, yticklabels=classes)  
 ax_specific_svm.set_title('Specific SVM Confusion Matrix')
 ax_specific_svm.set_xlabel('Predicted Label')
 ax_specific_svm.set_ylabel('True Label')
@@ -1372,12 +1339,11 @@ ax_specific_svm.set_ylabel('True Label')
 #| echo: false
 #| fig-cap: "Figure 14: Word Embeddings SVM Confusion Matrix "
 import matplotlib.image as mpimg
-# Load the saved image
+
 img = mpimg.imread('SVMWE.png')
 
-# Display the image
 plt.imshow(img)
-plt.axis('off')  # Hide the axis values
+plt.axis('off') 
 plt.show()
 ```
 
@@ -1469,8 +1435,7 @@ loaded_model = load_model('NN_final_model_3.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-#print(f'Test Loss: {final_loss:.4f}')
-#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+
 ```
 
 
@@ -1480,7 +1445,7 @@ final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 y_pred_nn3 = loaded_model.predict(X_test)
 y_pred_nn3_classes = np.argmax(y_pred_nn3, axis=1)  # Convert probabilities to class labels
 
-# Compute the confusion matrix
+
 cm_nn3 = confusion_matrix(y_test, y_pred_nn3_classes)
 
 # Visualize the confusion matrix
@@ -1504,10 +1469,8 @@ We finally examine the confusion matrix for the NN using word embeddings in Figu
 import matplotlib.image as mpimg
 # Load the saved image
 img = mpimg.imread('NNWE.png')
-
-# Display the image
 plt.imshow(img)
-plt.axis('off')  # Hide the axis values
+plt.axis('off')  #
 plt.show()
 ```
 
@@ -1527,5 +1490,4 @@ The results from the Neural Networks, while promising, did not significantly ove
 
 # Conclusions
 
-In summary, while the study has successfully delineated the linguistic tendencies across various South African presidents, it has also highlighted challenges and potential avenues for refinement. The interplay of feature extraction methods, model selection, and data intricacies presents a complex landscape, emphasizing the multifaceted nature of political speech classification. Future research can build upon these findings, integrating more advanced models, addressing dataset imbalances, and potentially fusing insights from other academic disciplines like linguistics and political science for a holistic understanding. Though, this paper has succeeded in critically examing the landscape of NLP classification, providing a robust direction for work in political NLP classification and detailed analysis and evaluation of the methods available. 
-
+In summary, while the study has successfully delineated the linguistic tendencies across various South African presidents, it has also highlighted challenges and potential avenues for refinement. The interplay of feature extraction methods, model selection, and data intricacies presents a complex landscape, emphasizing the multifaceted nature of political speech classification. Future research can build upon these findings, integrating more advanced models, addressing dataset imbalances, and potentially fusing insights from other academic disciplines like linguistics and political science for a holistic understanding. Though, this paper has succeeded in critically examining the landscape of NLP classification, providing a robust direction for work in political NLP classification and detailed analysis and evaluation of the methods available. 
