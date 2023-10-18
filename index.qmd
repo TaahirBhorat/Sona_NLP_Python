@@ -531,6 +531,7 @@ clf.save_model('catboost_BOW.cbm')
 ```
 
 ```{python}
+#| echo: false
 loaded_model = CatBoostClassifier()
 loaded_model.load_model('catboost_BOW.cbm')
 
@@ -596,7 +597,7 @@ import seaborn as sns
  Figure 7 Shows the mean training and validation accuracy across 20 epochs using 5-fold cross-validation on the training dataset. We observe little evidence of significant learning in the validation set over the epochs, with the validation accuracy remaining constant over the 20 epochs. Hence given this the final model selected was chosen to run on 2 epochs. A possible reason for this could be the choice of the kernel weight initializer which provides a non-naive initial set of weights for the NN.
 
 ```{python}
-
+#| echo: false
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.models import Sequential, load_model
@@ -794,6 +795,7 @@ with open('svm_model1.pkl', 'wb') as model_file:
     pickle.dump(svm_clf, model_file)
 ```
 ```{python}
+#| echo: false
 # Using pickle
 with open('svm_model1.pkl', 'rb') as model_file:
     loaded_svm_pickle1 = pickle.load(model_file)
@@ -1278,6 +1280,7 @@ plt.show()
 ```{python}
 #| echo: false
 #| eval: false
+#| include: false
 param_grid = {
     'C': [0.1, 1, 10],  # Regularization parameter
     'kernel': ['linear', 'rbf'],  # Type of SVM
@@ -1323,7 +1326,7 @@ with open('svm_model3.pkl', 'wb') as model_file:
 
 ```{python}
 #| echo: false
-
+#| include: false
 with open('svm_model3.pkl', 'rb') as model_file:
     loaded_svm3_pickle = pickle.load(model_file)
 
