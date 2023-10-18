@@ -1,0 +1,12 @@
+---
+title: "Plagarism Declaration"
+format: html
+---
+
+```{python}
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+img = mpimg.imread('plagarism.png')
+imgplot = plt.imshow(img)
+plt.show()
+```

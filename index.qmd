@@ -1,6 +1,9 @@
 ---
 title: "Are Presidents Predictable: An Analysis of SONA Addresses"
 ---
+# Abstract
+
+This paper critically examines various State of the Nation Address (SONA) speeches of South African presidents from 1994 to 2023. The aim is to categorise sentences from SONA speeches into their presidential speaker. Utilising Natural Language Processing (NLP) techniques, three feature extraction tools: Bag of Words (BoW), Term Frequency-Inverse Document Frequency (TF-IDF), and Word Tokenization are considered. Three predictive models, namely Gradient Boosted Trees, Feed Forward Neural Networks, and Support Vector Machines, are then applied and assessed regarding their classification ability across the feature extraction methods. Preliminary data exploration revealed significant dataset imbalances in presidential representation. The findings underscore the superior performance of traditional feature extraction methods in TF-IDF and less so BoW over Word Embeddings. Support Vector Machines, especially when coupled with TF-IDF, demonstrate remarkable accuracy at around 61%. Despite the promising results, challenges such as dataset imbalances and the limitations of Word Embeddings highlight potential areas for future research. The study concludes by emphasizing the potential of integrating insights from multiple disciplines and refining methodologies for a comprehensive understanding of political speeches.
 
 # Introduction
 
