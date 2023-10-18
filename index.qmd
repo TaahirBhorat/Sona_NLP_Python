@@ -1494,3 +1494,29 @@ The results from the Neural Networks, while promising, did not significantly ove
 # Conclusions
 
 In summary, while the study has successfully delineated the linguistic tendencies across various South African presidents, it has also highlighted challenges and potential avenues for refinement. The interplay of feature extraction methods, model selection, and data intricacies presents a complex landscape, emphasizing the multifaceted nature of political speech classification. Future research can build upon these findings, integrating more advanced models, addressing dataset imbalances, and potentially fusing insights from other academic disciplines like linguistics and political science for a holistic understanding. Though, this paper has succeeded in critically examining the landscape of NLP classification, providing a robust direction for work in political NLP classification and detailed analysis and evaluation of the methods available. 
+
+# Bibliography
+
+Akuma, S., Lubem, T. and Adom, I.T. (2022) ‘Comparing bag of words and TF-IDF with different models for hate speech detection from live tweets’, International Journal of Information Technology, 14(7), pp. 3629–3635. doi:10.1007/s41870-022-01096-4. 
+
+Brownlee, J. (2021) Gradient boosting with Scikit-learn, XGBoost, LIGHTGBM, and CatBoost, MachineLearningMastery.com. Available at: https://machinelearningmastery.com/gradient-boosting-with-scikit-learn-xgboost-lightgbm-and-catboost/ (Accessed: 4 October 2023). 
+
+Dogra, V. et al. (2022) ‘A complete process of text classification system using state-of-the-art NLP models’, Computational Intelligence and Neuroscience, 2022, pp. 1–26. doi:10.1155/2022/1883698. 
+
+Friedman, J.H. (2001) ‘Greedy function approximation: A gradient boosting machine.’, The Annals of Statistics, 29(5). doi:10.1214/aos/1013203451. 
+
+Goodfellow, I., Bengio, Y. and Courville, A., 2016. Deep learning. MIT press.
+
+Glorot, X., Bordes, A. and Bengio, Y., 2011. Deep sparse rectifier neural networks. In Proceedings of the fourteenth international conference on artificial intelligence and statistics (pp. 315-323).
+
+He, K., Zhang, X., Ren, S. and Sun, J., 2015. Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification. In Proceedings of the IEEE international conference on computer vision (pp. 1026-1034).
+
+Kotei, E. and Thirunavukarasu, R. (2023) ‘A systematic review of transformer-based pre-trained language models through self-supervised learning’, Information, 14(3), p. 187. doi:10.3390/info14030187. 
+
+Khurana, D. et al. (2022) ‘Natural language processing: State of the art, current trends and challenges’, Multimedia Tools and Applications, 82(3), pp. 3713–3744. doi:10.1007/s11042-022-13428-4. 
+
+Řehůřek, R. (2022) Gensim: Topic modelling for humans, Word2Vec Model - gensim. Available at: https://radimrehurek.com/gensim/auto_examples/tutorials/run_word2vec.html#:~:text=Word2Vec%20is%20a%20more%20recent,each%20other%20have%20differing%20meanings. (Accessed: 6 October 2023). 
+
+Shmilovici, A. (2005) ‘Support Vector Machines’, Data Mining and Knowledge Discovery Handbook, pp. 257–276. doi:10.1007/0-387-25465-x_12. 
+
+Sklearn (2023) Sklearn.svm.SVC, scikit. Available at: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html (Accessed: 13 October 2023). 

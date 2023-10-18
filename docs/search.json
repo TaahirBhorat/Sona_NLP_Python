@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "Bibliography.html",
-    "href": "Bibliography.html",
-    "title": "Bibliography",
-    "section": "",
-    "text": "Akuma, S., Lubem, T. and Adom, I.T. (2022) ‘Comparing bag of words and TF-IDF with different models for hate speech detection from live tweets’, International Journal of Information Technology, 14(7), pp. 3629–3635. doi:10.1007/s41870-022-01096-4.\nBrownlee, J. (2021) Gradient boosting with Scikit-learn, XGBoost, LIGHTGBM, and CatBoost, MachineLearningMastery.com. Available at: https://machinelearningmastery.com/gradient-boosting-with-scikit-learn-xgboost-lightgbm-and-catboost/ (Accessed: 4 October 2023).\nDogra, V. et al. (2022) ‘A complete process of text classification system using state-of-the-art NLP models’, Computational Intelligence and Neuroscience, 2022, pp. 1–26. doi:10.1155/2022/1883698.\nFriedman, J.H. (2001) ‘Greedy function approximation: A gradient boosting machine.’, The Annals of Statistics, 29(5). doi:10.1214/aos/1013203451.\nGoodfellow, I., Bengio, Y. and Courville, A., 2016. Deep learning. MIT press.\nGlorot, X., Bordes, A. and Bengio, Y., 2011. Deep sparse rectifier neural networks. In Proceedings of the fourteenth international conference on artificial intelligence and statistics (pp. 315-323).\nHe, K., Zhang, X., Ren, S. and Sun, J., 2015. Delving deep into rectifiers: Surpassing human-level performance on ImageNet classification. In Proceedings of the IEEE international conference on computer vision (pp. 1026-1034).\nKotei, E. and Thirunavukarasu, R. (2023) ‘A systematic review of transformer-based pre-trained language models through self-supervised learning’, Information, 14(3), p. 187. doi:10.3390/info14030187.\nKhurana, D. et al. (2022) ‘Natural language processing: State of the art, current trends and challenges’, Multimedia Tools and Applications, 82(3), pp. 3713–3744. doi:10.1007/s11042-022-13428-4.\nŘehůřek, R. (2022) Gensim: Topic modelling for humans, Word2Vec Model - gensim. Available at: https://radimrehurek.com/gensim/auto_examples/tutorials/run_word2vec.html#:~:text=Word2Vec%20is%20a%20more%20recent,each%20other%20have%20differing%20meanings. (Accessed: 6 October 2023).\nShmilovici, A. (2005) ‘Support Vector Machines’, Data Mining and Knowledge Discovery Handbook, pp. 257–276. doi:10.1007/0-387-25465-x_12.\nSklearn (2023) Sklearn.svm.SVC, scikit. Available at: https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html (Accessed: 13 October 2023)."
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Are Presidents Predictable: An Analysis of SONA Addresses",
@@ -96,12 +89,5 @@
     "title": "Appendix",
     "section": "Neural Network",
     "text": "Neural Network\n\n\n\n\n\nFigure A4: Word Embeddings Neural Network Average Training and Validation Accuracy Over Epochs"
-  },
-  {
-    "objectID": "Plagarism-Declaration.html",
-    "href": "Plagarism-Declaration.html",
-    "title": "Plagarism Declaration",
-    "section": "",
-    "text": "import matplotlib.pyplot as plt\nimport matplotlib.image as mpimg\nimg = mpimg.imread('plagarism.png')\nimgplot = plt.imshow(img)\nplt.show()"
   }
 ]
