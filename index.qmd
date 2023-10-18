@@ -553,19 +553,14 @@ classification_rep = classification_report(y_test, y_pred.flatten().astype(int),
 # Read the CSV file
 new_df = pd.read_csv("cv_results_over_epochs.csv")
 
-# Plotting the mean values for training and validation errors with distinct colors
 plt.plot(new_df['iterations'], new_df['train-MultiClass-mean'], label='Training Error', color='b')  # 'b' stands for blue
 plt.plot(new_df['iterations'], new_df['test-MultiClass-mean'], label='Validation Error', color='r')  # 'r' stands for red
 
-# Adding title and labels to the plot
 plt.title('Training and Validation Error Over Epochs')
 plt.xlabel('Epochs (Iterations)')
 plt.ylabel('Error')
 
-# Adding legend to the plot
 plt.legend()
-
-# Show the plot
 plt.show()
 ```
 
@@ -578,18 +573,14 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
-# Compute confusion matrix
+# confusion matrix
 cm = confusion_matrix(y_test, y_pred.flatten().astype(int))
-
-# Get class names from the label encoder
 classes = le.classes_
 
-# Create a heatmap plot of the confusion matrix
 plt.figure(figsize=(10,7))
-sns.set(font_scale=1.4) # for label size
+sns.set(font_scale=1.4) 
 sns.heatmap(cm, annot=True, annot_kws={"size": 16}, fmt='g', cmap='Blues', xticklabels=classes, yticklabels=classes)
 
-# Add plot labels and show the plot
 plt.xlabel('Predicted label')
 plt.ylabel('True label')
 plt.title('Confusion Matrix')
@@ -618,7 +609,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-# Convert the sparse matrix to dense matrix as neural network needs dense input
+# Convert the sparse matrix to dense matrix 
 X_train_dense = X_train.toarray()
 X_test_dense = X_test.toarray()
 seed = 7
@@ -637,24 +628,24 @@ np.random.seed(seed)
  #   X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
  #   y_train_fold, y_val_fold = y_train[train], y_train[test]
 
-    # Define model (adjust as necessary)
+    # Define model
   #  model = Sequential([
    #     Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
    #     Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
    #     Dense(len(np.unique(y_train)), activation='softmax')
    # ])
     
-    # Compile model (adjust optimizer, loss, and metrics as necessary)
+    # Compile model 
    # model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # Train model and store training history
     #history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
 
-    # Append accuracies for each epoch for this fold
+    # Append accuracies
     #sum_train_accuracy.append(history.history['accuracy'])
     #sum_val_accuracy.append(history.history['val_accuracy'])
 
-# Compute average accuracies for each epoch
+# Compute average 
 #avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
 #avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
 
@@ -662,7 +653,6 @@ np.random.seed(seed)
 #avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
 #avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_1.csv', index=False)
 
-# Load averaged accuracies from CSV
 loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_1.csv')
 
 # Plotting
@@ -672,7 +662,7 @@ plt.plot(range(1, len(loaded_avg_accuracies['avg_val_accuracy']) + 1), loaded_av
 
 plt.title('Average Training and Validation Accuracy Over Epochs')
 plt.xlabel('Epoch')
-plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1))  # Adjust x-axis ticks to start from 1
+plt.xticks(range(1, len(loaded_avg_accuracies['avg_train_accuracy']) + 1)) 
 plt.ylabel('Accuracy')
 plt.legend(loc='upper left')
 plt.show()
@@ -709,8 +699,6 @@ loaded_model = load_model('NN_final_model_1.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-#print(f'Test Loss: {final_loss:.4f}')
-#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
 ```
 
 
@@ -721,9 +709,8 @@ With respect to the misclassifications: Mandela was often misclassified as Mbeki
 
 ```{python}
 #| include: false
-# Obtain model's predictions on the test set
 y_pred = loaded_model.predict(X_test)
-y_pred_classes = np.argmax(y_pred, axis=1)  # Convert probabilities to class labels
+y_pred_classes = np.argmax(y_pred, axis=1) 
 ```
 
 ```{python}
@@ -768,7 +755,6 @@ plt.show()
 # Perform Grid Search on the training data
 #grid_search.fit(X_train, y_train)
 
-# Get the best parameters and the best estimator from Grid Search
 #best_params = grid_search.best_params_
 #best_svm_clf = grid_search.best_estimator_
 
@@ -800,7 +786,6 @@ plt.show()
 with open('svm_model1.pkl', 'rb') as model_file:
     loaded_svm_pickle1 = pickle.load(model_file)
 
-# Make predictions on the testing data
 y_pred_svm = loaded_svm_pickle1.predict(X_test)
 
 # Evaluate the classifier
@@ -838,13 +823,11 @@ plt.show()
 
 ```{python}
 #| echo: false
-# Initialize a TfidfVectorizer with stop words removal
+
 vectorizer = TfidfVectorizer(stop_words='english')
 
-# Compute the TF-IDF values for each word in each sentence
 X = vectorizer.fit_transform(data['Sentences'])
 
-# Encode the president names as target variable
 y = data['Presidents']
 
 # Split the data into training and testing sets with an 80-20 ratio
@@ -908,7 +891,6 @@ y_pred_class = y_pred.flatten().astype(int)
 # Inverse transform the predictions back to original labels
 y_pred_decoded = le.inverse_transform(y_pred_class)
 
-# Evaluate the classifier using the original (non-encoded) labels
 accuracy = accuracy_score(y_test_encoded, y_pred_class)
 classification_rep = classification_report(y_test_encoded, y_pred_class, target_names=le.classes_)
 
@@ -951,14 +933,12 @@ plt.show()
 # Initialize Grid Search
 #grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
-# Perform Grid Search on the training data
 #grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
 #best_params = grid_search.best_params_
 #best_svm_clf = grid_search.best_estimator_
 
-# Make predictions using the best model
 #y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
@@ -989,8 +969,6 @@ y_pred_svm = loaded_svm2_pickle.predict(X_test)
 accuracy_svm = accuracy_score(y_test, y_pred_svm)
 classification_rep_svm = classification_report(y_test, y_pred_svm)
 
-# Print the accuracy and classification report
-#accuracy_svm
 ```
 
 ```{python}
@@ -1027,7 +1005,6 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-# Convert the sparse matrix to dense matrix as neural network needs dense input
 X_train_dense = X_train.toarray()
 X_test_dense = X_test.toarray()
 
@@ -1104,8 +1081,7 @@ loaded_model = load_model('NN_final_model_2.h5')
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
-#print(f'Test Loss: {final_loss:.4f}')
-#print(f'Test Accuracy: {final_accuracy*100:.2f}%')
+
 ```
 
 
@@ -1167,7 +1143,6 @@ data['Sentence_Embeddings'] = data['Tokenized_Sentences'].apply(lambda x: senten
 label_mapping = {label: idx for idx, label in enumerate(data['Presidents'].unique())}
 data['Label'] = data['Presidents'].map(label_mapping)
 
-# Split data into features (X) and target (y)
 X = np.vstack(data['Sentence_Embeddings'].to_numpy())
 y = data['Label'].to_numpy()
 
@@ -1220,10 +1195,6 @@ y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
 accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
 
-# Print the accuracy and classification report
-#print(f'Accuracy: {accuracy * 100:.2f}%')
-#print('Classification Report:')
-#print(classification_rep)
 
 ```
 
@@ -1329,7 +1300,7 @@ cm_specific_svm = confusion_matrix(y_test, y_pred_specific_svm)
 
 
 fig_specific_svm, ax_specific_svm = plt.subplots(figsize=(10, 7))
-sns.set(font_scale=1.2)  # for label size
+sns.set(font_scale=1.2)  
 sns.heatmap(cm_specific_svm, annot=True, fmt='g', cmap='Blues', annot_kws={"size": 12}, ax=ax_specific_svm,xticklabels=classes, yticklabels=classes)  
 ax_specific_svm.set_title('Specific SVM Confusion Matrix')
 ax_specific_svm.set_xlabel('Predicted Label')
@@ -1446,7 +1417,7 @@ final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 #| echo: false
 #| eval: false
 y_pred_nn3 = loaded_model.predict(X_test)
-y_pred_nn3_classes = np.argmax(y_pred_nn3, axis=1)  # Convert probabilities to class labels
+y_pred_nn3_classes = np.argmax(y_pred_nn3, axis=1)  
 
 
 cm_nn3 = confusion_matrix(y_test, y_pred_nn3_classes)
@@ -1473,7 +1444,7 @@ import matplotlib.image as mpimg
 # Load the saved image
 img = mpimg.imread('NNWE.png')
 plt.imshow(img)
-plt.axis('off')  #
+plt.axis('off')  
 plt.show()
 ```
 
