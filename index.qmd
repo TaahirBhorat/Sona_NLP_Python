@@ -499,6 +499,7 @@ Figure 5 shows the mean loss over each 5-fold cross-validation over 300 epochs o
 
 ```{python}
 #| echo: false
+#| eval: false
 pool = Pool(data=X_train, label=y_train, cat_features=[])
 # Parameters for the CatBoostClassifier
 params = {
@@ -510,23 +511,26 @@ params = {
     'verbose': 10                   # Output training information every 10 iterations
 }
 
-#cv_results = cv(
- #   pool=pool,
- #   params=params,
- #   fold_count=5,  # Number of folds in CV
- #   plot=False,   
- #   early_stopping_rounds=10
-#)
+cv_results = cv(
+    pool=pool,
+    params=params,
+    fold_count=5,  # Number of folds in CV
+    plot=False,   
+    early_stopping_rounds=10
+)
 
 # Save cross-validation results to a CSV file
-#cv_results.to_csv('cv_results_over_epochs.csv', index=False)
+cv_results.to_csv('cv_results_over_epochs.csv', index=False)
 
-# Train the model on the full training set and save it
-#clf = CatBoostClassifier(**params)
-#clf.fit(pool)
-#clf.save_model('catboost_BOW.cbm')
+ Train the model on the full training set and save it
+clf = CatBoostClassifier(**params)
+clf.fit(pool)
+clf.save_model('catboost_BOW.cbm')
 
-# Load the model from the file
+
+```
+
+```{python}
 loaded_model = CatBoostClassifier()
 loaded_model.load_model('catboost_BOW.cbm')
 
@@ -537,15 +541,7 @@ y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
 # Evaluate the classifier
 accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
-
-# Print the accuracy and classification report
-#print(f'Accuracy: {accuracy * 100:.2f}%')
-#print('Classification Report:')
-#print(classification_rep)
-
 ```
-
-
 
 ```{python}
 #| echo: false
@@ -600,8 +596,7 @@ import seaborn as sns
  Figure 7 Shows the mean training and validation accuracy across 20 epochs using 5-fold cross-validation on the training dataset. We observe little evidence of significant learning in the validation set over the epochs, with the validation accuracy remaining constant over the 20 epochs. Hence given this the final model selected was chosen to run on 2 epochs. A possible reason for this could be the choice of the kernel weight initializer which provides a non-naive initial set of weights for the NN.
 
 ```{python}
-#| echo: false
-#| fig-cap: "Figure: 7 Bag of Words Neural Network Average Training and Validation Accuracy Over Epochs"
+
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 from tensorflow.keras.models import Sequential, load_model
@@ -614,45 +609,52 @@ X_train_dense = X_train.toarray()
 X_test_dense = X_test.toarray()
 seed = 7
 np.random.seed(seed)
+```
 
-# Define 5-fold cross-validation
-#num_folds = 5
-#kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
+```{python}
+#| eval: false
+#| echo: false
+
+num_folds = 5
+kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
 
 # Initialize variables to store sum of accuracies for each epoch
-#sum_train_accuracy = []
-#sum_val_accuracy = []
+sum_train_accuracy = []
+sum_val_accuracy = []
 
-#for train, test in kfold.split(X_train_dense, y_train):
-    # Split data into train and validation sets for this fold
- #   X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
- #   y_train_fold, y_val_fold = y_train[train], y_train[test]
+for train, test in kfold.split(X_train_dense, y_train):
+    Split data into train and validation sets for this fold
+    X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
+    y_train_fold, y_val_fold = y_train[train], y_train[test]
 
     # Define model
-  #  model = Sequential([
-   #     Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
-   #     Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
-   #     Dense(len(np.unique(y_train)), activation='softmax')
-   # ])
+    model = Sequential([
+        Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
+        Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
+        Dense(len(np.unique(y_train)), activation='softmax')
+    ])
     
     # Compile model 
-   # model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # Train model and store training history
-    #history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
+    history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
 
     # Append accuracies
-    #sum_train_accuracy.append(history.history['accuracy'])
-    #sum_val_accuracy.append(history.history['val_accuracy'])
+    sum_train_accuracy.append(history.history['accuracy'])
+    sum_val_accuracy.append(history.history['val_accuracy'])
 
 # Compute average 
-#avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
-#avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
+avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
+avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
 
 # Save averaged accuracies to CSV
-#avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
-#avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_1.csv', index=False)
-
+avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
+avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_1.csv', index=False)
+```
+```{python}
+#| echo: false
+#| fig-cap: "Figure: 7 Bag of Words Neural Network Average Training and Validation Accuracy Over Epochs"
 loaded_avg_accuracies = pd.read_csv('avg_accuracies_over_epochs_NN_1.csv')
 
 # Plotting
@@ -675,33 +677,39 @@ plt.show()
 #| echo: false
 X_train = X_train.toarray()
 X_test = X_test.toarray()
+```
 
-# Define model
-#model = Sequential([
-#    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
-#    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
-#    Dense(len(label_mapping), activation='softmax')  # Output layer
-#])
+```{python}
+#| echo: false
+#| eval: false
+
+ Define model
+model = Sequential([
+    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
+    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
+    Dense(len(label_mapping), activation='softmax')  # Output layer
+])
 
 # Compile model
-#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 
-#epochs = 2
-#model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
+epochs = 2
+model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
 
 # Save the final model
-#model.save('NN_final_model_1.h5')
+model.save('NN_final_model_1.h5')
 
-# Load the final model
+```
+
+```{python}
+#| echo: false
 loaded_model = load_model('NN_final_model_1.h5')
 
 
 # Evaluate the loaded model on the test set
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 ```
-
-
 
 In Figure 8 Neural Network classifier exhibits varying degrees of classification accuracy across different classes. For Mandela, out of 334 instances, 170 were correctly classified, with an accuracy of 50.9%. The Mbeki class had 264 (55.0%) a. The classifier achieved higher accuracy for Ramaphosa, correctly classifying 291 (63.8%). The highest accuracy was observed for the Zuma class, with 331 (62.9%).
 
@@ -740,48 +748,52 @@ plt.show()
 
 ```{python, eval = FALSE}
 #| echo: false
-#param_grid = {
-#    'C': [0.1, 1, 10],  # Regularization parameter
-#    'kernel': ['linear', 'rbf'],  # Type of SVM
-#    'gamma': ['scale', 'auto']  # Kernel coefficient
-#}
+#| eval: false
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
 
 # Initialize the SVM classifier
-#svm = SVC(random_state=42)
+svm = SVC(random_state=42)
 
 # Initialize Grid Search
-#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
 # Perform Grid Search on the training data
-#grid_search.fit(X_train, y_train)
+grid_search.fit(X_train, y_train)
 
-#best_params = grid_search.best_params_
-#best_svm_clf = grid_search.best_estimator_
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
 
 # Make predictions using the best model
-#y_pred_best_svm = best_svm_clf.predict(X_test)
+y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
 
-#best_params, accuracy_best_svm, classification_rep_best_svm
 ```
 
 
 ```{python}
 #| echo: false
 # Initialize the Support Vector Machine classifier
-#svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
-
+svm_clf = SVC(kernel='linear', gamma = 'scale', C = 0.1, random_state=42)
+```
+```{python}
+#| echo: false
+#| eval: false
 # Fit the model on the training data
-#svm_clf.fit(X_train, y_train)
+ svm_clf.fit(X_train, y_train)
 
 
 # Using pickle
-#with open('svm_model1.pkl', 'wb') as model_file:
-#    pickle.dump(svm_clf, model_file)
-
+with open('svm_model1.pkl', 'wb') as model_file:
+    pickle.dump(svm_clf, model_file)
+```
+```{python}
 # Using pickle
 with open('svm_model1.pkl', 'rb') as model_file:
     loaded_svm_pickle1 = pickle.load(model_file)
@@ -862,24 +874,31 @@ params = {
     'random_seed': 42,
     'verbose': 10
 }
+```
+```{python}
+#| echo: false
+#| eval: false
 
 # Perform cross-validation and save results
-#cv_results = cv(
-#    pool=pool,
-#    params=params,
-#    fold_count=5,
-#    plot=False,
-#    early_stopping_rounds=10
-#)
+cv_results = cv(
+    pool=pool,
+    params=params,
+    fold_count=5,
+    plot=False,
+    early_stopping_rounds=10
+)
 
-# Save cross-validation results to a CSV file
-#cv_results.to_csv('cv_results_over_epochs_2.csv', index=False)
+ Save cross-validation results to a CSV file
+cv_results.to_csv('cv_results_over_epochs_2.csv', index=False)
 
-# Train model on full training set and save it
-#clf = CatBoostClassifier(**params)
-#clf.fit(pool)
-#clf.save_model('catboost_TFIDF.cbm')
+ Train model on full training set and save it
+clf = CatBoostClassifier(**params)
+clf.fit(pool)
+clf.save_model('catboost_TFIDF.cbm')
+```
 
+```{python}
+#| echo: false
 # Load model from file
 loaded_model = CatBoostClassifier()
 loaded_model.load_model('catboost_TFIDF.cbm')
@@ -921,43 +940,47 @@ plt.show()
 
 ```{python}
 #| echo: false
-#param_grid = {
-#    'C': [0.1, 1, 10],  # Regularization parameter
-#    'kernel': ['linear', 'rbf'],  # Type of SVM
-#    'gamma': ['scale', 'auto']  # Kernel coefficient
-#}
+#| eval: false
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
 
 # Initialize the SVM classifier
-#svm = SVC(random_state=42)
+svm = SVC(random_state=42)
 
 # Initialize Grid Search
-#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
-#grid_search.fit(X_train, y_train)
+grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
-#best_params = grid_search.best_params_
-#best_svm_clf = grid_search.best_estimator_
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
 
-#y_pred_best_svm = best_svm_clf.predict(X_test)
+y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm)
 
 ```
 
 ```{python}
 #| echo: false
 # Initialize the Support Vector Machine classifier
-#svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
+svm_clf = SVC(kernel='rbf', gamma = 'scale', C = 10, random_state=42)
 
 # Fit the model on the training data
-#svm_clf.fit(X_train, y_train)
+svm_clf.fit(X_train, y_train)
 
-#with open('svm_model2.pkl', 'wb') as model_file:
-#    pickle.dump(svm_clf, model_file)
+with open('svm_model2.pkl', 'wb') as model_file:
+    pickle.dump(svm_clf, model_file)
+```
 
+```{python}
+#| echo: false
 # Using pickle
 with open('svm_model2.pkl', 'rb') as model_file:
     loaded_svm2_pickle = pickle.load(model_file)
@@ -1010,44 +1033,50 @@ X_test_dense = X_test.toarray()
 
 encoder = LabelEncoder()
 y_train = encoder.fit_transform(y_train)
-#seed = 7
-#np.random.seed(seed)
+```
+
+
+```{python}
+#| echo: false
+#| eval: false
+seed = 7
+np.random.seed(seed)
 
 # Define 5-fold cross-validation
-#num_folds = 5
-#kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
+num_folds = 5
+kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
 
 # Initialize variables to store sum of accuracies for each epoch
-#sum_train_accuracy = []
-#sum_val_accuracy = []
+sum_train_accuracy = []
+sum_val_accuracy = []
 
-#for train, test in kfold.split(X_train_dense, y_train):
-    # Split data into train and validation sets for this fold
-#    X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
-#    y_train_fold, y_val_fold = y_train[train], y_train[test]
+for train, test in kfold.split(X_train_dense, y_train):
+     Split data into train and validation sets for this fold
+    X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
+    y_train_fold, y_val_fold = y_train[train], y_train[test]
 
-#    model = Sequential([
-#        Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
-#        Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
-#        Dense(len(np.unique(y_train)), activation='softmax')
-#    ])
+    model = Sequential([
+        Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
+        Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
+        Dense(len(np.unique(y_train)), activation='softmax')
+    ])
     
-#    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     # Train model and store training history
-#    history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
+    history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
 
     # Append accuracies for each epoch for this fold
-#    sum_train_accuracy.append(history.history['accuracy'])
-#    sum_val_accuracy.append(history.history['val_accuracy'])
+    sum_train_accuracy.append(history.history['accuracy'])
+    sum_val_accuracy.append(history.history['val_accuracy'])
 
 # Compute average accuracies for each epoch
-#avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
-#avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
+avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
+avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
 
 # Save averaged accuracies to CSV
-#avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
-#avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_2.csv', index=False)
+avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
+avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_2.csv', index=False)
 
 
 ```
@@ -1058,23 +1087,31 @@ y_train = encoder.fit_transform(y_train)
 #X_test = X_test.toarray()
 encoder = LabelEncoder()
 y_test = encoder.fit_transform(y_test)
+```
+```{python}
+#| echo: false
+#| eval: false
 # Define model
-#model = Sequential([
-#    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
-#    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
-#    Dense(len(label_mapping), activation='softmax')  # Output layer
-#])
+model = Sequential([
+    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
+    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
+    Dense(len(label_mapping), activation='softmax')  # Output layer
+])
 
 # Compile model
-#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 
-#epochs = 2
-#model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
+epochs = 2
+model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
 
 # Save the final model
-#model.save('NN_final_model_2.h5')
+model.save('NN_final_model_2.h5')
 
+```
+
+```{python}
+#| echo: false
 # Load the final model
 loaded_model = load_model('NN_final_model_2.h5')
 
@@ -1083,8 +1120,6 @@ loaded_model = load_model('NN_final_model_2.h5')
 final_loss, final_accuracy = loaded_model.evaluate(X_test, y_test, verbose = 0)
 
 ```
-
-
 
 Figure 12 illustrates the confusion matrix for the NN trained using TF-IDF feature extraction. For Mandela, the NN secured 182 correct predictions (54.5%). The Mbeki class observed an accuracy of 60.6% with 291 correct predictions. For Ramaphosa, 276 correct predictions were made (60.5%). The highest accuracy was noted for the Zuma class, with 321 with an accuracy of 61.0%.
 
@@ -1166,23 +1201,30 @@ params = {
     'random_seed': 42,             # Random seed
     'verbose': 10                   # Output training information every 10 iterations
 }
-
-#cv_results = cv(
- #   pool=pool,
- #   params=params,
- #   fold_count=5,  # Number of folds in CV
- #   plot=False,   # Set to True if you want to see the plot of train and test errors during cross-validation
-  #  early_stopping_rounds=10
-#)
+```
+```{python}
+#| echo: false
+#| eval: false
+cv_results = cv(
+    pool=pool,
+    params=params,
+    fold_count=5,  # Number of folds in CV
+    plot=False,   # Set to True if you want to see the plot of train and test errors during cross-validation
+    early_stopping_rounds=10
+)
 
 # Save cross-validation results to a CSV file
-#cv_results.to_csv('cv_results_over_epochs_3.csv', index=False)
+cv_results.to_csv('cv_results_over_epochs_3.csv', index=False)
 
 # Train the model on the full training set and save it
-#clf = CatBoostClassifier(**params)
-#clf.fit(pool)
-#clf.save_model('catboost_WordEmbed.cbm')
+clf = CatBoostClassifier(**params)
+clf.fit(pool)
+clf.save_model('catboost_WordEmbed.cbm')
+```
 
+
+```{python}
+#| include: false
 # Load the model from the file
 loaded_model = CatBoostClassifier()
 loaded_model.load_model('catboost_WordEmbed.cbm')
@@ -1194,8 +1236,6 @@ y_pred_decoded = le.inverse_transform(y_pred.flatten().astype(int))
 # Evaluate the classifier
 accuracy = accuracy_score(y_test, y_pred.flatten().astype(int))
 classification_rep = classification_report(y_test, y_pred.flatten().astype(int), target_names=le.classes_)
-
-
 ```
 
 
@@ -1235,47 +1275,54 @@ plt.show()
 
 ### SVM
 
-```{python, eval = FALSE}
+```{python}
 #| echo: false
-#param_grid = {
-#    'C': [0.1, 1, 10],  # Regularization parameter
-#    'kernel': ['linear', 'rbf'],  # Type of SVM
-#    'gamma': ['scale', 'auto']  # Kernel coefficient
-#}
+#| eval: false
+param_grid = {
+    'C': [0.1, 1, 10],  # Regularization parameter
+    'kernel': ['linear', 'rbf'],  # Type of SVM
+    'gamma': ['scale', 'auto']  # Kernel coefficient
+}
 
 # Initialize the SVM classifier
-#svm = SVC(random_state=42)
+svm = SVC(random_state=42)
 
 # Initialize Grid Search
-#grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
+grid_search = GridSearchCV(estimator=svm, param_grid=param_grid, cv=3, scoring='accuracy')
 
 # Perform Grid Search on the training data
-#grid_search.fit(X_train, y_train)
+grid_search.fit(X_train, y_train)
 
 # Get the best parameters and the best estimator from Grid Search
-#best_params = grid_search.best_params_
-#best_svm_clf = grid_search.best_estimator_
+best_params = grid_search.best_params_
+best_svm_clf = grid_search.best_estimator_
 
 # Make predictions using the best model
-#y_pred_best_svm = best_svm_clf.predict(X_test)
+y_pred_best_svm = best_svm_clf.predict(X_test)
 
 # Evaluate the best model
-#accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
-#classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
+accuracy_best_svm = accuracy_score(y_test, y_pred_best_svm)
+classification_rep_best_svm = classification_report(y_test, y_pred_best_svm, target_names=label_mapping.keys())
 ```
 
 
 ```{python}
 #| echo: false
 #| include: false
+#| eval: false
 # Initialize the Support Vector Machine classifier with specific parameters
-#specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
+specific_svm_clf = SVC(kernel='linear', gamma='scale', C=10, random_state=42)
 
 # Fit the model on the training data
-#specific_svm_clf.fit(X_train, y_train)
+specific_svm_clf.fit(X_train, y_train)
 
-#with open('svm_model3.pkl', 'wb') as model_file:
-#    pickle.dump(specific_svm_clf, model_file)
+with open('svm_model3.pkl', 'wb') as model_file:
+    pickle.dump(specific_svm_clf, model_file)
+```
+
+
+```{python}
+#| echo: false
 
 with open('svm_model3.pkl', 'rb') as model_file:
     loaded_svm3_pickle = pickle.load(model_file)
@@ -1338,44 +1385,49 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
 encoder = LabelEncoder()
 y_train = encoder.fit_transform(y_train)
-#seed = 7
-#np.random.seed(seed)
+```
+
+```{python}
+#| eval: false
+#| echo: false
+seed = 7
+np.random.seed(seed)
 
 # Define 5-fold cross-validation
-#num_folds = 5
-#kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
+num_folds = 5
+kfold = StratifiedKFold(n_splits=num_folds, shuffle=True, random_state=seed)
 
-# Initialize variables to store sum of accuracies for each epoch
-#sum_train_accuracy = []
-#sum_val_accuracy = []
+ Initialize variables to store sum of accuracies for each epoch
+sum_train_accuracy = []
+sum_val_accuracy = []
 
-#for train, test in kfold.split(X_train_dense, y_train):
-    # Split data into train and validation sets for this fold
- #   X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
- #   y_train_fold, y_val_fold = y_train[train], y_train[test]
+for train, test in kfold.split(X_train_dense, y_train):
+    Split data into train and validation sets for this fold
+    X_train_fold, X_val_fold = X_train_dense[train], X_train_dense[test]
+    y_train_fold, y_val_fold = y_train[train], y_train[test]
 
- #   model = Sequential([
- #       Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
- #       Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
- #       Dense(len(np.unique(y_train)), activation='softmax')
- #   ])
+    model = Sequential([
+        Dense(505, input_dim=X_train_fold.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),
+        Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),
+        Dense(len(np.unique(y_train)), activation='softmax')
+    ])
     
-#    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    # Train model and store training history
- #   history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
+     Train model and store training history
+    history = model.fit(X_train_fold, y_train_fold, validation_data=(X_val_fold, y_val_fold), epochs=20)
 
-    # Append accuracies for each epoch for this fold
- #   sum_train_accuracy.append(history.history['accuracy'])
- #   sum_val_accuracy.append(history.history['val_accuracy'])
+     Append accuracies for each epoch for this fold
+    sum_train_accuracy.append(history.history['accuracy'])
+    sum_val_accuracy.append(history.history['val_accuracy'])
 
 # Compute average accuracies for each epoch
-#avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
-#avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
+avg_train_accuracy = np.mean(sum_train_accuracy, axis=0)
+avg_val_accuracy = np.mean(sum_val_accuracy, axis=0)
 
-# Save averaged accuracies to CSV
-#avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
-#avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_3.csv', index=False)
+ Save averaged accuracies to CSV
+avg_accuracies_df = pd.DataFrame({'avg_train_accuracy': avg_train_accuracy, 'avg_val_accuracy': avg_val_accuracy})
+avg_accuracies_df.to_csv('avg_accuracies_over_epochs_NN_3.csv', index=False)
 
 
 ```
@@ -1386,23 +1438,31 @@ y_train = encoder.fit_transform(y_train)
 #X_test = X_test.toarray()
 encoder = LabelEncoder()
 y_test = encoder.fit_transform(y_test)
-# Define model
-#model = Sequential([
- #   Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
- #   Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
-  #  Dense(len(label_mapping), activation='softmax')  # Output layer
-#])
+```
+```{python}
+#| eval: false
+#| echo: false
+
+ Define model
+model = Sequential([
+    Dense(505, input_dim=X_train.shape[1], activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-8)),  # Input layer
+    Dense(220, activation='relu', kernel_initializer='he_normal', kernel_regularizer=l2(1e-7)),  # Hidden layer
+    Dense(len(label_mapping), activation='softmax')  # Output layer
+])
 
 # Compile model
-#model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 
-#epochs = 3
-#model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
+epochs = 3
+model.fit(X_train, y_train, validation_split=0.2, epochs=epochs)
 
 # Save the final model
-#model.save('NN_final_model_3.h5')
+model.save('NN_final_model_3.h5')
+```
 
+```{python}
+#| echo: false
 # Load the final model
 loaded_model = load_model('NN_final_model_3.h5')
 
